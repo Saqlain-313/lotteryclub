@@ -1,39 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  BarChart3,
-  Gamepad2,
-  Headphones,
-  Home as HomeIcon,
-  Wallet,
-  Menu,
-  X,
-  Trophy,
-  Users,
-  Settings,
-  LogOut,
-  LogIn,
-  User,
-  PlusCircle,
-  History,
-  ArrowUpRight,
+  Activity,
   ArrowDownLeft,
-  Gift,
-  ClipboardList,
-  Key,
-  MessageCircle,
+  ArrowUpRight,
+  Award,
   ChevronDown,
   ChevronRight,
   Circle,
+  ClipboardList,
+  Dice5,
+  Gift,
+  History,
+  Home as HomeIcon,
+  Key,
+  LogIn,
+  LogOut,
+  Menu,
+  MessageCircle,
+  PlusCircle,
+  PowerIcon,
   Sparkles,
   Star,
+  User,
   UserPlus,
-  Award,
-  Activity,
-  Dice5,
-  PowerIcon,
+  Wallet,
 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../redux/slices/authSlice";
 
 const Navbar = ({ children }) => {
@@ -108,14 +101,54 @@ const Navbar = ({ children }) => {
   // Account menu items
   const accountMenuItems = [
     { icon: User, label: "Profile", path: "/profile", color: "text-blue-500" },
-    { icon: PlusCircle, label: "Deposit", path: "/deposit", color: "text-green-500" },
-    { icon: History, label: "Deposit History", path: "/deposit-history", color: "text-purple-500" },
-    { icon: ArrowUpRight, label: "Withdrawal", path: "/withdrawal", color: "text-orange-500" },
-    { icon: ArrowDownLeft, label: "Withdrawal History", path: "/withdrawal-history", color: "text-red-500" },
-    { icon: Gift, label: "Refer & Earn", path: "/refer-earn", color: "text-pink-500" },
-    { icon: ClipboardList, label: "All Bet History", path: "/bet-history", color: "text-indigo-500" },
-    { icon: Key, label: "Change Password", path: "/change-password", color: "text-yellow-600" },
-    { icon: MessageCircle, label: "Support Chat", path: "/support-chat", color: "text-cyan-500" },
+    {
+      icon: PlusCircle,
+      label: "Deposit",
+      path: "/deposit",
+      color: "text-green-500",
+    },
+    {
+      icon: History,
+      label: "Deposit History",
+      path: "/deposit-history",
+      color: "text-purple-500",
+    },
+    {
+      icon: ArrowUpRight,
+      label: "Withdrawal",
+      path: "/withdrawal",
+      color: "text-orange-500",
+    },
+    {
+      icon: ArrowDownLeft,
+      label: "Withdrawal History",
+      path: "/withdrawal-history",
+      color: "text-red-500",
+    },
+    {
+      icon: Gift,
+      label: "Refer & Earn",
+      path: "/refer-earn",
+      color: "text-pink-500",
+    },
+    {
+      icon: ClipboardList,
+      label: "All Bet History",
+      path: "/bet-history",
+      color: "text-indigo-500",
+    },
+    {
+      icon: Key,
+      label: "Change Password",
+      path: "/change-password",
+      color: "text-yellow-600",
+    },
+    {
+      icon: MessageCircle,
+      label: "Support Chat",
+      path: "/support-chat",
+      color: "text-cyan-500",
+    },
   ];
 
   const handleLogout = async () => {
@@ -176,7 +209,6 @@ const Navbar = ({ children }) => {
       {/* ================= DESKTOP SIDEBAR ================= */}
       <div className="hidden md:flex md:flex-col md:w-72 md:fixed md:inset-y-0 md:bg-white/95 md:backdrop-blur-xl md:z-50 shadow-2xl shadow-gray-200/50 border-r border-white/40 perspective-1000">
         <div className="flex flex-col h-full transform-gpu rotate-y-0 hover:rotate-y-2 transition-all duration-700 ease-out [transform-style:preserve-3d]">
-
           {/* Brand with WINZOX Logo */}
           <div className="flex items-center justify-center h-32 px-6 border-b border-white/40 transform-gpu hover:translate-z-8 transition-all duration-500 bg-gradient-to-r from-yellow-50/40 to-orange-50/40">
             <Link to="/" className="flex items-center group">
@@ -194,9 +226,7 @@ const Navbar = ({ children }) => {
           <div className="px-6 py-3 bg-white/60 mx-4 mt-3 rounded-2xl border border-gray-200/50 shadow-lg transform-gpu hover:translate-z-6 hover:scale-105 transition-all duration-500 [transform-style:preserve-3d] backdrop-blur-sm">
             <div className="flex items-center justify-center gap-2 text-xs font-bold tracking-widest">
               <Sparkles size={14} className="text-yellow-500 animate-sparkle" />
-              <span className="text-gray-700">
-                PLAY • WIN • REPEAT
-              </span>
+              <span className="text-gray-700">PLAY • WIN • REPEAT</span>
               <Sparkles size={14} className="text-yellow-500 animate-sparkle" />
             </div>
           </div>
@@ -208,10 +238,11 @@ const Navbar = ({ children }) => {
                 <Link
                   key={index}
                   to={item.path}
-                  className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-500 group relative ${isActiveRoute(item.path)
-                    ? "bg-gradient-to-r from-yellow-400/20 to-orange-400/20 text-yellow-600 shadow-xl shadow-yellow-500/15 border border-yellow-200/40 transform-gpu hover:translate-x-3 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/25 [transform-style:preserve-3d]"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transform-gpu hover:translate-x-3 hover:scale-105 hover:shadow-xl [transform-style:preserve-3d]"
-                    }`}
+                  className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-500 group relative ${
+                    isActiveRoute(item.path)
+                      ? "bg-gradient-to-r from-yellow-400/20 to-orange-400/20 text-yellow-600 shadow-xl shadow-yellow-500/15 border border-yellow-200/40 transform-gpu hover:translate-x-3 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/25 [transform-style:preserve-3d]"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transform-gpu hover:translate-x-3 hover:scale-105 hover:shadow-xl [transform-style:preserve-3d]"
+                  }`}
                 >
                   {isActiveRoute(item.path) && (
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-gradient-to-b from-yellow-400 to-orange-500 rounded-r-full shadow-lg shadow-yellow-500/50 animate-pulse-slow"></div>
@@ -219,19 +250,30 @@ const Navbar = ({ children }) => {
                   <div className="relative">
                     <item.icon
                       size={22}
-                      className={`transition-all duration-500 group-hover:scale-110 group-hover:rotate-y-6 [transform-style:preserve-3d] ${isActiveRoute(item.path) ? "text-yellow-500" : "text-gray-400 group-hover:text-gray-700"
-                        }`}
+                      className={`transition-all duration-500 group-hover:scale-110 group-hover:rotate-y-6 [transform-style:preserve-3d] ${
+                        isActiveRoute(item.path)
+                          ? "text-yellow-500"
+                          : "text-gray-400 group-hover:text-gray-700"
+                      }`}
                     />
                     {isActiveRoute(item.path) && (
                       <div className="absolute inset-0 bg-yellow-400/20 blur-xl rounded-full animate-pulse-slow"></div>
                     )}
                   </div>
-                  <span className={`text-sm font-bold ${isActiveRoute(item.path) ? "text-gray-900" : "text-gray-700"
-                    }`}>
+                  <span
+                    className={`text-sm font-bold ${
+                      isActiveRoute(item.path)
+                        ? "text-gray-900"
+                        : "text-gray-700"
+                    }`}
+                  >
                     {item.label}
                   </span>
                   {isActiveRoute(item.path) && (
-                    <ChevronRight size={18} className="ml-auto text-yellow-500 transform-gpu group-hover:translate-x-2 transition-transform duration-300" />
+                    <ChevronRight
+                      size={18}
+                      className="ml-auto text-yellow-500 transform-gpu group-hover:translate-x-2 transition-transform duration-300"
+                    />
                   )}
                 </Link>
               ))}
@@ -245,19 +287,26 @@ const Navbar = ({ children }) => {
                   className="w-full flex items-center justify-between px-4 py-3.5 text-gray-700 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 rounded-2xl transition-all duration-500 group transform-gpu hover:translate-x-2 hover:scale-105 [transform-style:preserve-3d]"
                 >
                   <span className="flex items-center gap-3">
-                    <User size={20} className="text-gray-400 group-hover:text-gray-700 transition-colors duration-300" />
+                    <User
+                      size={20}
+                      className="text-gray-400 group-hover:text-gray-700 transition-colors duration-300"
+                    />
                     <span className="text-sm font-bold">Account</span>
                   </span>
                   <ChevronDown
                     size={18}
-                    className={`transition-all duration-500 text-gray-400 ${isAccountMenuOpen ? "rotate-180 text-yellow-500" : ""
-                      }`}
+                    className={`transition-all duration-500 text-gray-400 ${
+                      isAccountMenuOpen ? "rotate-180 text-yellow-500" : ""
+                    }`}
                   />
                 </button>
 
                 <div
-                  className={`overflow-hidden transition-all duration-500 ${isAccountMenuOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
-                    }`}
+                  className={`overflow-hidden transition-all duration-500 ${
+                    isAccountMenuOpen
+                      ? "max-h-[600px] opacity-100"
+                      : "max-h-0 opacity-0"
+                  }`}
                 >
                   <div className="px-2 py-2 space-y-1.5">
                     {accountMenuItems.map((item, index) => (
@@ -287,7 +336,10 @@ const Navbar = ({ children }) => {
                 disabled={loading}
                 className="flex items-center gap-3 rounded-2xl px-4 py-3.5 text-gray-600 hover:text-red-500 hover:bg-gradient-to-r hover:from-red-50/60 hover:to-red-50/30 w-full transition-all duration-500 group disabled:opacity-50 transform-gpu hover:scale-105 hover:shadow-xl [transform-style:preserve-3d]"
               >
-                <LogOut size={20} className="text-gray-400 group-hover:text-red-500 transition-colors duration-300 group-hover:rotate-y-6 [transform-style:preserve-3d]" />
+                <LogOut
+                  size={20}
+                  className="text-gray-400 group-hover:text-red-500 transition-colors duration-300 group-hover:rotate-y-6 [transform-style:preserve-3d]"
+                />
                 {loading ? (
                   <span className="flex items-center gap-2">
                     <Circle className="animate-spin" size={16} />
@@ -303,14 +355,20 @@ const Navbar = ({ children }) => {
                   to="/login"
                   className="flex items-center gap-3 rounded-2xl px-4 py-3.5 text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transition-all duration-500 group transform-gpu hover:translate-x-2 hover:scale-105 [transform-style:preserve-3d]"
                 >
-                  <LogIn size={20} className="text-gray-400 group-hover:text-gray-700 transition-colors duration-300 group-hover:rotate-y-6 [transform-style:preserve-3d]" />
+                  <LogIn
+                    size={20}
+                    className="text-gray-400 group-hover:text-gray-700 transition-colors duration-300 group-hover:rotate-y-6 [transform-style:preserve-3d]"
+                  />
                   Login
                 </Link>
                 <Link
                   to="/register"
                   className="flex items-center justify-center gap-2 rounded-2xl px-4 py-3.5 bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-black font-bold hover:shadow-2xl hover:shadow-yellow-500/40 transition-all duration-500 group transform-gpu hover:scale-105 hover:-translate-y-1 hover:rotate-y-3 [transform-style:preserve-3d]"
                 >
-                  <UserPlus size={20} className="group-hover:scale-110 group-hover:rotate-y-6 transition-all duration-500 [transform-style:preserve-3d]" />
+                  <UserPlus
+                    size={20}
+                    className="group-hover:scale-110 group-hover:rotate-y-6 transition-all duration-500 [transform-style:preserve-3d]"
+                  />
                   Register Now
                 </Link>
               </div>
@@ -344,13 +402,17 @@ const Navbar = ({ children }) => {
                   <Link
                     key={item.label}
                     to={item.path}
-                    className={`relative px-4 py-2 rounded-2xl text-sm font-bold transition-all duration-500 [transform-style:preserve-3d] ${isActiveRoute(item.path)
-                      ? "text-yellow-600 bg-gradient-to-r from-yellow-50/80 to-orange-50/80 transform-gpu scale-105 shadow-lg shadow-yellow-500/15"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transform-gpu hover:scale-105 hover:-translate-y-1"
-                      }`}
+                    className={`relative px-4 py-2 rounded-2xl text-sm font-bold transition-all duration-500 [transform-style:preserve-3d] ${
+                      isActiveRoute(item.path)
+                        ? "text-yellow-600 bg-gradient-to-r from-yellow-50/80 to-orange-50/80 transform-gpu scale-105 shadow-lg shadow-yellow-500/15"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transform-gpu hover:scale-105 hover:-translate-y-1"
+                    }`}
                   >
                     <span className="flex items-center gap-2">
-                      <item.icon size={16} className="transition-all duration-300 group-hover:rotate-y-6 [transform-style:preserve-3d]" />
+                      <item.icon
+                        size={16}
+                        className="transition-all duration-300 group-hover:rotate-y-6 [transform-style:preserve-3d]"
+                      />
                       {item.label}
                     </span>
                     {isActiveRoute(item.path) && (
@@ -364,7 +426,10 @@ const Navbar = ({ children }) => {
             {/* Right */}
             <div className="flex items-center gap-3">
               {/* Mobile Logo */}
-              <Link to="/" className="flex items-center gap-2 md:hidden transform-gpu hover:scale-105 transition-all duration-500">
+              <Link
+                to="/"
+                className="flex items-center gap-2 md:hidden transform-gpu hover:scale-105 transition-all duration-500"
+              >
                 <WinzoxLogo className="h-14" />
               </Link>
 
@@ -384,8 +449,9 @@ const Navbar = ({ children }) => {
                     </span>
                     <ChevronDown
                       size={14}
-                      className={`hidden sm:inline transition-all duration-500 ${isUserMenuOpen ? "rotate-180" : ""
-                        }`}
+                      className={`hidden sm:inline transition-all duration-500 ${
+                        isUserMenuOpen ? "rotate-180" : ""
+                      }`}
                     />
                   </button>
 
@@ -418,7 +484,10 @@ const Navbar = ({ children }) => {
                             onClick={() => setIsUserMenuOpen(false)}
                             className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 hover:text-yellow-600 transition-all duration-300 transform-gpu hover:translate-x-2 [transform-style:preserve-3d]"
                           >
-                            <item.icon size={16} className="text-gray-400 group-hover:scale-110 transition-all duration-300" />
+                            <item.icon
+                              size={16}
+                              className="text-gray-400 group-hover:scale-110 transition-all duration-300"
+                            />
                             {item.label}
                           </Link>
                         ))}
@@ -460,30 +529,32 @@ const Navbar = ({ children }) => {
         </div>
 
         {/* ================= PAGE CONTENT ================= */}
-        <div className="flex-1 p-4 sm:p-6 pb-24 md:pb-6">
-          {children}
-        </div>
+        <div className="flex-1 sm:p-6 pb-24 md:pb-6">{children}</div>
       </div>
 
       {/* ================= MOBILE BOTTOM NAV ================= */}
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden perspective-1000">
         <div className="relative mx-auto max-w-full">
           <div className="relative h-[72px] bg-white/95 backdrop-blur-xl rounded-t-3xl border-t border-white/40 shadow-[0_-8px_40px_rgba(0,0,0,0.08)] transform-gpu translate-y-0 hover:-translate-y-3 transition-all duration-700 [transform-style:preserve-3d]">
-
             {/* Grid Layout - 5 columns */}
             <div className="grid grid-cols-5 h-full w-full">
-
               {/* Home */}
               <Link
                 to="/"
-                className={`flex flex-col items-center justify-center text-[10px] transition-all duration-500 relative ${location.pathname === "/" ? "text-yellow-600" : "text-gray-500 hover:text-yellow-600"
-                  } transform-gpu hover:scale-110 hover:-translate-y-2 hover:rotate-y-6 [transform-style:preserve-3d]`}
+                className={`flex flex-col items-center justify-center text-[10px] transition-all duration-500 relative ${
+                  location.pathname === "/"
+                    ? "text-yellow-600"
+                    : "text-gray-500 hover:text-yellow-600"
+                } transform-gpu hover:scale-110 hover:-translate-y-2 hover:rotate-y-6 [transform-style:preserve-3d]`}
               >
                 <HomeIcon
                   size={20}
                   strokeWidth={location.pathname === "/" ? 2.5 : 2}
-                  className={`transition-all duration-500 ${location.pathname === "/" ? "text-yellow-600" : "text-gray-500"
-                    }`}
+                  className={`transition-all duration-500 ${
+                    location.pathname === "/"
+                      ? "text-yellow-600"
+                      : "text-gray-500"
+                  }`}
                 />
                 <span className="mt-0.5 font-bold text-[10px]">Home</span>
                 {location.pathname === "/" && (
@@ -494,14 +565,20 @@ const Navbar = ({ children }) => {
               {/* Activity */}
               <Link
                 to="/activity"
-                className={`flex flex-col items-center justify-center text-[10px] transition-all duration-500 relative ${location.pathname === "/activity" ? "text-yellow-600" : "text-gray-500 hover:text-yellow-600"
-                  } transform-gpu hover:scale-110 hover:-translate-y-2 hover:rotate-y-6 [transform-style:preserve-3d]`}
+                className={`flex flex-col items-center justify-center text-[10px] transition-all duration-500 relative ${
+                  location.pathname === "/activity"
+                    ? "text-yellow-600"
+                    : "text-gray-500 hover:text-yellow-600"
+                } transform-gpu hover:scale-110 hover:-translate-y-2 hover:rotate-y-6 [transform-style:preserve-3d]`}
               >
                 <Activity
                   size={20}
                   strokeWidth={location.pathname === "/activity" ? 2.5 : 2}
-                  className={`transition-all duration-500 ${location.pathname === "/activity" ? "text-yellow-600" : "text-gray-500"
-                    }`}
+                  className={`transition-all duration-500 ${
+                    location.pathname === "/activity"
+                      ? "text-yellow-600"
+                      : "text-gray-500"
+                  }`}
                 />
                 <span className="mt-0.5 font-bold text-[10px]">Activity</span>
                 {location.pathname === "/activity" && (
@@ -515,14 +592,20 @@ const Navbar = ({ children }) => {
               {/* Wallet */}
               <Link
                 to="/wallet"
-                className={`flex flex-col items-center justify-center text-[10px] transition-all duration-500 relative ${location.pathname === "/wallet" ? "text-yellow-600" : "text-gray-500 hover:text-yellow-600"
-                  } transform-gpu hover:scale-110 hover:-translate-y-2 hover:rotate-y-6 [transform-style:preserve-3d]`}
+                className={`flex flex-col items-center justify-center text-[10px] transition-all duration-500 relative ${
+                  location.pathname === "/wallet"
+                    ? "text-yellow-600"
+                    : "text-gray-500 hover:text-yellow-600"
+                } transform-gpu hover:scale-110 hover:-translate-y-2 hover:rotate-y-6 [transform-style:preserve-3d]`}
               >
                 <Wallet
                   size={20}
                   strokeWidth={location.pathname === "/wallet" ? 2.5 : 2}
-                  className={`transition-all duration-500 ${location.pathname === "/wallet" ? "text-yellow-600" : "text-gray-500"
-                    }`}
+                  className={`transition-all duration-500 ${
+                    location.pathname === "/wallet"
+                      ? "text-yellow-600"
+                      : "text-gray-500"
+                  }`}
                 />
                 <span className="mt-0.5 font-bold text-[10px]">Wallet</span>
                 {location.pathname === "/wallet" && (
@@ -533,14 +616,20 @@ const Navbar = ({ children }) => {
               {/* Profile */}
               <Link
                 to="/profile"
-                className={`flex flex-col items-center justify-center text-[10px] transition-all duration-500 relative ${location.pathname === "/profile" ? "text-yellow-600" : "text-gray-500 hover:text-yellow-600"
-                  } transform-gpu hover:scale-110 hover:-translate-y-2 hover:rotate-y-6 [transform-style:preserve-3d]`}
+                className={`flex flex-col items-center justify-center text-[10px] transition-all duration-500 relative ${
+                  location.pathname === "/profile"
+                    ? "text-yellow-600"
+                    : "text-gray-500 hover:text-yellow-600"
+                } transform-gpu hover:scale-110 hover:-translate-y-2 hover:rotate-y-6 [transform-style:preserve-3d]`}
               >
                 <User
                   size={20}
                   strokeWidth={location.pathname === "/profile" ? 2.5 : 2}
-                  className={`transition-all duration-500 ${location.pathname === "/profile" ? "text-yellow-600" : "text-gray-500"
-                    }`}
+                  className={`transition-all duration-500 ${
+                    location.pathname === "/profile"
+                      ? "text-yellow-600"
+                      : "text-gray-500"
+                  }`}
                 />
                 <span className="mt-0.5 font-bold text-[10px]">Profile</span>
                 {location.pathname === "/profile" && (
@@ -559,7 +648,11 @@ const Navbar = ({ children }) => {
                 <div className="w-[78px] h-[78px] rounded-full bg-white p-[4px] shadow-2xl relative">
                   <div className="w-full h-full rounded-full bg-black p-[3px]">
                     <div className="w-full h-full rounded-full bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 flex flex-col items-center justify-center group-hover:scale-105 transition-all duration-500 shadow-lg">
-                      <Gift size={22} className="text-black" strokeWidth={2.3} />
+                      <Gift
+                        size={22}
+                        className="text-black"
+                        strokeWidth={2.3}
+                      />
                       <span className="text-[9px] font-bold text-black leading-none mt-0.5">
                         Promo
                       </span>
@@ -571,15 +664,15 @@ const Navbar = ({ children }) => {
                 </div>
               </div>
             </Link>
-
           </div>
         </div>
       </div>
 
       {/* ================= MOBILE SIDEBAR ================= */}
       <div
-        className={`fixed inset-0 z-50 md:hidden transition-all duration-500 ${isSidebarOpen ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
+        className={`fixed inset-0 z-50 md:hidden transition-all duration-500 ${
+          isSidebarOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
         onClick={(e) => {
           if (e.target === e.currentTarget) {
             setIsSidebarOpen(false);
@@ -589,8 +682,9 @@ const Navbar = ({ children }) => {
         <div className="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
         <div
           ref={sidebarRef}
-          className={`fixed left-0 top-0 h-full w-80 bg-white/95 backdrop-blur-xl shadow-2xl transform transition-all duration-500 ease-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } perspective-1000`}
+          className={`fixed left-0 top-0 h-full w-80 bg-white/95 backdrop-blur-xl shadow-2xl transform transition-all duration-500 ease-out ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } perspective-1000`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col h-full transform-gpu hover:rotate-y-2 transition-all duration-700 [transform-style:preserve-3d]">
@@ -608,9 +702,15 @@ const Navbar = ({ children }) => {
             {/* Tagline - Clean version without gradient */}
             <div className="px-4 py-2 mx-4 mt-2 bg-white/60 rounded-2xl border border-gray-200/50 shadow-lg">
               <div className="flex items-center justify-center gap-2 text-[10px] text-gray-700 tracking-widest font-bold">
-                <Sparkles size={10} className="text-yellow-500 animate-sparkle" />
+                <Sparkles
+                  size={10}
+                  className="text-yellow-500 animate-sparkle"
+                />
                 <span className="text-gray-700">PLAY • WIN • REPEAT</span>
-                <Sparkles size={10} className="text-yellow-500 animate-sparkle" />
+                <Sparkles
+                  size={10}
+                  className="text-yellow-500 animate-sparkle"
+                />
               </div>
             </div>
 
@@ -624,7 +724,9 @@ const Navbar = ({ children }) => {
                     {getInitial()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-gray-900">{getUserDisplayName()}</p>
+                    <p className="font-bold text-gray-900">
+                      {getUserDisplayName()}
+                    </p>
                     <p className="text-xs text-gray-500 truncate">
                       {getUserSubtitle()}
                     </p>
@@ -642,15 +744,26 @@ const Navbar = ({ children }) => {
                     key={index}
                     to={item.path}
                     onClick={() => setIsSidebarOpen(false)}
-                    className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-500 [transform-style:preserve-3d] ${isActiveRoute(item.path)
-                      ? "bg-gradient-to-r from-yellow-400/20 to-orange-400/20 text-yellow-600 border border-yellow-200/30 transform-gpu scale-105 shadow-lg shadow-yellow-500/15"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transform-gpu hover:translate-x-2 hover:scale-105"
-                      }`}
+                    className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-500 [transform-style:preserve-3d] ${
+                      isActiveRoute(item.path)
+                        ? "bg-gradient-to-r from-yellow-400/20 to-orange-400/20 text-yellow-600 border border-yellow-200/30 transform-gpu scale-105 shadow-lg shadow-yellow-500/15"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transform-gpu hover:translate-x-2 hover:scale-105"
+                    }`}
                   >
-                    <item.icon size={20} className={isActiveRoute(item.path) ? "text-yellow-500" : "text-gray-400"} />
+                    <item.icon
+                      size={20}
+                      className={
+                        isActiveRoute(item.path)
+                          ? "text-yellow-500"
+                          : "text-gray-400"
+                      }
+                    />
                     <span className="text-sm font-bold">{item.label}</span>
                     {isActiveRoute(item.path) && (
-                      <ChevronRight size={16} className="ml-auto text-yellow-500" />
+                      <ChevronRight
+                        size={16}
+                        className="ml-auto text-yellow-500"
+                      />
                     )}
                   </Link>
                 ))}
@@ -660,7 +773,9 @@ const Navbar = ({ children }) => {
               {isAuthenticated && (
                 <div className="mt-4 pt-4 border-t border-white/40">
                   <button
-                    onClick={() => setIsMobileAccountMenuOpen(!isMobileAccountMenuOpen)}
+                    onClick={() =>
+                      setIsMobileAccountMenuOpen(!isMobileAccountMenuOpen)
+                    }
                     className="w-full flex items-center justify-between px-4 py-3.5 text-gray-700 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 rounded-2xl transition-all duration-500 transform-gpu hover:translate-x-2 [transform-style:preserve-3d]"
                   >
                     <span className="flex items-center gap-3">
@@ -669,14 +784,20 @@ const Navbar = ({ children }) => {
                     </span>
                     <ChevronDown
                       size={16}
-                      className={`transition-all duration-500 ${isMobileAccountMenuOpen ? "rotate-180 text-yellow-500" : "text-gray-400"
-                        }`}
+                      className={`transition-all duration-500 ${
+                        isMobileAccountMenuOpen
+                          ? "rotate-180 text-yellow-500"
+                          : "text-gray-400"
+                      }`}
                     />
                   </button>
 
                   <div
-                    className={`overflow-hidden transition-all duration-500 ${isMobileAccountMenuOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
-                      }`}
+                    className={`overflow-hidden transition-all duration-500 ${
+                      isMobileAccountMenuOpen
+                        ? "max-h-[600px] opacity-100"
+                        : "max-h-0 opacity-0"
+                    }`}
                   >
                     <div className="px-2 py-2 space-y-1.5">
                       {accountMenuItems.map((item, index) => (

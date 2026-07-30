@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import {
   ArrowLeft,
-  Phone,
-  Lock,
   Eye,
   EyeOff,
+  Gift,
+  Lock,
+  Phone,
   ShieldCheck,
   User,
-  Gift,
 } from "lucide-react";
-import { login, clearError, clearMessage } from "../redux/slices/authSlice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { clearError, login } from "../redux/slices/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error, success, message, isAuthenticated } = useSelector(
-    (state) => state.auth
+    (state) => state.auth,
   );
 
   const [showPassword, setShowPassword] = useState(false);
@@ -55,7 +55,7 @@ const Login = () => {
 
     if (!formData.mobile.trim()) {
       errors.mobile = "Mobile number is required";
-    } else if (!/^[0-9]{10}$/.test(formData.mobile.replace(/\D/g, ''))) {
+    } else if (!/^[0-9]{10}$/.test(formData.mobile.replace(/\D/g, ""))) {
       errors.mobile = "Please enter a valid 10-digit mobile number";
     }
 
@@ -108,45 +108,62 @@ const Login = () => {
                 }}
               />
               <h1 className="text-4xl font-bold text-white mb-1">WINZOX</h1>
-              <p className="text-yellow-100 tracking-widest text-sm">PLAY • WIN • REPEAT</p>
-              
+              <p className="text-yellow-100 tracking-widest text-sm">
+                PLAY • WIN • REPEAT
+              </p>
+
               <div className="mt-12 space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
                     <ShieldCheck size={20} className="text-white" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-sm">Secure Login</h3>
-                    <p className="text-yellow-100 text-xs">Your data is encrypted and protected</p>
+                    <h3 className="text-white font-semibold text-sm">
+                      Secure Login
+                    </h3>
+                    <p className="text-yellow-100 text-xs">
+                      Your data is encrypted and protected
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
                     <Gift size={20} className="text-white" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-sm">Exclusive Rewards</h3>
-                    <p className="text-yellow-100 text-xs">Get bonuses and special offers</p>
+                    <h3 className="text-white font-semibold text-sm">
+                      Exclusive Rewards
+                    </h3>
+                    <p className="text-yellow-100 text-xs">
+                      Get bonuses and special offers
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
                     <User size={20} className="text-white" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-sm">Active Community</h3>
-                    <p className="text-yellow-100 text-xs">Join 10,000+ active players</p>
+                    <h3 className="text-white font-semibold text-sm">
+                      Active Community
+                    </h3>
+                    <p className="text-yellow-100 text-xs">
+                      Join 10,000+ active players
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div>
               <p className="text-yellow-100 text-sm">
                 Don't have an account?{" "}
-                <Link to="/register" className="text-white font-semibold hover:underline">
+                <Link
+                  to="/register"
+                  className="text-white font-semibold hover:underline"
+                >
                   Register here
                 </Link>
               </p>
@@ -158,7 +175,10 @@ const Login = () => {
             {/* Mobile Header - UNCHANGED */}
             <div className="flex items-center justify-between mb-4 md:hidden">
               <Link to="/" className="inline-block">
-                <ArrowLeft size={24} className="text-gray-700 hover:text-yellow-500 transition-colors" />
+                <ArrowLeft
+                  size={24}
+                  className="text-gray-700 hover:text-yellow-500 transition-colors"
+                />
               </Link>
               <div className="text-center flex-1">
                 <h1 className="text-2xl font-bold text-yellow-500">WINZOX</h1>
@@ -168,11 +188,18 @@ const Login = () => {
             {/* Desktop Header */}
             <div className="hidden md:flex items-center gap-3 mb-6">
               <Link to="/">
-                <ArrowLeft size={24} className="text-gray-700 hover:text-yellow-500 transition-colors" />
+                <ArrowLeft
+                  size={24}
+                  className="text-gray-700 hover:text-yellow-500 transition-colors"
+                />
               </Link>
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Welcome Back!</h2>
-                <p className="text-gray-500 text-sm">Login to continue your winning journey</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Welcome Back!
+                </h2>
+                <p className="text-gray-500 text-sm">
+                  Login to continue your winning journey
+                </p>
               </div>
             </div>
 
@@ -186,9 +213,15 @@ const Login = () => {
                   e.target.style.display = "none";
                 }}
               />
-              <p className="text-gray-500 tracking-widest text-[10px]">PLAY • WIN • REPEAT</p>
-              <h2 className="text-xl font-bold mt-2 text-gray-900">Welcome Back!</h2>
-              <p className="text-gray-500 text-xs">Login to continue your winning journey</p>
+              <p className="text-gray-500 tracking-widest text-[10px]">
+                PLAY • WIN • REPEAT
+              </p>
+              <h2 className="text-xl font-bold mt-2 text-gray-900">
+                Welcome Back!
+              </h2>
+              <p className="text-gray-500 text-xs">
+                Login to continue your winning journey
+              </p>
             </div>
 
             {/* Form - Mobile layout unchanged */}
@@ -212,7 +245,7 @@ const Login = () => {
               {error && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-center justify-between">
                   <span>{error}</span>
-                  <button 
+                  <button
                     onClick={() => dispatch(clearError())}
                     className="text-red-400 hover:text-red-600"
                   >
@@ -238,7 +271,9 @@ const Login = () => {
                   } rounded-lg px-3 h-10 bg-white`}
                 >
                   <Phone size={16} className="text-gray-500 flex-shrink-0" />
-                  <span className="mx-2 text-sm text-gray-600 flex-shrink-0">+91</span>
+                  <span className="mx-2 text-sm text-gray-600 flex-shrink-0">
+                    +91
+                  </span>
                   <input
                     type="text"
                     name="mobile"
@@ -314,7 +349,10 @@ const Login = () => {
 
               {/* Secure Login - UNCHANGED */}
               <div className="bg-gray-100 rounded-xl p-3 flex gap-3 items-center border border-gray-300">
-                <ShieldCheck size={32} className="text-yellow-500 flex-shrink-0" />
+                <ShieldCheck
+                  size={32}
+                  className="text-yellow-500 flex-shrink-0"
+                />
                 <div>
                   <h4 className="font-semibold text-sm text-gray-900">
                     100% Secure Login
