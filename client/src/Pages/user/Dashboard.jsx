@@ -1,29 +1,33 @@
-import React, { useEffect } from "react";
+import {
+  ArrowLeftFromLine,
+  ArrowRight,
+  ArrowRightFromLine,
+  Award,
+  Calendar,
+  Clock,
+  Coins,
+  Crown,
+  Dice5,
+  Eye,
+  Gamepad2,
+  Gem,
+  Hash,
+  Inbox,
+  List,
+  Moon,
+  Sparkles,
+  Sun,
+  Target,
+  TrendingUp,
+  Trophy,
+  Wallet,
+} from "lucide-react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getTodayBidsSummary } from "../../redux/slices/bidSlice";
-import { getTodayResults } from "../../redux/slices/resultSlice";
 import { getActiveMarkets } from "../../redux/slices/marketSlice";
-import {
-  Trophy,
-  Target,
-  Clock,
-  TrendingUp,
-  DollarSign,
-  Calendar,
-  Wallet,
-  ArrowRight,
-  Sparkles,
-  Award,
-  Zap,
-  Star,
-  Crown,
-  Coins,
-  BarChart3,
-  Gem,
-  Flame,
-  Gift,
-} from "lucide-react";
+import { getTodayResults } from "../../redux/slices/resultSlice";
 
 const MatkaDashboard = () => {
   const dispatch = useDispatch();
@@ -47,7 +51,7 @@ const MatkaDashboard = () => {
       "half-sangam": "Half-Sangam",
       "full-sangam": "Full-Sangam",
       "last-digit": "Last Digit",
-      "first-digit": "First Digit"
+      "first-digit": "First Digit",
     };
     return display[type] || type;
   };
@@ -60,22 +64,22 @@ const MatkaDashboard = () => {
       "half-sangam": "from-orange-400 to-amber-500",
       "full-sangam": "from-red-400 to-rose-500",
       "last-digit": "from-cyan-400 to-blue-500",
-      "first-digit": "from-pink-400 to-rose-500"
+      "first-digit": "from-pink-400 to-rose-500",
     };
     return gradients[type] || "from-gray-400 to-gray-500";
   };
 
   const getGameTypeIcon = (type) => {
     const icons = {
-      single: "🎯",
-      jodi: "🔢",
-      panna: "🎲",
-      "half-sangam": "🌓",
-      "full-sangam": "🌕",
-      "last-digit": "🔚",
-      "first-digit": "🔛"
+      single: Target,
+      jodi: Hash,
+      panna: Dice5,
+      "half-sangam": Moon,
+      "full-sangam": Sun,
+      "last-digit": ArrowRightFromLine,
+      "first-digit": ArrowLeftFromLine,
     };
-    return icons[type] || "⭐";
+    return icons[type] || Gamepad2;
   };
 
   const formatCurrency = (amount) => {
@@ -94,7 +98,9 @@ const MatkaDashboard = () => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="h-10 w-10 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 animate-pulse"></div>
           </div>
-          <p className="text-gray-500 text-sm mt-4 text-center font-medium">Loading your dashboard...</p>
+          <p className="text-gray-500 text-sm mt-4 text-center font-medium">
+            Loading your dashboard...
+          </p>
         </div>
       </div>
     );
@@ -114,7 +120,7 @@ const MatkaDashboard = () => {
               <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl animate-pulse"></div>
               <div className="absolute bottom-0 left-0 w-72 h-72 bg-white rounded-full filter blur-3xl animate-pulse delay-1000"></div>
             </div>
-            
+
             <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <div className="flex items-center gap-3 mb-2">
@@ -127,7 +133,7 @@ const MatkaDashboard = () => {
                 </div>
                 <h1 className="text-3xl md:text-4xl font-extrabold flex items-center gap-2">
                   Welcome back, {user?.name || "User"}!
-                  <span className="text-2xl animate-float">🎲</span>
+                  <Sparkles className="w-6 h-6 text-yellow-300 animate-pulse" />
                 </h1>
                 <p className="text-amber-100/90 text-sm mt-1 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 animate-pulse" />
@@ -140,9 +146,15 @@ const MatkaDashboard = () => {
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-50 to-orange-50 opacity-0 group-hover/btn:opacity-100 transition duration-300"></div>
                 <span className="relative z-10 flex items-center gap-2">
-                  <Target size={18} className="group-hover/btn:rotate-12 transition duration-300" />
+                  <Target
+                    size={18}
+                    className="group-hover/btn:rotate-12 transition duration-300"
+                  />
                   Place Bid
-                  <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition duration-300" />
+                  <ArrowRight
+                    size={16}
+                    className="group-hover/btn:translate-x-1 transition duration-300"
+                  />
                 </span>
               </Link>
             </div>
@@ -156,7 +168,7 @@ const MatkaDashboard = () => {
             <div className="absolute inset-0 opacity-5">
               <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500 rounded-full filter blur-3xl"></div>
             </div>
-            
+
             <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex items-center gap-4">
                 <div className="relative">
@@ -166,10 +178,12 @@ const MatkaDashboard = () => {
                   </div>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm font-medium">Available Balance</p>
+                  <p className="text-gray-500 text-sm font-medium">
+                    Available Balance
+                  </p>
                   <div className="flex items-baseline gap-3">
                     <p className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent">
-                      {formatCurrency(user?.balance.local || 0)}
+                      {formatCurrency(user?.balance?.local || 0)}
                     </p>
                     <span className="inline-flex items-center gap-1 text-green-600 text-xs font-bold bg-green-100 px-3 py-1 rounded-full border border-green-200">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
@@ -189,53 +203,63 @@ const MatkaDashboard = () => {
         {/* Quick Stats with 3D Hover Effects */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { 
-              icon: Target, 
-              gradient: "from-blue-400 to-indigo-500", 
-              label: "Today's Bids", 
+            {
+              icon: Target,
+              gradient: "from-blue-400 to-indigo-500",
+              label: "Today's Bids",
               value: todaySummary?.totalBids || 0,
               shadow: "shadow-blue-500/30",
-              border: "hover:border-blue-200"
+              border: "hover:border-blue-200",
             },
-            { 
-              icon: Coins, 
-              gradient: "from-purple-400 to-violet-500", 
-              label: "Total Amount", 
+            {
+              icon: Coins,
+              gradient: "from-purple-400 to-violet-500",
+              label: "Total Amount",
               value: formatCurrency(todaySummary?.totalAmount || 0),
               shadow: "shadow-purple-500/30",
-              border: "hover:border-purple-200"
+              border: "hover:border-purple-200",
             },
-            { 
-              icon: BarChart3, 
-              gradient: "from-green-400 to-emerald-500", 
-              label: "Active Markets", 
+            {
+              icon: TrendingUp,
+              gradient: "from-green-400 to-emerald-500",
+              label: "Active Markets",
               value: activeMarkets?.length || 0,
               shadow: "shadow-green-500/30",
-              border: "hover:border-green-200"
+              border: "hover:border-green-200",
             },
-            { 
-              icon: Trophy, 
-              gradient: "from-amber-400 to-orange-500", 
-              label: "Today's Wins", 
+            {
+              icon: Trophy,
+              gradient: "from-amber-400 to-orange-500",
+              label: "Today's Wins",
               value: recentWins > 0 ? `+${recentWins}` : "0",
               shadow: "shadow-amber-500/30",
-              border: "hover:border-amber-200"
+              border: "hover:border-amber-200",
             },
           ].map((stat, index) => (
-            <div 
+            <div
               key={index}
               className="group relative transform hover:-translate-y-2 transition duration-300"
             >
-              <div className={`absolute -inset-1 bg-gradient-to-r ${stat.gradient} rounded-2xl blur-md opacity-20 group-hover:opacity-40 transition duration-300`}></div>
-              <div className={`relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-5 overflow-hidden hover:${stat.border} transition duration-300`}>
+              <div
+                className={`absolute -inset-1 bg-gradient-to-r ${stat.gradient} rounded-2xl blur-md opacity-20 group-hover:opacity-40 transition duration-300`}
+              ></div>
+              <div
+                className={`relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-5 overflow-hidden hover:${stat.border} transition duration-300`}
+              >
                 <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-transparent to-gray-50/50 rounded-full -mr-10 -mt-10"></div>
                 <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-lg ${stat.shadow} transform group-hover:scale-110 transition duration-300`}>
+                  <div
+                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-lg ${stat.shadow} transform group-hover:scale-110 transition duration-300`}
+                  >
                     <stat.icon size={20} className="text-white" />
                   </div>
                   <div>
-                    <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">{stat.label}</p>
-                    <p className="text-2xl font-extrabold text-gray-800 mt-0.5">{stat.value}</p>
+                    <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">
+                      {stat.label}
+                    </p>
+                    <p className="text-2xl font-extrabold text-gray-800 mt-0.5">
+                      {stat.value}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -259,17 +283,24 @@ const MatkaDashboard = () => {
                   <div>
                     <h2 className="text-lg font-extrabold text-gray-800 flex items-center gap-2">
                       Today's Results
-                      <span className="text-xs font-medium bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2 py-0.5 rounded-full">Live</span>
+                      <span className="text-xs font-medium bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2 py-0.5 rounded-full">
+                        Live
+                      </span>
                     </h2>
-                    <p className="text-gray-500 text-xs">Latest winning numbers from today's games</p>
+                    <p className="text-gray-500 text-xs">
+                      Latest winning numbers from today's games
+                    </p>
                   </div>
                 </div>
                 <Link
                   to="/matka/results"
                   className="group/btn text-amber-600 hover:text-amber-700 text-sm font-bold flex items-center gap-1.5 bg-amber-50/80 backdrop-blur-sm px-4 py-2.5 rounded-xl hover:bg-amber-100/80 transition-all duration-300 border border-amber-200/50 hover:border-amber-300"
                 >
-                  View All 
-                  <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition duration-300" />
+                  View All
+                  <ArrowRight
+                    size={16}
+                    className="group-hover/btn:translate-x-1 transition duration-300"
+                  />
                 </Link>
               </div>
             </div>
@@ -279,34 +310,51 @@ const MatkaDashboard = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gradient-to-r from-gray-50 to-amber-50/30">
-                      <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Market</th>
-                      <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Game Type</th>
-                      <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Winning Number</th>
-                      <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">Payout</th>
+                      <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                        Market
+                      </th>
+                      <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                        Game Type
+                      </th>
+                      <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                        Winning Number
+                      </th>
+                      <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                        Payout
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {todayResults.slice(0, 5).map((result, index) => {
-                      const gameTypeDisplay = getGameTypeDisplay(result.gameType);
-                      const gameTypeGradient = getGameTypeGradient(result.gameType);
-                      const gameTypeIcon = getGameTypeIcon(result.gameType);
-                      
+                      const gameTypeDisplay = getGameTypeDisplay(
+                        result.gameType,
+                      );
+                      const gameTypeGradient = getGameTypeGradient(
+                        result.gameType,
+                      );
+                      const GameTypeIcon = getGameTypeIcon(result.gameType);
+
                       return (
-                        <tr 
-                          key={result._id} 
+                        <tr
+                          key={result._id}
                           className={`border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-amber-50/50 hover:to-orange-50/50 transition-all duration-300 cursor-pointer group/row transform hover:scale-[1.002] ${
-                            index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
+                            index % 2 === 0 ? "bg-white" : "bg-gray-50/30"
                           }`}
                         >
                           <td className="py-4 px-6">
                             <div className="flex items-center gap-3">
                               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                              <span className="font-bold text-gray-800">{result.marketName}</span>
+                              <span className="font-bold text-gray-800">
+                                {result.marketName}
+                              </span>
                             </div>
                           </td>
                           <td className="py-4 px-6">
-                            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-gradient-to-r ${gameTypeGradient} text-white shadow-lg transform group-hover/row:scale-105 transition duration-300`}>
-                              {gameTypeIcon} {gameTypeDisplay}
+                            <span
+                              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full bg-gradient-to-r ${gameTypeGradient} text-white shadow-lg transform group-hover/row:scale-105 transition duration-300`}
+                            >
+                              <GameTypeIcon size={14} />
+                              {gameTypeDisplay}
                             </span>
                           </td>
                           <td className="py-4 px-6">
@@ -328,9 +376,21 @@ const MatkaDashboard = () => {
               </div>
             ) : (
               <div className="text-center py-16">
-                <div className="text-7xl mb-4 animate-float">🎯</div>
-                <p className="text-gray-700 font-bold text-xl">No results declared today</p>
-                <p className="text-gray-400 text-sm mt-2">Results will appear here once announced</p>
+                <div className="flex justify-center mb-4">
+                  <div className="w-28 h-28 rounded-full bg-gradient-to-r from-amber-100 to-orange-100 flex items-center justify-center animate-float">
+                    <Inbox
+                      size={56}
+                      className="text-amber-500"
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                </div>
+                <p className="text-gray-700 font-bold text-xl">
+                  No results declared today
+                </p>
+                <p className="text-gray-400 text-sm mt-2">
+                  Results will appear here once announced
+                </p>
               </div>
             )}
           </div>
@@ -339,24 +399,60 @@ const MatkaDashboard = () => {
         {/* Quick Links with 3D Hover Effects */}
         <div className="grid grid-cols-3 gap-4">
           {[
-            { to: "/matka/markets", icon: "🎯", label: "Place Bid", sub: "Play now", gradient: "from-amber-400 to-orange-500", border: "hover:border-amber-200" },
-            { to: "/matka/bids-history", icon: "📊", label: "My Bids", sub: "View history", gradient: "from-purple-400 to-violet-500", border: "hover:border-purple-200" },
-            { to: "/matka/results", icon: "🏆", label: "Results", sub: "Check winners", gradient: "from-green-400 to-emerald-500", border: "hover:border-green-200" },
-          ].map((link, index) => (
-            <Link
-              key={index}
-              to={link.to}
-              className="group relative transform hover:-translate-y-2 transition duration-300"
-            >
-              <div className={`absolute -inset-1 bg-gradient-to-r ${link.gradient} rounded-2xl blur-md opacity-20 group-hover:opacity-40 transition duration-300`}></div>
-              <div className={`relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-6 text-center transition-all duration-300 hover:${link.border}`}>
-                <div className="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300 group-hover:rotate-6">{link.icon}</div>
-                <p className="font-extrabold text-gray-700 group-hover:text-amber-600 transition">{link.label}</p>
-                <p className="text-xs text-gray-400 mt-1">{link.sub}</p>
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
-              </div>
-            </Link>
-          ))}
+            {
+              to: "/matka/markets",
+              icon: Target,
+              label: "Place Bid",
+              sub: "Play now",
+              gradient: "from-amber-400 to-orange-500",
+              border: "hover:border-amber-200",
+            },
+            {
+              to: "/matka/bids-history",
+              icon: List,
+              label: "My Bids",
+              sub: "View history",
+              gradient: "from-purple-400 to-violet-500",
+              border: "hover:border-purple-200",
+            },
+            {
+              to: "/matka/results",
+              icon: Eye,
+              label: "Results",
+              sub: "Check winners",
+              gradient: "from-green-400 to-emerald-500",
+              border: "hover:border-green-200",
+            },
+          ].map((link, index) => {
+            const Icon = link.icon;
+            return (
+              <Link
+                key={index}
+                to={link.to}
+                className="group relative transform hover:-translate-y-2 transition duration-300"
+              >
+                <div
+                  className={`absolute -inset-1 bg-gradient-to-r ${link.gradient} rounded-2xl blur-md opacity-20 group-hover:opacity-40 transition duration-300`}
+                ></div>
+                <div
+                  className={`relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-6 text-center transition-all duration-300 hover:${link.border}`}
+                >
+                  <div className="flex justify-center mb-3 group-hover:scale-110 transition-transform duration-300 group-hover:rotate-6">
+                    <div
+                      className={`w-16 h-16 rounded-full bg-gradient-to-r ${link.gradient} flex items-center justify-center shadow-lg`}
+                    >
+                      <Icon size={28} className="text-white" />
+                    </div>
+                  </div>
+                  <p className="font-extrabold text-gray-700 group-hover:text-amber-600 transition">
+                    {link.label}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">{link.sub}</p>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
         {/* Footer Note */}
@@ -370,8 +466,13 @@ const MatkaDashboard = () => {
 
       <style jsx>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
         }
         .animate-float {
           animation: float 3s ease-in-out infinite;

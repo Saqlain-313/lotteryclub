@@ -44,134 +44,135 @@ function App() {
 
   return (
     <AppInitializer>
-      <Navbar />
-      <ScrollToTop />
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Homme />} />
-        <Route path="/powerhit" element={<GameCounts />} />
+      <Navbar>
+        <ScrollToTop />
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Homme />} />
+          <Route path="/powerhit" element={<GameCounts />} />
 
-        {/* Promo */}
-        <Route
-          path="/promo"
-          element={
-            <ProtectedRoute>
-              <PromoPage />
-            </ProtectedRoute>
-          }
-        />
+          {/* Promo */}
+          <Route
+            path="/promo"
+            element={
+              <ProtectedRoute>
+                <PromoPage />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Protected Routes */}
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
+          {/* Protected Routes */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/wallet"
-          element={
-            <ProtectedRoute>
-              <WalletDashboard />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/wallet"
+            element={
+              <ProtectedRoute>
+                <WalletDashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/activity"
-          element={
-            <ProtectedRoute>
-              <Activity />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/activity"
+            element={
+              <ProtectedRoute>
+                <Activity />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/withdrawal"
-          element={
-            <ProtectedRoute>
-              <Withdrawal />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/withdrawal"
+            element={
+              <ProtectedRoute>
+                <Withdrawal />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/withdrawal-history/:page?"
-          element={
-            <ProtectedRoute>
-              <WithdrawalHistory />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/withdrawal-history/:page?"
+            element={
+              <ProtectedRoute>
+                <WithdrawalHistory />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/deposit"
-          element={
-            <ProtectedRoute>
-              <Deposit />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/deposit"
+            element={
+              <ProtectedRoute>
+                <Deposit />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/deposit-history"
-          element={
-            <ProtectedRoute>
-              <DepositHistory />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/deposit-history"
+            element={
+              <ProtectedRoute>
+                <DepositHistory />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* 👇 Matka Game Routes */}
-        <Route
-          path="/matka"
-          element={
-            <ProtectedRoute>
-              <MatkaDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/matka/markets"
-          element={
-            <ProtectedRoute>
-              <MatkaMarkets />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/matka/place-bid/:marketId"
-          element={
-            <ProtectedRoute>
-              <PlaceBid />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/matka/bids-history"
-          element={
-            <ProtectedRoute>
-              <BidsHistory />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/matka/results"
-          element={
-            <ProtectedRoute>
-              <MatkaResults />
-            </ProtectedRoute>
-          }
-        />
+          {/* 👇 Matka Game Routes */}
+          <Route
+            path="/matka"
+            element={
+              <ProtectedRoute>
+                <MatkaDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/matka/markets"
+            element={
+              <ProtectedRoute>
+                <MatkaMarkets />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/matka/place-bid/:marketId"
+            element={
+              <ProtectedRoute>
+                <PlaceBid />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/matka/bids-history"
+            element={
+              <ProtectedRoute>
+                <BidsHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/matka/results"
+            element={
+              <ProtectedRoute>
+                <MatkaResults />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* 404 */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+          {/* 404 */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </Navbar>
     </AppInitializer>
   );
 }

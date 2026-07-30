@@ -1,4 +1,11 @@
-import { Trophy, Medal, UserCircle2, Crown, Star, TrendingUp, ChevronRight, Award, Users, Zap } from "lucide-react";
+import {
+  ChevronRight,
+  Crown,
+  Medal,
+  UserCircle2,
+  Users,
+  Zap,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const topWinners = [
@@ -60,7 +67,10 @@ export default function TopWinners() {
       {/* Header - WINZOX Style */}
       <div className="flex flex-wrap items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight" style={goldenTextStyle}>
+          <h2
+            className="text-2xl md:text-3xl font-black tracking-tight"
+            style={goldenTextStyle}
+          >
             Top Winners
           </h2>
           <p className="text-gray-500 text-sm font-medium mt-0.5">
@@ -72,7 +82,10 @@ export default function TopWinners() {
           className="group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95 text-sm"
         >
           View All
-          <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+          <ChevronRight
+            size={18}
+            className="group-hover:translate-x-1 transition-transform"
+          />
         </button>
       </div>
 
@@ -86,7 +99,7 @@ export default function TopWinners() {
                 <Crown className="text-white" size={16} />
               </div>
               <span className="text-yellow-700 font-bold text-sm uppercase tracking-wide">
-                🏆 Top 3 Winners
+                Top 3 Winners
               </span>
             </div>
           </div>
@@ -100,14 +113,22 @@ export default function TopWinners() {
                   <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 border-4 border-gray-300 flex items-center justify-center shadow-lg">
                     <UserCircle2 className="text-gray-600" size={32} />
                   </div>
-                  <div className="absolute -top-1 -right-1 text-lg md:text-2xl">🥈</div>
+                  <div className="absolute -top-1 -right-1 text-lg md:text-2xl">
+                    🥈
+                  </div>
                 </div>
                 <div className="mt-2 text-center">
-                  <p className="text-gray-800 font-bold text-sm md:text-base">{topWinners[1].name}</p>
-                  <p className="text-gray-500 text-xs md:text-sm">{topWinners[1].amount}</p>
+                  <p className="text-gray-800 font-bold text-sm md:text-base">
+                    {topWinners[1].name}
+                  </p>
+                  <p className="text-gray-500 text-xs md:text-sm">
+                    {topWinners[1].amount}
+                  </p>
                 </div>
                 <div className="w-full bg-gray-200/50 h-16 md:h-24 rounded-t-lg flex items-center justify-center mt-1 border border-gray-200/50">
-                  <span className="text-gray-400 font-bold text-xl md:text-2xl">2</span>
+                  <span className="text-gray-400 font-bold text-xl md:text-2xl">
+                    2
+                  </span>
                 </div>
               </div>
 
@@ -117,17 +138,27 @@ export default function TopWinners() {
                   <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 border-4 border-yellow-300 flex items-center justify-center shadow-2xl">
                     <UserCircle2 className="text-white" size={36} />
                   </div>
-                  <div className="absolute -top-1 -right-1 text-xl md:text-3xl animate-bounce">⭐</div>
+                  <div className="absolute -top-1 -right-1 text-xl md:text-3xl animate-bounce">
+                    ⭐
+                  </div>
                   <div className="absolute -bottom-1 -left-1">
-                    <span className="text-xs bg-yellow-400 text-yellow-900 px-1.5 py-0.5 rounded-full font-bold">#1</span>
+                    <span className="text-xs bg-yellow-400 text-yellow-900 px-1.5 py-0.5 rounded-full font-bold">
+                      #1
+                    </span>
                   </div>
                 </div>
                 <div className="mt-2 text-center">
-                  <p className="text-gray-900 font-extrabold text-base md:text-lg">{topWinners[0].name}</p>
-                  <p className="text-yellow-600 font-bold text-sm md:text-base">{topWinners[0].amount}</p>
+                  <p className="text-gray-900 font-extrabold text-base md:text-lg">
+                    {topWinners[0].name}
+                  </p>
+                  <p className="text-yellow-600 font-bold text-sm md:text-base">
+                    {topWinners[0].amount}
+                  </p>
                 </div>
                 <div className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 h-20 md:h-32 rounded-t-lg flex items-center justify-center mt-1 shadow-lg">
-                  <span className="text-white font-black text-2xl md:text-4xl">1</span>
+                  <span className="text-white font-black text-2xl md:text-4xl">
+                    1
+                  </span>
                 </div>
               </div>
 
@@ -137,14 +168,22 @@ export default function TopWinners() {
                   <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-orange-300 to-orange-400 border-4 border-orange-300 flex items-center justify-center shadow-lg">
                     <UserCircle2 className="text-white" size={32} />
                   </div>
-                  <div className="absolute -top-1 -right-1 text-lg md:text-2xl">🥉</div>
+                  <div className="absolute -top-1 -right-1 text-lg md:text-2xl">
+                    🥉
+                  </div>
                 </div>
                 <div className="mt-2 text-center">
-                  <p className="text-gray-800 font-bold text-sm md:text-base">{topWinners[2].name}</p>
-                  <p className="text-gray-500 text-xs md:text-sm">{topWinners[2].amount}</p>
+                  <p className="text-gray-800 font-bold text-sm md:text-base">
+                    {topWinners[2].name}
+                  </p>
+                  <p className="text-gray-500 text-xs md:text-sm">
+                    {topWinners[2].amount}
+                  </p>
                 </div>
                 <div className="w-full bg-orange-200/50 h-12 md:h-16 rounded-t-lg flex items-center justify-center mt-1 border border-orange-200/50">
-                  <span className="text-orange-400 font-bold text-xl md:text-2xl">3</span>
+                  <span className="text-orange-400 font-bold text-xl md:text-2xl">
+                    3
+                  </span>
                 </div>
               </div>
             </div>
@@ -185,10 +224,12 @@ export default function TopWinners() {
                   className="grid grid-cols-12 gap-2 px-3 py-2.5 rounded-xl hover:bg-gray-50/80 transition-all duration-200 group cursor-pointer"
                 >
                   <div className="col-span-1 flex items-center justify-center">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200
-                      ${winner.rank <= 5 
-                        ? 'bg-gradient-to-br from-yellow-100 to-yellow-200 text-yellow-700' 
-                        : 'bg-gray-100 text-gray-500 group-hover:bg-yellow-100 group-hover:text-yellow-700'
+                    <div
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200
+                      ${
+                        winner.rank <= 5
+                          ? "bg-gradient-to-br from-yellow-100 to-yellow-200 text-yellow-700"
+                          : "bg-gray-100 text-gray-500 group-hover:bg-yellow-100 group-hover:text-yellow-700"
                       }`}
                     >
                       {winner.rank}

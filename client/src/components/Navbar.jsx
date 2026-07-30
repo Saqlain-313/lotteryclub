@@ -128,7 +128,7 @@ const Navbar = ({ children }) => {
     {
       icon: Gift,
       label: "Refer & Earn",
-      path: "/refer-earn",
+      path: "/promo",
       color: "text-pink-500",
     },
     {
@@ -232,22 +232,23 @@ const Navbar = ({ children }) => {
           </div>
 
           {/* Navigation Menu */}
-          <nav className="flex-1 px-4 py-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+          <nav className="flex-1 px-4 py-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent relative z-10">
             <div className="space-y-1.5">
               {menuItems.map((item, index) => (
                 <Link
                   key={index}
                   to={item.path}
-                  className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-500 group relative ${
+                  className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-500 group relative cursor-pointer ${
                     isActiveRoute(item.path)
                       ? "bg-gradient-to-r from-yellow-400/20 to-orange-400/20 text-yellow-600 shadow-xl shadow-yellow-500/15 border border-yellow-200/40 transform-gpu hover:translate-x-3 hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/25 [transform-style:preserve-3d]"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transform-gpu hover:translate-x-3 hover:scale-105 hover:shadow-xl [transform-style:preserve-3d]"
                   }`}
+                  style={{ pointerEvents: "auto" }}
                 >
                   {isActiveRoute(item.path) && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-gradient-to-b from-yellow-400 to-orange-500 rounded-r-full shadow-lg shadow-yellow-500/50 animate-pulse-slow"></div>
+                    <div className="absolute left-0 top-[9%] -translate-y-1/2 w-1.5 h-10 bg-gradient-to-b from-yellow-400 to-orange-500 rounded-r-full shadow-lg shadow-yellow-500/50 animate-pulse-slow pointer-events-none"></div>
                   )}
-                  <div className="relative">
+                  <div className="relative pointer-events-none">
                     <item.icon
                       size={22}
                       className={`transition-all duration-500 group-hover:scale-110 group-hover:rotate-y-6 [transform-style:preserve-3d] ${
@@ -257,11 +258,11 @@ const Navbar = ({ children }) => {
                       }`}
                     />
                     {isActiveRoute(item.path) && (
-                      <div className="absolute inset-0 bg-yellow-400/20 blur-xl rounded-full animate-pulse-slow"></div>
+                      <div className="absolute inset-0 bg-yellow-400/20 blur-xl rounded-full animate-pulse-slow pointer-events-none"></div>
                     )}
                   </div>
                   <span
-                    className={`text-sm font-bold ${
+                    className={`text-sm font-bold pointer-events-none ${
                       isActiveRoute(item.path)
                         ? "text-gray-900"
                         : "text-gray-700"
@@ -272,30 +273,32 @@ const Navbar = ({ children }) => {
                   {isActiveRoute(item.path) && (
                     <ChevronRight
                       size={18}
-                      className="ml-auto text-yellow-500 transform-gpu group-hover:translate-x-2 transition-transform duration-300"
+                      className="ml-auto text-yellow-500 transform-gpu group-hover:translate-x-2 transition-transform duration-300 pointer-events-none"
                     />
                   )}
                 </Link>
               ))}
             </div>
-
             {/* Account Section */}
             {isAuthenticated && (
-              <div className="mt-6 pt-6 border-t border-white/40">
+              <div className="mt-6 pt-6 border-t border-white/40 relative z-10">
                 <button
                   onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-                  className="w-full flex items-center justify-between px-4 py-3.5 text-gray-700 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 rounded-2xl transition-all duration-500 group transform-gpu hover:translate-x-2 hover:scale-105 [transform-style:preserve-3d]"
+                  className="w-full flex items-center justify-between px-4 py-3.5 text-gray-700 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 rounded-2xl transition-all duration-500 group transform-gpu hover:translate-x-2 hover:scale-105 [transform-style:preserve-3d] cursor-pointer relative z-10"
+                  type="button"
                 >
-                  <span className="flex items-center gap-3">
+                  <span className="flex items-center gap-3 pointer-events-none">
                     <User
                       size={20}
-                      className="text-gray-400 group-hover:text-gray-700 transition-colors duration-300"
+                      className="text-gray-400 group-hover:text-gray-700 transition-colors duration-300 pointer-events-none"
                     />
-                    <span className="text-sm font-bold">Account</span>
+                    <span className="text-sm font-bold pointer-events-none">
+                      Account
+                    </span>
                   </span>
                   <ChevronDown
                     size={18}
-                    className={`transition-all duration-500 text-gray-400 ${
+                    className={`transition-all duration-500 text-gray-400 pointer-events-none ${
                       isAccountMenuOpen ? "rotate-180 text-yellow-500" : ""
                     }`}
                   />
@@ -309,19 +312,47 @@ const Navbar = ({ children }) => {
                   }`}
                 >
                   <div className="px-2 py-2 space-y-1.5">
-                    {accountMenuItems.map((item, index) => (
-                      <Link
-                        key={index}
-                        to={item.path}
-                        className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transition-all duration-300 group transform-gpu hover:translate-x-2 hover:scale-105 [transform-style:preserve-3d]"
-                      >
-                        <item.icon
-                          size={18}
-                          className={`${item.color} transition-all duration-300 group-hover:scale-110 group-hover:rotate-y-3 [transform-style:preserve-3d]`}
-                        />
-                        <span>{item.label}</span>
-                      </Link>
-                    ))}
+                    {accountMenuItems.map((item, index) => {
+                      const isActive =
+                        location.pathname === item.path ||
+                        location.pathname.startsWith(`${item.path}/`);
+
+                      return (
+                        <Link
+                          key={index}
+                          to={item.path}
+                          className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-300 group transform-gpu hover:translate-x-2 hover:scale-105 [transform-style:preserve-3d] cursor-pointer relative z-10 ${
+                            isActive
+                              ? "bg-gradient-to-r from-yellow-50/80 to-orange-50/80 text-yellow-600 font-semibold shadow-lg shadow-yellow-500/10 border border-yellow-200/50"
+                              : "text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60"
+                          }`}
+                          style={{ pointerEvents: "auto" }}
+                        >
+                          {isActive && (
+                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-yellow-400 to-orange-500 rounded-r-full shadow-lg shadow-yellow-500/50"></div>
+                          )}
+                          <item.icon
+                            size={18}
+                            className={`transition-all duration-300 group-hover:scale-110 group-hover:rotate-y-3 [transform-style:preserve-3d] pointer-events-none ${
+                              isActive
+                                ? "text-yellow-500 scale-110"
+                                : item.color || "text-gray-400"
+                            }`}
+                          />
+                          <span
+                            className={`pointer-events-none ${isActive ? "text-yellow-600" : ""}`}
+                          >
+                            {item.label}
+                          </span>
+                          {isActive && (
+                            <ChevronRight
+                              size={14}
+                              className="ml-auto text-yellow-500 pointer-events-none"
+                            />
+                          )}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -382,8 +413,8 @@ const Navbar = ({ children }) => {
         {/* ================= TOP NAVBAR ================= */}
         <div className="h-16 border-b border-white/40 bg-white/80 backdrop-blur-xl sticky top-0 z-40 shadow-lg shadow-gray-100/50 transform-gpu">
           <div className="h-full flex items-center justify-between px-4 sm:px-6">
-            {/* Left */}
-            <div className="flex items-center gap-4">
+            {/* Left - Menu Button (Mobile only) */}
+            <div className="flex items-center gap-4 md:w-auto">
               <button
                 ref={menuButtonRef}
                 onClick={(e) => {
@@ -423,15 +454,25 @@ const Navbar = ({ children }) => {
               </div>
             </div>
 
-            {/* Right */}
-            <div className="flex items-center gap-3">
-              {/* Mobile Logo */}
+            {/* Center - Mobile Logo */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 md:hidden">
               <Link
                 to="/"
-                className="flex items-center gap-2 md:hidden transform-gpu hover:scale-105 transition-all duration-500"
+                className="flex items-center gap-2 transform-gpu hover:scale-105 transition-all duration-500"
               >
                 <WinzoxLogo className="h-14" />
               </Link>
+            </div>
+
+            {/* Right - User Profile / Auth Buttons */}
+            <div className="flex items-center gap-3">
+              {/* Mobile Logo - Hidden on mobile, visible on desktop */}
+              {/* <Link
+                to="/"
+                className="hidden md:flex items-center gap-2 transform-gpu hover:scale-105 transition-all duration-500"
+              >
+                <WinzoxLogo className="h-14" />
+              </Link> */}
 
               {isAuthenticated ? (
                 <div className="relative" ref={userMenuRef}>
@@ -454,7 +495,6 @@ const Navbar = ({ children }) => {
                       }`}
                     />
                   </button>
-
                   {/* User Dropdown */}
                   {isUserMenuOpen && (
                     <div className="absolute right-0 mt-3 w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 py-2 z-50 animate-slideDown transform-gpu [transform-style:preserve-3d]">
@@ -477,20 +517,40 @@ const Navbar = ({ children }) => {
                       </div>
 
                       <div className="py-1">
-                        {accountMenuItems.map((item, index) => (
-                          <Link
-                            key={index}
-                            to={item.path}
-                            onClick={() => setIsUserMenuOpen(false)}
-                            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 hover:text-yellow-600 transition-all duration-300 transform-gpu hover:translate-x-2 [transform-style:preserve-3d]"
-                          >
-                            <item.icon
-                              size={16}
-                              className="text-gray-400 group-hover:scale-110 transition-all duration-300"
-                            />
-                            {item.label}
-                          </Link>
-                        ))}
+                        {accountMenuItems.map((item, index) => {
+                          const isActive = location.pathname === item.path;
+                          return (
+                            <Link
+                              key={index}
+                              to={item.path}
+                              onClick={() => setIsUserMenuOpen(false)}
+                              className={`flex items-center gap-3 px-4 py-3 text-sm transition-all duration-300 transform-gpu hover:translate-x-2 [transform-style:preserve-3d] relative ${
+                                isActive
+                                  ? "bg-gradient-to-r from-yellow-50/80 to-orange-50/80 text-yellow-600 font-bold"
+                                  : "text-gray-700 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 hover:text-yellow-600"
+                              }`}
+                            >
+                              {isActive && (
+                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-yellow-400 to-orange-500 rounded-r-full shadow-lg shadow-yellow-500/50"></div>
+                              )}
+                              <item.icon
+                                size={16}
+                                className={`transition-all duration-300 ${
+                                  isActive
+                                    ? "text-yellow-500 scale-110"
+                                    : "text-gray-400 group-hover:scale-110"
+                                }`}
+                              />
+                              <span>{item.label}</span>
+                              {isActive && (
+                                <ChevronRight
+                                  size={14}
+                                  className="ml-auto text-yellow-500"
+                                />
+                              )}
+                            </Link>
+                          );
+                        })}
                       </div>
 
                       <div className="border-t border-white/40 pt-1">
@@ -529,7 +589,7 @@ const Navbar = ({ children }) => {
         </div>
 
         {/* ================= PAGE CONTENT ================= */}
-        <div className="flex-1 sm:p-6 pb-24 md:pb-6">{children}</div>
+        <div className="flex-1 pb-[4rem] md:pb-6">{children}</div>
       </div>
 
       {/* ================= MOBILE BOTTOM NAV ================= */}
@@ -558,7 +618,7 @@ const Navbar = ({ children }) => {
                 />
                 <span className="mt-0.5 font-bold text-[10px]">Home</span>
                 {location.pathname === "/" && (
-                  <div className="absolute -top-1 w-8 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></div>
+                  <div className="absolute top-[3.5rem] w-8 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></div>
                 )}
               </Link>
 
@@ -582,7 +642,7 @@ const Navbar = ({ children }) => {
                 />
                 <span className="mt-0.5 font-bold text-[10px]">Activity</span>
                 {location.pathname === "/activity" && (
-                  <div className="absolute -top-1 w-8 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></div>
+                  <div className="absolute top-[3.5rem] w-8 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></div>
                 )}
               </Link>
 
@@ -609,7 +669,7 @@ const Navbar = ({ children }) => {
                 />
                 <span className="mt-0.5 font-bold text-[10px]">Wallet</span>
                 {location.pathname === "/wallet" && (
-                  <div className="absolute -top-1 w-8 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></div>
+                  <div className="absolute top-[3.5rem] w-8 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></div>
                 )}
               </Link>
 
@@ -633,7 +693,7 @@ const Navbar = ({ children }) => {
                 />
                 <span className="mt-0.5 font-bold text-[10px]">Profile</span>
                 {location.pathname === "/profile" && (
-                  <div className="absolute -top-1 w-8 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></div>
+                  <div className="absolute top-[3.5rem] w-8 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></div>
                 )}
               </Link>
             </div>

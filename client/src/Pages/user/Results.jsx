@@ -1,8 +1,27 @@
-import React, { useEffect, useState } from "react";
+import {
+  ArrowLeftFromLine,
+  ArrowRightFromLine,
+  Award,
+  CalendarDays,
+  Coins,
+  Crown,
+  Dice5,
+  Filter,
+  Gamepad2,
+  Hash,
+  Inbox,
+  Moon,
+  Sparkles,
+  Sun,
+  Target,
+  Trophy,
+  Users,
+  Zap,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getResults, getResultStats } from "../../redux/slices/resultSlice";
 import { getActiveMarkets } from "../../redux/slices/marketSlice";
-import { Trophy, TrendingUp, Award, Calendar, Filter, ArrowRight, Sparkles, Crown, Coins, Zap } from "lucide-react";
+import { getResults, getResultStats } from "../../redux/slices/resultSlice";
 
 const MatkaResults = () => {
   const dispatch = useDispatch();
@@ -48,35 +67,44 @@ const MatkaResults = () => {
       "half-sangam": "Half-Sangam",
       "full-sangam": "Full-Sangam",
       "last-digit": "Last Digit",
-      "first-digit": "First Digit"
+      "first-digit": "First Digit",
     };
     return display[type] || type;
   };
 
   const getGameTypeColor = (type) => {
     const colors = {
-      single: "bg-gradient-to-r from-blue-400 to-blue-600 text-white shadow-blue-500/30",
+      single:
+        "bg-gradient-to-r from-blue-400 to-blue-600 text-white shadow-blue-500/30",
       jodi: "bg-gradient-to-r from-green-400 to-green-600 text-white shadow-green-500/30",
-      panna: "bg-gradient-to-r from-purple-400 to-purple-600 text-white shadow-purple-500/30",
-      "half-sangam": "bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-orange-500/30",
-      "full-sangam": "bg-gradient-to-r from-red-400 to-red-600 text-white shadow-red-500/30",
-      "last-digit": "bg-gradient-to-r from-indigo-400 to-indigo-600 text-white shadow-indigo-500/30",
-      "first-digit": "bg-gradient-to-r from-pink-400 to-pink-600 text-white shadow-pink-500/30"
+      panna:
+        "bg-gradient-to-r from-purple-400 to-purple-600 text-white shadow-purple-500/30",
+      "half-sangam":
+        "bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-orange-500/30",
+      "full-sangam":
+        "bg-gradient-to-r from-red-400 to-red-600 text-white shadow-red-500/30",
+      "last-digit":
+        "bg-gradient-to-r from-indigo-400 to-indigo-600 text-white shadow-indigo-500/30",
+      "first-digit":
+        "bg-gradient-to-r from-pink-400 to-pink-600 text-white shadow-pink-500/30",
     };
-    return colors[type] || "bg-gradient-to-r from-gray-400 to-gray-600 text-white shadow-gray-500/30";
+    return (
+      colors[type] ||
+      "bg-gradient-to-r from-gray-400 to-gray-600 text-white shadow-gray-500/30"
+    );
   };
 
   const getGameTypeIcon = (type) => {
     const icons = {
-      single: "🎯",
-      jodi: "🔢",
-      panna: "🎲",
-      "half-sangam": "🌓",
-      "full-sangam": "🌕",
-      "last-digit": "🔚",
-      "first-digit": "🔛"
+      single: Target,
+      jodi: Hash,
+      panna: Dice5,
+      "half-sangam": Moon,
+      "full-sangam": Sun,
+      "last-digit": ArrowRightFromLine,
+      "first-digit": ArrowLeftFromLine,
     };
-    return icons[type] || "⭐";
+    return icons[type] || Gamepad2;
   };
 
   const formatCurrency = (amount) => {
@@ -90,12 +118,14 @@ const MatkaResults = () => {
   // Get gradient background based on market name
   const getMarketGradient = (marketName) => {
     const gradients = {
-      "Kalyan": "from-amber-400 to-orange-500",
-      "Main": "from-emerald-400 to-teal-500",
-      "Rajdhani": "from-purple-400 to-pink-500",
-      "Time": "from-cyan-400 to-blue-500",
+      Kalyan: "from-amber-400 to-orange-500",
+      Main: "from-emerald-400 to-teal-500",
+      Rajdhani: "from-purple-400 to-pink-500",
+      Time: "from-cyan-400 to-blue-500",
     };
-    const found = Object.keys(gradients).find(key => marketName?.includes(key));
+    const found = Object.keys(gradients).find((key) =>
+      marketName?.includes(key),
+    );
     return found ? gradients[found] : "from-gray-400 to-gray-500";
   };
 
@@ -138,13 +168,13 @@ const MatkaResults = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2 rounded-xl border border-amber-200/50 shadow-inner">
-                <Calendar size={16} className="text-amber-600" />
+                <CalendarDays size={16} className="text-amber-600" />
                 <span className="text-sm font-medium text-gray-700">
-                  {new Date().toLocaleDateString("en-IN", { 
-                    weekday: 'short', 
-                    day: '2-digit', 
-                    month: 'short', 
-                    year: 'numeric' 
+                  {new Date().toLocaleDateString("en-IN", {
+                    weekday: "short",
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
                   })}
                 </span>
               </div>
@@ -156,49 +186,61 @@ const MatkaResults = () => {
         {stats && stats.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { 
-                icon: Trophy, 
-                color: "from-blue-500 to-blue-600", 
-                label: "Total Results", 
+              {
+                icon: Trophy,
+                color: "from-blue-500 to-blue-600",
+                label: "Total Results",
                 value: stats.reduce((acc, s) => acc + s.totalResults, 0),
-                shadow: "shadow-blue-500/30"
+                shadow: "shadow-blue-500/30",
               },
-              { 
-                icon: Coins, 
-                color: "from-green-500 to-emerald-600", 
-                label: "Total Payout", 
-                value: formatCurrency(stats.reduce((acc, s) => acc + s.totalPayout, 0)),
-                shadow: "shadow-green-500/30"
+              {
+                icon: Coins,
+                color: "from-green-500 to-emerald-600",
+                label: "Total Payout",
+                value: formatCurrency(
+                  stats.reduce((acc, s) => acc + s.totalPayout, 0),
+                ),
+                shadow: "shadow-green-500/30",
               },
-              { 
-                icon: Crown, 
-                color: "from-purple-500 to-purple-600", 
-                label: "Total Winners", 
+              {
+                icon: Users,
+                color: "from-purple-500 to-purple-600",
+                label: "Total Winners",
                 value: stats.reduce((acc, s) => acc + s.totalWinningBids, 0),
-                shadow: "shadow-purple-500/30"
+                shadow: "shadow-purple-500/30",
               },
-              { 
-                icon: Zap, 
-                color: "from-orange-500 to-amber-600", 
-                label: "Avg Payout", 
-                value: formatCurrency(stats.reduce((acc, s) => acc + s.avgPayout, 0) / stats.length),
-                shadow: "shadow-orange-500/30"
+              {
+                icon: Zap,
+                color: "from-orange-500 to-amber-600",
+                label: "Avg Payout",
+                value: formatCurrency(
+                  stats.reduce((acc, s) => acc + s.avgPayout, 0) / stats.length,
+                ),
+                shadow: "shadow-orange-500/30",
               },
             ].map((stat, index) => (
-              <div 
+              <div
                 key={index}
                 className="group relative transform hover:-translate-y-1 transition duration-300"
               >
-                <div className={`absolute -inset-1 bg-gradient-to-r ${stat.color} rounded-2xl blur-md opacity-20 group-hover:opacity-40 transition duration-300`}></div>
+                <div
+                  className={`absolute -inset-1 bg-gradient-to-r ${stat.color} rounded-2xl blur-md opacity-20 group-hover:opacity-40 transition duration-300`}
+                ></div>
                 <div className="relative bg-white rounded-2xl shadow-lg border border-gray-100/50 p-5 overflow-hidden">
                   <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-transparent to-gray-50/50 rounded-full -mr-10 -mt-10"></div>
                   <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg ${stat.shadow} transform group-hover:scale-110 transition duration-300`}>
+                    <div
+                      className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg ${stat.shadow} transform group-hover:scale-110 transition duration-300`}
+                    >
                       <stat.icon size={20} className="text-white" />
                     </div>
                     <div>
-                      <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">{stat.label}</p>
-                      <p className="text-xl font-extrabold text-gray-800 mt-0.5">{stat.value}</p>
+                      <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">
+                        {stat.label}
+                      </p>
+                      <p className="text-xl font-extrabold text-gray-800 mt-0.5">
+                        {stat.value}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -213,11 +255,15 @@ const MatkaResults = () => {
           <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-5">
             <div className="flex items-center gap-2 mb-4">
               <Filter size={18} className="text-amber-500" />
-              <h2 className="text-sm font-semibold text-gray-700">Filter Results</h2>
+              <h2 className="text-sm font-semibold text-gray-700">
+                Filter Results
+              </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">Market</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                  Market
+                </label>
                 <select
                   name="marketId"
                   value={filter.marketId}
@@ -233,7 +279,9 @@ const MatkaResults = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">Start Date</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                  Start Date
+                </label>
                 <input
                   type="date"
                   name="startDate"
@@ -243,7 +291,9 @@ const MatkaResults = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">End Date</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                  End Date
+                </label>
                 <input
                   type="date"
                   name="endDate"
@@ -273,39 +323,63 @@ const MatkaResults = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-100">
-                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Market</th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Game Type</th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Winning Number</th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Total Bids</th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Winners</th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Total Payout</th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Date</th>
+                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                        Market
+                      </th>
+                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                        Game Type
+                      </th>
+                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                        Winning Number
+                      </th>
+                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                        Total Bids
+                      </th>
+                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                        Winners
+                      </th>
+                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                        Total Payout
+                      </th>
+                      <th className="px-4 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                        Date
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100/50">
                     {results.map((result, index) => {
-                      const gameTypeDisplay = getGameTypeDisplay(result.gameType);
+                      const gameTypeDisplay = getGameTypeDisplay(
+                        result.gameType,
+                      );
                       const gameTypeColor = getGameTypeColor(result.gameType);
-                      const gameTypeIcon = getGameTypeIcon(result.gameType);
-                      const marketGradient = getMarketGradient(result.marketName);
-                      
+                      const GameTypeIcon = getGameTypeIcon(result.gameType);
+                      const marketGradient = getMarketGradient(
+                        result.marketName,
+                      );
+
                       return (
-                        <tr 
-                          key={result._id} 
+                        <tr
+                          key={result._id}
                           className="hover:bg-gradient-to-r hover:from-amber-50/50 hover:to-orange-50/50 transition-all duration-300 group/row transform hover:scale-[1.002]"
                         >
                           <td className="px-4 py-3.5">
-                            <span className={`inline-block px-3 py-1 text-xs font-bold text-white rounded-lg bg-gradient-to-r ${marketGradient} shadow-lg transform group-hover/row:scale-105 transition duration-300`}>
+                            <span
+                              className={`inline-block px-3 py-1 text-xs font-bold text-white rounded-lg bg-gradient-to-r ${marketGradient} shadow-lg transform group-hover/row:scale-105 transition duration-300`}
+                            >
                               {result.marketName}
                             </span>
                           </td>
                           <td className="px-4 py-3.5">
-                            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full shadow-lg transform group-hover/row:scale-105 transition duration-300 ${gameTypeColor}`}>
-                              {gameTypeIcon} {gameTypeDisplay}
+                            <span
+                              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-full shadow-lg transform group-hover/row:scale-105 transition duration-300 ${gameTypeColor}`}
+                            >
+                              <GameTypeIcon size={14} />
+                              {gameTypeDisplay}
                             </span>
                           </td>
                           <td className="px-4 py-3.5">
-                            <span className="inline-block text-lg font-black text-transparent bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text transform group-hover/row:scale-110 transition duration-300">
+                            <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 font-black rounded-xl text-lg border border-green-200 shadow-lg shadow-green-500/10 transform group-hover/row:scale-105 transition duration-300">
+                              <Award size={16} className="text-green-500" />
                               {result.winningNumber}
                             </span>
                           </td>
@@ -322,11 +396,14 @@ const MatkaResults = () => {
                             {formatCurrency(result.totalPayout)}
                           </td>
                           <td className="px-4 py-3.5 text-sm text-gray-500 font-medium">
-                            {new Date(result.resultDate).toLocaleDateString("en-IN", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
+                            {new Date(result.resultDate).toLocaleDateString(
+                              "en-IN",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              },
+                            )}
                           </td>
                         </tr>
                       );
@@ -340,9 +417,21 @@ const MatkaResults = () => {
           <div className="group relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-amber-400/20 to-orange-400/20 rounded-2xl blur-xl"></div>
             <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-16 text-center">
-              <div className="text-7xl mb-4 animate-float">📋</div>
-              <p className="text-gray-600 text-xl font-semibold">No results found</p>
-              <p className="text-gray-400 text-sm mt-1">Results will appear here once declared</p>
+              <div className="flex justify-center mb-4">
+                <div className="w-28 h-28 rounded-full bg-gradient-to-r from-amber-100 to-orange-100 flex items-center justify-center animate-float">
+                  <Inbox
+                    size={56}
+                    className="text-amber-500"
+                    strokeWidth={1.5}
+                  />
+                </div>
+              </div>
+              <p className="text-gray-600 text-xl font-semibold">
+                No results found
+              </p>
+              <p className="text-gray-400 text-sm mt-1">
+                Results will appear here once declared
+              </p>
             </div>
           </div>
         )}
@@ -350,8 +439,13 @@ const MatkaResults = () => {
 
       <style jsx>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
         }
         .animate-float {
           animation: float 3s ease-in-out infinite;

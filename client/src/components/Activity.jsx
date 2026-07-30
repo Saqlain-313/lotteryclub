@@ -1,14 +1,25 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { 
-  Coins, Gift, RefreshCw, AlertCircle, Calendar, 
-  TrendingUp, Sparkles, Clock, Shield, Award, Zap, 
-  CheckCircle, Lock, ChevronRight, Star, Users, Gamepad2, Trophy
+import {
+  AlertCircle,
+  Calendar,
+  CheckCircle,
+  ChevronRight,
+  Clock,
+  Coins,
+  Gamepad2,
+  Gift,
+  Lock,
+  RefreshCw,
+  Sparkles,
+  Star,
+  Users,
+  Zap,
 } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getDailyClaimStatus,
   claimDailyBonus,
   clearDailyClaimError,
+  getDailyClaimStatus,
   resetClaimSuccess,
 } from "../redux/Slices/dailyClaimSlice";
 
@@ -31,7 +42,9 @@ const getISTDateString = (date = new Date()) =>
 const getNextISTMidnight = () => {
   const nowIST = getISTDateString();
   const [y, m, d] = nowIST.split("-").map(Number);
-  return new Date(`${y}-${String(m).padStart(2, "0")}-${String(d + 1).padStart(2, "0")}T00:00:00+05:30`);
+  return new Date(
+    `${y}-${String(m).padStart(2, "0")}-${String(d + 1).padStart(2, "0")}T00:00:00+05:30`,
+  );
 };
 
 // Golden text style
@@ -47,20 +60,20 @@ const goldenTextStyle = {
 // =======================
 const RewardCard = ({ title, subtitle, button, bg, image }) => {
   return (
-    <div className={`bg-gradient-to-br  rounded-2xl p-5 mb-4 shadow-lg relative overflow-hidden group cursor-pointer hover:scale-[1.02] transition-transform duration-200 min-h-[200px]`}>
+    <div
+      className={`bg-gradient-to-br  rounded-2xl p-5 mb-4 shadow-lg relative overflow-hidden group cursor-pointer hover:scale-[1.02] transition-transform duration-200 min-h-[200px]`}
+    >
       {/* Background Image */}
       <div className="absolute inset-0 ">
-        <img 
-          src={image} 
-          alt={title} 
-          className="w-full h-full object-cover"
-        />
+        <img src={image} alt={title} className="w-full h-full object-cover" />
       </div>
       <div className="absolute inset-0 bg-black/40"></div>
       <div className="relative z-10 flex flex-col min-h-[160px] justify-between">
         <div>
           <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1 inline-block mb-3">
-            <span className="text-white text-xs font-bold tracking-wider">🔥 HOT OFFER</span>
+            <span className="text-white text-xs font-bold tracking-wider">
+              🔥 HOT OFFER
+            </span>
           </div>
           <h3 className="text-white text-xl font-bold">{title}</h3>
           <p className="text-white/90 text-sm mt-1">{subtitle}</p>
@@ -181,7 +194,8 @@ const Activity = () => {
     updateTimeRemaining();
   };
 
-  const rewardData = rewards && Object.keys(rewards).length > 0 ? rewards : defaultRewards;
+  const rewardData =
+    rewards && Object.keys(rewards).length > 0 ? rewards : defaultRewards;
   const rewardList = Object.entries(rewardData)
     .map(([day, amount]) => ({ day: Number(day), amount }))
     .sort((a, b) => a.day - b.day);
@@ -192,13 +206,17 @@ const Activity = () => {
       <div className="min-h-screen bg-[#f7f9fb] py-6 font-['Inter',sans-serif]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-lg px-5 py-4 mb-6 border border-white/40">
-            <h1 className="text-2xl font-bold text-center text-gray-800 tracking-tight">Activity</h1>
+            <h1 className="text-2xl font-bold text-center text-gray-800 tracking-tight">
+              Activity
+            </h1>
           </div>
           <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl shadow-2xl p-8 max-w-md mx-auto">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
             <div className="relative z-10 text-center">
               <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-yellow-400 border-t-transparent"></div>
-              <p className="mt-4 text-gray-600 font-medium">Loading daily rewards...</p>
+              <p className="mt-4 text-gray-600 font-medium">
+                Loading daily rewards...
+              </p>
             </div>
           </div>
         </div>
@@ -214,7 +232,7 @@ const Activity = () => {
           {/* Left Column */}
           <div className="space-y-6">
             {/* Daily Claim Component */}
-            <div className="relative bg-gradient-to-br from-white via-gray-50 to-white rounded-3xl shadow-2xl p-4 sm:p-6 border border-gray-100 overflow-hidden">
+            <div className="relative bg-gradient-to-br from-white via-gray-50 to-white rounded-3xl shadow-2xl sm:p-6 border border-gray-100 overflow-hidden">
               {/* Animated background gradient */}
               <div className="absolute -top-40 -right-40 w-80 h-80 bg-yellow-200/20 rounded-full blur-3xl animate-pulse"></div>
               <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -236,7 +254,10 @@ const Activity = () => {
                         </div>
                       </div>
                       <div>
-                        <h3 className="text-lg md:text-xl font-black tracking-tight" style={goldenTextStyle}>
+                        <h3
+                          className="text-lg md:text-xl font-black tracking-tight"
+                          style={goldenTextStyle}
+                        >
                           Daily Loyalty Reward
                         </h3>
                         <p className="text-gray-500 text-xs font-medium flex items-center gap-1">
@@ -251,7 +272,10 @@ const Activity = () => {
                       className="p-2 hover:bg-yellow-50/80 rounded-xl transition-all duration-300 hover:scale-110 hover:rotate-180 border border-yellow-200/50"
                       title="Refresh Status"
                     >
-                      <RefreshCw size={18} className={`${loading ? "animate-spin" : ""} text-yellow-600`} />
+                      <RefreshCw
+                        size={18}
+                        className={`${loading ? "animate-spin" : ""} text-yellow-600`}
+                      />
                     </button>
                   </div>
 
@@ -259,26 +283,42 @@ const Activity = () => {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
                     {totalCredit && Number(totalCredit) > 0 && (
                       <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-3 border border-yellow-200/50 shadow-sm">
-                        <p className="text-xs text-gray-500 font-medium">Total Credits</p>
-                        <p className="text-xl font-bold text-yellow-600">₹{totalCredit}</p>
+                        <p className="text-xs text-gray-500 font-medium">
+                          Total Credits
+                        </p>
+                        <p className="text-xl font-bold text-yellow-600">
+                          ₹{totalCredit}
+                        </p>
                       </div>
                     )}
                     {currentDay && (
                       <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-3 border border-yellow-200/50 shadow-sm">
-                        <p className="text-xs text-gray-500 font-medium">Current Day</p>
-                        <p className="text-xl font-bold text-gray-800">Day {currentDay}/7</p>
+                        <p className="text-xs text-gray-500 font-medium">
+                          Current Day
+                        </p>
+                        <p className="text-xl font-bold text-gray-800">
+                          Day {currentDay}/7
+                        </p>
                       </div>
                     )}
                     {claimedDay && (
                       <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-3 border border-green-200/50 shadow-sm">
-                        <p className="text-xs text-gray-500 font-medium">Last Claimed</p>
-                        <p className="text-xl font-bold text-green-600">Day {claimedDay}</p>
+                        <p className="text-xs text-gray-500 font-medium">
+                          Last Claimed
+                        </p>
+                        <p className="text-xl font-bold text-green-600">
+                          Day {claimedDay}
+                        </p>
                       </div>
                     )}
                     {reward && claimSuccess && (
                       <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-3 border border-yellow-200/50 shadow-sm">
-                        <p className="text-xs text-gray-500 font-medium">Reward Earned</p>
-                        <p className="text-xl font-bold text-yellow-600">₹{reward}</p>
+                        <p className="text-xs text-gray-500 font-medium">
+                          Reward Earned
+                        </p>
+                        <p className="text-xl font-bold text-yellow-600">
+                          ₹{reward}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -291,13 +331,13 @@ const Activity = () => {
                         {lastClaimDateIST
                           ? lastClaimDateIST
                           : new Date(lastClaimDate).toLocaleString("en-IN", {
-                            timeZone: "Asia/Kolkata",
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                              timeZone: "Asia/Kolkata",
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
                       </span>
                     </div>
                   )}
@@ -310,7 +350,8 @@ const Activity = () => {
                           <Zap size={20} className="text-white" />
                         </div>
                         <p className="font-bold text-green-700">
-                          🎉 Success! You claimed ₹{reward} for Day {claimedDay}!
+                          🎉 Success! You claimed ₹{reward} for Day {claimedDay}
+                          !
                         </p>
                       </div>
                     </div>
@@ -321,7 +362,10 @@ const Activity = () => {
                     <div className="mt-4 p-4 bg-gradient-to-r from-red-400/20 via-red-500/20 to-red-400/20 border border-red-400/30 rounded-2xl backdrop-blur-sm animate-shake">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <AlertCircle size={20} className="text-red-500 flex-shrink-0" />
+                          <AlertCircle
+                            size={20}
+                            className="text-red-500 flex-shrink-0"
+                          />
                           <p className="text-red-700 font-medium">{error}</p>
                         </div>
                         <button
@@ -343,7 +387,9 @@ const Activity = () => {
                       {rewardList.map((item) => {
                         const isCompleted = item.day < currentDay;
                         const isCurrent = item.day === currentDay && canClaim;
-                        const isLocked = item.day > currentDay || (item.day === currentDay && !canClaim);
+                        const isLocked =
+                          item.day > currentDay ||
+                          (item.day === currentDay && !canClaim);
 
                         return (
                           <div
@@ -359,16 +405,24 @@ const Activity = () => {
                             {isCompleted ? (
                               <>
                                 <CheckCircle className="text-white" size={16} />
-                                <span className="text-[8px] md:text-[10px] font-bold text-white mt-0.5">DAY {item.day}</span>
+                                <span className="text-[8px] md:text-[10px] font-bold text-white mt-0.5">
+                                  DAY {item.day}
+                                </span>
                               </>
                             ) : isCurrent ? (
                               <>
-                                <span className="text-[8px] md:text-[10px] font-bold text-white">DAY {item.day}</span>
-                                <span className="text-[10px] md:text-xs font-black text-white">₹{item.amount}</span>
+                                <span className="text-[8px] md:text-[10px] font-bold text-white">
+                                  DAY {item.day}
+                                </span>
+                                <span className="text-[10px] md:text-xs font-black text-white">
+                                  ₹{item.amount}
+                                </span>
                               </>
                             ) : (
                               <>
-                                <span className="text-[8px] md:text-[10px] font-bold text-gray-400">DAY {item.day}</span>
+                                <span className="text-[8px] md:text-[10px] font-bold text-gray-400">
+                                  DAY {item.day}
+                                </span>
                                 <Lock className="text-gray-400" size={14} />
                               </>
                             )}
@@ -411,7 +465,12 @@ const Activity = () => {
                       </span>
                     )}
                     <span className="flex items-center gap-1 text-yellow-600">
-                      <Gift size={12} /> ₹{rewardList.reduce((sum, r) => sum + (r.day < currentDay ? r.amount : 0), 0)} claimed
+                      <Gift size={12} /> ₹
+                      {rewardList.reduce(
+                        (sum, r) => sum + (r.day < currentDay ? r.amount : 0),
+                        0,
+                      )}{" "}
+                      claimed
                     </span>
                   </div>
 
@@ -419,7 +478,9 @@ const Activity = () => {
                   <div className="mt-3">
                     <div className="flex justify-between text-[10px] font-medium text-gray-500 mb-1">
                       <span>Progress</span>
-                      <span className="text-yellow-600 font-bold">{Math.min(currentDay - 1, 7)}/7 Days</span>
+                      <span className="text-yellow-600 font-bold">
+                        {Math.min(currentDay - 1, 7)}/7 Days
+                      </span>
                     </div>
                     <div className="relative w-full h-2 bg-gray-200/50 rounded-full overflow-hidden">
                       <div
@@ -436,15 +497,24 @@ const Activity = () => {
             <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-5 border border-white/40 shadow-lg">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-800">Experience Progress</h3>
-                  <p className="text-sm font-semibold text-gray-500">3,450 XP until Diamond Tier</p>
+                  <h3 className="text-lg font-bold text-gray-800">
+                    Experience Progress
+                  </h3>
+                  <p className="text-sm font-semibold text-gray-500">
+                    3,450 XP until Diamond Tier
+                  </p>
                 </div>
                 <div className="text-right">
-                  <span className="text-2xl font-bold text-yellow-600">LVL 42</span>
+                  <span className="text-2xl font-bold text-yellow-600">
+                    LVL 42
+                  </span>
                 </div>
               </div>
               <div className="relative w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-                <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-amber-600 rounded-full" style={{width: '72%'}}></div>
+                <div
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-400 to-amber-600 rounded-full"
+                  style={{ width: "72%" }}
+                ></div>
                 <div className="absolute top-0 left-[72%] h-full w-0.5 bg-white shadow-[0_0_10px_white]"></div>
               </div>
               <div className="mt-3 flex justify-between text-xs font-semibold text-gray-500">
@@ -460,7 +530,9 @@ const Activity = () => {
             {/* Daily Missions */}
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-gray-800">Daily Missions</h3>
+                <h3 className="text-lg font-bold text-gray-800">
+                  Daily Missions
+                </h3>
                 <button className="text-yellow-600 text-sm font-semibold flex items-center gap-1 hover:underline">
                   View All
                   <ChevronRight className="w-4 h-4" />
@@ -471,23 +543,54 @@ const Activity = () => {
               <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-4 mb-4 border border-white/40 shadow-lg flex items-center gap-4 hover:shadow-xl transition-shadow cursor-pointer group">
                 <div className="w-14 h-14 relative flex items-center justify-center shrink-0">
                   <svg className="absolute inset-0 w-14 h-14 -rotate-90">
-                    <circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" strokeWidth="6"/>
-                    <circle cx="28" cy="28" r="24" fill="none" stroke="#fbbf24" strokeWidth="6" strokeDasharray="150.8" strokeDashoffset="37.7" strokeLinecap="round"/>
+                    <circle
+                      cx="28"
+                      cy="28"
+                      r="24"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="6"
+                    />
+                    <circle
+                      cx="28"
+                      cy="28"
+                      r="24"
+                      fill="none"
+                      stroke="#fbbf24"
+                      strokeWidth="6"
+                      strokeDasharray="150.8"
+                      strokeDashoffset="37.7"
+                      strokeLinecap="round"
+                    />
                   </svg>
                   <div className="absolute inset-1.5 bg-white rounded-full flex items-center justify-center">
-                    <Gamepad2 className="w-6 h-6 text-yellow-600" fill="currentColor" />
+                    <Gamepad2
+                      className="w-6 h-6 text-yellow-600"
+                      fill="currentColor"
+                    />
                   </div>
                 </div>
                 <div className="flex-1 min-w-[140px]">
-                  <h4 className="font-bold text-gray-800 group-hover:text-yellow-600 transition-colors">Play 5 Live Casino Games</h4>
-                  <p className="text-sm text-gray-500">Wager on any live table to complete this mission.</p>
+                  <h4 className="font-bold text-gray-800 group-hover:text-yellow-600 transition-colors">
+                    Play 5 Live Casino Games
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    Wager on any live table to complete this mission.
+                  </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 ml-auto">
                   <div className="flex items-center gap-1 bg-yellow-100 px-3 py-1 rounded-full">
-                    <Star className="w-4 h-4 text-yellow-600" fill="currentColor" />
-                    <span className="text-sm font-semibold text-yellow-600 whitespace-nowrap">+500 XP</span>
+                    <Star
+                      className="w-4 h-4 text-yellow-600"
+                      fill="currentColor"
+                    />
+                    <span className="text-sm font-semibold text-yellow-600 whitespace-nowrap">
+                      +500 XP
+                    </span>
                   </div>
-                  <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">3 / 5</span>
+                  <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">
+                    3 / 5
+                  </span>
                 </div>
               </div>
 
@@ -495,20 +598,45 @@ const Activity = () => {
               <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-4 mb-4 border border-white/40 shadow-lg flex items-center gap-4 hover:shadow-xl transition-shadow cursor-pointer group opacity-90">
                 <div className="w-14 h-14 relative flex items-center justify-center shrink-0">
                   <svg className="absolute inset-0 w-14 h-14 -rotate-90">
-                    <circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" strokeWidth="6"/>
-                    <circle cx="28" cy="28" r="24" fill="none" stroke="#10b981" strokeWidth="6" strokeDasharray="150.8" strokeDashoffset="0" strokeLinecap="round"/>
+                    <circle
+                      cx="28"
+                      cy="28"
+                      r="24"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="6"
+                    />
+                    <circle
+                      cx="28"
+                      cy="28"
+                      r="24"
+                      fill="none"
+                      stroke="#10b981"
+                      strokeWidth="6"
+                      strokeDasharray="150.8"
+                      strokeDashoffset="0"
+                      strokeLinecap="round"
+                    />
                   </svg>
                   <div className="absolute inset-1.5 bg-white rounded-full flex items-center justify-center">
                     <Coins className="w-6 h-6 text-green-500" />
                   </div>
                 </div>
                 <div className="flex-1 min-w-[140px]">
-                  <h4 className="font-bold text-gray-800">Daily Deposit Bonus</h4>
-                  <p className="text-sm text-gray-500">Add funds to your wallet for a 5% bonus today.</p>
+                  <h4 className="font-bold text-gray-800">
+                    Daily Deposit Bonus
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    Add funds to your wallet for a 5% bonus today.
+                  </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 ml-auto">
-                  <div className="bg-green-100 text-green-600 px-3 py-1 rounded-full font-bold text-xs uppercase tracking-wider">Completed</div>
-                  <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">Claimed</span>
+                  <div className="bg-green-100 text-green-600 px-3 py-1 rounded-full font-bold text-xs uppercase tracking-wider">
+                    Completed
+                  </div>
+                  <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">
+                    Claimed
+                  </span>
                 </div>
               </div>
 
@@ -516,23 +644,51 @@ const Activity = () => {
               <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-4 border border-white/40 shadow-lg flex items-center gap-4 hover:shadow-xl transition-shadow cursor-pointer group">
                 <div className="w-14 h-14 relative flex items-center justify-center shrink-0">
                   <svg className="absolute inset-0 w-14 h-14 -rotate-90">
-                    <circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" strokeWidth="6"/>
-                    <circle cx="28" cy="28" r="24" fill="none" stroke="#fbbf24" strokeWidth="6" strokeDasharray="150.8" strokeDashoffset="113.1" strokeLinecap="round"/>
+                    <circle
+                      cx="28"
+                      cy="28"
+                      r="24"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="6"
+                    />
+                    <circle
+                      cx="28"
+                      cy="28"
+                      r="24"
+                      fill="none"
+                      stroke="#fbbf24"
+                      strokeWidth="6"
+                      strokeDasharray="150.8"
+                      strokeDashoffset="113.1"
+                      strokeLinecap="round"
+                    />
                   </svg>
                   <div className="absolute inset-1.5 bg-white rounded-full flex items-center justify-center">
-                    <Users className="w-6 h-6 text-yellow-600" fill="currentColor" />
+                    <Users
+                      className="w-6 h-6 text-yellow-600"
+                      fill="currentColor"
+                    />
                   </div>
                 </div>
                 <div className="flex-1 min-w-[140px]">
-                  <h4 className="font-bold text-gray-800 group-hover:text-yellow-600 transition-colors">Invite 2 Friends</h4>
-                  <p className="text-sm text-gray-500">Get exclusive vouchers for every successful referral.</p>
+                  <h4 className="font-bold text-gray-800 group-hover:text-yellow-600 transition-colors">
+                    Invite 2 Friends
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    Get exclusive vouchers for every successful referral.
+                  </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 ml-auto">
                   <div className="flex items-center gap-1 bg-yellow-100 px-3 py-1 rounded-full">
                     <Gift className="w-4 h-4 text-yellow-600" />
-                    <span className="text-sm font-semibold text-yellow-600 whitespace-nowrap">2 Vouchers</span>
+                    <span className="text-sm font-semibold text-yellow-600 whitespace-nowrap">
+                      2 Vouchers
+                    </span>
                   </div>
-                  <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">0 / 2</span>
+                  <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">
+                    0 / 2
+                  </span>
                 </div>
               </div>
             </div>
@@ -565,17 +721,41 @@ const Activity = () => {
       {/* Custom CSS for animations */}
       <style jsx>{`
         @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
         }
         @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-20px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-          20%, 40%, 60%, 80% { transform: translateX(4px); }
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          10%,
+          30%,
+          50%,
+          70%,
+          90% {
+            transform: translateX(-4px);
+          }
+          20%,
+          40%,
+          60%,
+          80% {
+            transform: translateX(4px);
+          }
         }
         .animate-shimmer {
           animation: shimmer 2s infinite;

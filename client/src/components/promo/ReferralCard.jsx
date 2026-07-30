@@ -1,4 +1,4 @@
-import { Copy, Link2, CheckCircle } from "lucide-react";
+import { Copy, Link2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import SocialShare from "./SocialShare";
 
@@ -7,25 +7,35 @@ const ReferralCard = () => {
 
   // Construct referral link with current domain and referral code
   const baseUrl = window.location.origin;
-  const referralLink = `${baseUrl}/register/?ref=${user?.referralCode || 'alex777'}`;
+  const referralLink = `${baseUrl}/register/?ref=${user?.referralCode || "alex777"}`;
 
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(referralLink);
-      
+
       // Show success feedback
-      const btn = document.getElementById('copyBtn');
+      const btn = document.getElementById("copyBtn");
       const originalText = btn.innerHTML;
-      btn.innerHTML = '<span class="flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Copied!</span>';
-      btn.classList.add('bg-green-500', 'hover:bg-green-600');
-      btn.classList.remove('from-amber-400', 'to-amber-500', 'hover:from-amber-500', 'hover:to-amber-600');
-      
+      btn.innerHTML =
+        '<span class="flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Copied!</span>';
+      btn.classList.add("bg-green-500", "hover:bg-green-600");
+      btn.classList.remove(
+        "from-amber-400",
+        "to-amber-500",
+        "hover:from-amber-500",
+        "hover:to-amber-600",
+      );
+
       setTimeout(() => {
         btn.innerHTML = originalText;
-        btn.classList.remove('bg-green-500', 'hover:bg-green-600');
-        btn.classList.add('from-amber-400', 'to-amber-500', 'hover:from-amber-500', 'hover:to-amber-600');
+        btn.classList.remove("bg-green-500", "hover:bg-green-600");
+        btn.classList.add(
+          "from-amber-400",
+          "to-amber-500",
+          "hover:from-amber-500",
+          "hover:to-amber-600",
+        );
       }, 2000);
-      
     } catch (error) {
       console.error("Failed to copy: ", error);
       // Fallback method for older browsers
@@ -37,7 +47,7 @@ const ReferralCard = () => {
       document.body.appendChild(textArea);
       textArea.select();
       try {
-        document.execCommand('copy');
+        document.execCommand("copy");
         alert("Referral link copied!");
       } catch (err) {
         alert("Failed to copy link. Please copy manually.");
@@ -48,14 +58,15 @@ const ReferralCard = () => {
 
   return (
     <div className="mt-6 rounded-3xl bg-white shadow-xl border border-gray-100/80 p-6 md:p-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-      
       {/* Header */}
       <div className="flex items-start gap-4 mb-5">
         <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center flex-shrink-0">
           <Link2 size={24} className="text-amber-600" />
         </div>
         <div>
-          <h3 className="text-xl font-extrabold text-gray-800">Share Your Referral Link</h3>
+          <h3 className="text-xl font-extrabold text-gray-800">
+            Share Your Referral Link
+          </h3>
           <p className="text-sm text-gray-500 mt-0.5">
             Invite your friends and earn rewards on every successful referral.
           </p>
