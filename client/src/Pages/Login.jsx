@@ -37,13 +37,22 @@ const Login = () => {
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    let inputValue = value;
+
+    if (name === "mobile") {
+      inputValue = value.replace(/\D/g, "").slice(0, 10);
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: inputValue,
     }));
+
     if (formErrors[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: "" }));
     }
+
     if (error) {
       dispatch(clearError());
     }
@@ -275,11 +284,15 @@ const Login = () => {
                     +91
                   </span>
                   <input
-                    type="text"
+                    type="tel"
                     name="mobile"
                     value={formData.mobile}
                     onChange={handleChange}
                     placeholder="Enter mobile number"
+                    maxLength={10}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="tel"
                     className="bg-transparent flex-1 outline-none px-1 text-sm text-gray-900 placeholder-gray-400"
                   />
                 </div>
@@ -364,7 +377,7 @@ const Login = () => {
               </div>
 
               {/* Register Link - Mobile only (unchanged), Desktop has it in left panel */}
-              <p className="text-center text-gray-500 text-sm md:hidden">
+              <p className="text-center text-gray-500 text-sm">
                 Don't have an account?{" "}
                 <Link
                   to="/register"

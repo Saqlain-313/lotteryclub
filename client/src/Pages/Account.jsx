@@ -21,6 +21,7 @@ import {
   TrendingUp,
   User,
   Wallet,
+  X,
 } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +33,7 @@ const Account = () => {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.auth);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // 🔶 Warm amber/gold glow shadow — matches reference image exactly
   const glowShadow =
@@ -125,7 +127,16 @@ const Account = () => {
     },
   ];
 
-  const handleLogout = async () => {
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const handleCancelLogout = () => {
+    if (isLoggingOut) return;
+    setShowLogoutConfirm(false);
+  };
+
+  const handleConfirmLogout = async () => {
     setIsLoggingOut(true);
     try {
       await dispatch(logout()).unwrap();
@@ -133,6 +144,7 @@ const Account = () => {
     } catch (error) {
       console.error("Logout failed:", error);
       setIsLoggingOut(false);
+      setShowLogoutConfirm(false);
     }
   };
 
@@ -282,7 +294,7 @@ const Account = () => {
               Wallet
             </Link>
             <button
-              onClick={handleLogout}
+              onClick={handleLogoutClick}
               disabled={isLoggingOut}
               className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-red-50 rounded-xl border border-red-200/60 text-red-600 font-semibold text-sm shadow-[0_2px_8px_-2px_rgba(248,113,113,0.25)] hover:shadow-[0_4px_14px_-2px_rgba(248,113,113,0.4)] hover:bg-red-100 transition-all disabled:opacity-50"
             >
@@ -438,6 +450,63 @@ const Account = () => {
         </div>
       </div>
 
+      {/* Logout Confirmation Popup */}
+      {showLogoutConfirm && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
+          onClick={handleCancelLogout}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className={`relative bg-white rounded-2xl ${glowShadow} border border-amber-200/50 w-full max-w-xs p-6 text-center animate-[popIn_0.2s_ease]`}
+          >
+            <button
+              onClick={handleCancelLogout}
+              disabled={isLoggingOut}
+              className="absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-40"
+            >
+              <X size={14} className="text-gray-400" />
+            </button>
+
+            <div className="w-14 h-14 rounded-full bg-red-50 border border-red-200/60 flex items-center justify-center mx-auto mb-3">
+              <LogOut size={22} className="text-red-500" />
+            </div>
+
+            <h3 className="text-base font-bold text-gray-900 mb-1">
+              Log out of WINZOX?
+            </h3>
+            <p className="text-xs text-gray-500 mb-5 leading-relaxed">
+              Are you sure you want to logout? You'll need to sign in again to
+              access your wallet and bets.
+            </p>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleCancelLogout}
+                disabled={isLoggingOut}
+                className="flex-1 px-4 py-2.5 bg-gray-50 rounded-xl border border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-100 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmLogout}
+                disabled={isLoggingOut}
+                className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 rounded-xl text-white font-bold text-sm shadow-[0_4px_14px_-2px_rgba(239,68,68,0.5)] hover:shadow-[0_6px_20px_-2px_rgba(239,68,68,0.65)] transition-all disabled:opacity-60"
+              >
+                {isLoggingOut ? (
+                  <>
+                    <Circle className="animate-spin" size={14} />
+                    Logging out...
+                  </>
+                ) : (
+                  "Yes, Logout"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`
         @keyframes pulse-slow {
           0%, 100% { opacity: 0.6; transform: scale(1); }
@@ -445,6 +514,10 @@ const Account = () => {
         }
         .animate-pulse-slow {
           animation: pulse-slow 3s ease-in-out infinite;
+        }
+        @keyframes popIn {
+          0% { opacity: 0; transform: scale(0.92); }
+          100% { opacity: 1; transform: scale(1); }
         }
       `}</style>
     </div>

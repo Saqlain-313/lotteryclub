@@ -4,6 +4,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 
 import Activity from "./components/Activity.jsx";
 import AppInitializer from "./components/AppInitializer.jsx";
+import ChangePassword from "./components/ChangePassword.jsx";
 import Navbar from "./components/Navbar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import WithdrawalHistory from "./components/WithdrawalHistory.jsx";
@@ -123,6 +124,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Deposit />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/change-password"
+            element={
+              <ProtectedRoute>
+                <ChangePassword />
               </ProtectedRoute>
             }
           />
