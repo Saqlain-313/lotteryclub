@@ -257,21 +257,21 @@ export default function HeroSection() {
                       {/* Quick Info Chips */}
                       <div className="flex flex-wrap items-center gap-3 mt-2">
                         <div className="flex items-center gap-1.5">
-                          <Trophy className="w-3 h-3 md:w-4 h-4 text-yellow-400" />
+                          <Trophy className="w-3 h-3 md:w-4 text-yellow-400" />
                           <span className="text-gray-300 text-[10px] md:text-xs">
                             Fast Results
                           </span>
                         </div>
                         <div className="w-px h-3 bg-gray-600"></div>
                         <div className="flex items-center gap-1.5">
-                          <Shield className="w-3 h-3 md:w-4 h-4 text-yellow-400" />
+                          <Shield className="w-3 h-3 md:w-4 text-yellow-400" />
                           <span className="text-gray-300 text-[10px] md:text-xs">
                             100% Secure
                           </span>
                         </div>
                         <div className="w-px h-3 bg-gray-600 hidden sm:block"></div>
                         <div className="hidden sm:flex items-center gap-1.5">
-                          <Users className="w-3 h-3 md:w-4 h-4 text-yellow-400" />
+                          <Users className="w-3 h-3 md:w-4 text-yellow-400" />
                           <span className="text-gray-300 text-[10px] md:text-xs">
                             2M+ Players
                           </span>

@@ -575,15 +575,15 @@ const Navbar = ({ children }) => {
               >
                 <User
                   size={20}
-                  strokeWidth={location.pathname === "/profile" ? 2.5 : 2}
+                  strokeWidth={location.pathname === "/account" ? 2.5 : 2}
                   className={`transition-all duration-500 ${
-                    location.pathname === "/profile"
+                    location.pathname === "/account"
                       ? "text-yellow-600"
                       : "text-gray-500"
                   }`}
                 />
                 <span className="mt-0.5 font-bold text-[10px]">Account</span>
-                {location.pathname === "/profile" && (
+                {location.pathname === "/account" && (
                   <div className="absolute top-[3.5rem] w-8 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></div>
                 )}
               </Link>
