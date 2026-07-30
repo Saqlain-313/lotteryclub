@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useSelector } from "react-redux";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import Activity from "./components/Activity.jsx";
 import AppInitializer from "./components/AppInitializer.jsx";
@@ -20,6 +20,8 @@ import Withdrawal from "./Pages/Withdrawal.jsx";
 
 // 👇 Matka Game Imports
 import { useLayoutEffect } from "react";
+import Account from "./Pages/Account.jsx";
+import Maintenance from "./Pages/Maintenance.jsx";
 import BidsHistory from "./Pages/user/BidsHistory.jsx";
 import MatkaDashboard from "./Pages/user/Dashboard.jsx";
 import MatkaMarkets from "./Pages/user/Markets.jsx";
@@ -76,6 +78,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <WalletDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <Account />
               </ProtectedRoute>
             }
           />
@@ -168,7 +179,7 @@ function App() {
           />
 
           {/* 404 */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Maintenance />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

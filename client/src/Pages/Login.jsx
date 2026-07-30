@@ -92,7 +92,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex justify-center items-center p-3 md:p-6">
+    <div className="mt-20 bg-gray-50 text-gray-900 flex justify-center items-center p-3 md:p-6">
       <div className="w-full max-w-6xl bg-white rounded-2xl md:rounded-3xl border border-gray-300 md:border-0 md:shadow-2xl overflow-hidden">
         {/* Desktop Layout - Two Columns */}
         <div className="flex flex-col md:flex-row">

@@ -1,7 +1,7 @@
 // api.js
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "http://localhost:5007/api";
 // const API_BASE_URL = "/api";
 
 const api = axios.create({
@@ -10,12 +10,10 @@ const api = axios.create({
   withCredentials: true,
 
   headers: {
-    "Content-Type":
-      "application/json",
+    "Content-Type": "application/json",
 
     // ✅ NO CACHE
-    "Cache-Control":
-      "no-cache, no-store, must-revalidate",
+    "Cache-Control": "no-cache, no-store, must-revalidate",
 
     Pragma: "no-cache",
 
@@ -31,16 +29,11 @@ api.interceptors.request.use(
   (config) => {
     // ✅ prevent browser cache
 
-    config.headers[
-      "Cache-Control"
-    ] =
-      "no-cache, no-store, must-revalidate";
+    config.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
 
-    config.headers.Pragma =
-      "no-cache";
+    config.headers.Pragma = "no-cache";
 
-    config.headers.Expires =
-      "0";
+    config.headers.Expires = "0";
 
     // ✅ unique request
     config.params = {
@@ -52,8 +45,7 @@ api.interceptors.request.use(
     return config;
   },
 
-  (error) =>
-    Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // =====================================================
@@ -64,36 +56,24 @@ api.interceptors.response.use(
   (response) => response,
 
   (error) => {
-    if (
-      error.response
-        ?.status === 401
-    ) {
+    if (error.response?.status === 401) {
       // Ignore guest profile checks
 
-      const isProfileCheck =
-        error.config?.url?.includes(
-          "/auth/profile"
-        );
+      const isProfileCheck = error.config?.url?.includes("/auth/profile");
 
       if (
         !isProfileCheck &&
-        window.location.pathname !==
-          "/login" &&
-        window.location.pathname !==
-          "/register"
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/register"
       ) {
-        window.location.href =
-          "/login";
+        window.location.href = "/login";
       }
     }
 
-    return Promise.reject(
-      error
-    );
-  }
+    return Promise.reject(error);
+  },
 );
 
-const host =
-  "https://demo22.etsblokchain.live/";
+const host = "https://demo22.etsblokchain.live/";
 
 export { api, host };
