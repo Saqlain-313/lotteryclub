@@ -98,7 +98,6 @@ const gamePoolSchema = new mongoose.Schema(
 
     gameType:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true
     },
 
 

@@ -39,6 +39,7 @@ const PowerballResult = () => {
     const [groupedGames, setGroupedGames] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [notificationShown, setNotificationShown] = useState(false);
+    const [selectedDrawNo, setSelectedDrawNo] = useState("all");
 
     // Load initial data
     useEffect(() => {
@@ -68,6 +69,26 @@ const PowerballResult = () => {
             setGroupedGames({});
         }
     }, [pendingGames]);
+
+    // Get unique draw numbers from pending games
+    const getUniqueDrawNumbers = () => {
+        if (!pendingGames || pendingGames.length === 0) return [];
+        const drawNumbers = new Set();
+        pendingGames.forEach(game => {
+            if (game.drawNo) {
+                drawNumbers.add(game.drawNo);
+            }
+        });
+        return Array.from(drawNumbers).sort((a, b) => a - b);
+    };
+
+    // Filter pending games by draw number
+    const getFilteredPendingGames = () => {
+        if (selectedDrawNo === "all") {
+            return pendingGames;
+        }
+        return pendingGames.filter(game => game.drawNo === parseInt(selectedDrawNo));
+    };
 
     // Handle success and error states
     useEffect(() => {
@@ -170,8 +191,6 @@ const PowerballResult = () => {
 
             console.log('Result created successfully:', result);
             
-            // Success will be handled by the useEffect
-            // But we also manually handle it here for immediate feedback
             toast.success(result.message || "Result Declared Successfully!");
             
             // Reset form immediately
@@ -200,6 +219,7 @@ const PowerballResult = () => {
         setShowPendingGames(!showPendingGames);
         if (!showPendingGames) {
             dispatch(getAllPendingGames());
+            setSelectedDrawNo("all");
         }
     };
 
@@ -251,6 +271,7 @@ const PowerballResult = () => {
     const handleClosePendingGames = () => {
         setShowPendingGames(false);
         dispatch(clearPendingGames());
+        setSelectedDrawNo("all");
     };
 
     const getUniqueUsers = (games) => {
@@ -279,12 +300,65 @@ const PowerballResult = () => {
         }
     };
 
+    // Get filtered games for display
+    const filteredPendingGames = getFilteredPendingGames();
+    
+    // Regroup filtered games
+    const getFilteredGroupedGames = () => {
+        if (selectedDrawNo === "all") {
+            return groupedGames;
+        }
+        
+        const filtered = filteredPendingGames.reduce((acc, game) => {
+            if (!acc[game.poolId]) {
+                acc[game.poolId] = {
+                    poolId: game.poolId,
+                    poolTotalPlayers: game.poolTotalPlayers || 0,
+                    poolTotalAmount: game.poolTotalAmount || 0,
+                    poolStatus: game.poolStatus || "Open",
+                    drawNo: game.drawNo,
+                    games: []
+                };
+            }
+            acc[game.poolId].games.push(game);
+            return acc;
+        }, {});
+        return filtered;
+    };
+
+    const filteredGroupedGames = getFilteredGroupedGames();
+    const uniqueDrawNumbers = getUniqueDrawNumbers();
+
+    // Get existing draw numbers for display
+    const existingDrawNumbers = results && results.length > 0 
+        ? results.map(r => r.drawNo).sort((a, b) => a - b) 
+        : [];
+
+    // Get draw numbers from pending games for dropdown
+    const pendingDrawNumbers = getUniqueDrawNumbers();
+
+    // Combined draw numbers (from results + pending)
+    const allDrawNumbers = [...new Set([...existingDrawNumbers, ...pendingDrawNumbers])].sort((a, b) => a - b);
+
+    // Get next draw number
+    const getNextDrawNumber = () => {
+        if (allDrawNumbers.length === 0) return 1;
+        return allDrawNumbers[allDrawNumbers.length - 1] + 1;
+    };
+
+    const nextDrawNumber = getNextDrawNumber();
+
     return (
         <div className="container mx-auto px-4 py-8">
             {/* Declare Result Form */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 flex justify-between items-center">
                     <h4 className="text-xl font-bold text-white">Declare Powerball Result</h4>
+                    {results && results.length > 0 && (
+                        <div className="text-white text-sm bg-white/20 px-3 py-1 rounded-full">
+                            Latest Draw: #{existingDrawNumbers[existingDrawNumbers.length - 1]}
+                        </div>
+                    )}
                 </div>
 
                 <div className="p-6">
@@ -293,16 +367,92 @@ const PowerballResult = () => {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Draw Number
                             </label>
-                            <input
-                                type="number"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder="Enter Draw Number"
-                                name="drawNo"
-                                value={formData.drawNo}
-                                onChange={handleChange}
-                                disabled={isSubmitting || createLoading}
-                                required
-                            />
+                            <div className="flex gap-2">
+                                <select
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                                    name="drawNo"
+                                    value={formData.drawNo}
+                                    onChange={handleChange}
+                                    disabled={isSubmitting || createLoading}
+                                    required
+                                >
+                                    <option value="">Select Draw Number</option>
+                                    {allDrawNumbers.length > 0 ? (
+                                        <>
+                                            <optgroup label="Existing Draws">
+                                                {existingDrawNumbers.map((num) => (
+                                                    <option key={`existing-${num}`} value={num}>
+                                                        Draw #{num} {results?.some(r => r.drawNo === num) ? '✅' : ''}
+                                                    </option>
+                                                ))}
+                                            </optgroup>
+                                            {pendingDrawNumbers.length > 0 && (
+                                                <optgroup label="Pending Draws">
+                                                    {pendingDrawNumbers.map((num) => (
+                                                        <option key={`pending-${num}`} value={num}>
+                                                            Draw #{num} {pendingGames?.some(g => g.drawNo === num) ? '⏳' : ''}
+                                                        </option>
+                                                    ))}
+                                                </optgroup>
+                                            )}
+                                            <optgroup label="Next Draw">
+                                                <option value={nextDrawNumber} className="text-blue-600 font-bold">
+                                                    Draw #{nextDrawNumber} (New) ✨
+                                                </option>
+                                            </optgroup>
+                                        </>
+                                    ) : (
+                                        <option value="1">Draw #1 (New) ✨</option>
+                                    )}
+                                </select>
+                                {formData.drawNo && (
+                                    <div className="flex items-center px-3 bg-blue-50 border border-blue-200 rounded-md text-blue-700 font-semibold whitespace-nowrap">
+                                        #{formData.drawNo}
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {/* Show existing draw numbers hint */}
+                            {allDrawNumbers.length > 0 && (
+                                <div className="mt-1 text-xs text-gray-500 flex flex-wrap gap-1">
+                                    <span>Existing draws: </span>
+                                    {existingDrawNumbers.map((num, idx) => (
+                                        <span key={num} className="text-blue-600">
+                                            #{num}{idx < existingDrawNumbers.length - 1 ? ',' : ''}
+                                        </span>
+                                    ))}
+                                    {pendingDrawNumbers.length > 0 && (
+                                        <>
+                                            <span className="ml-1">Pending: </span>
+                                            {pendingDrawNumbers.map((num, idx) => (
+                                                <span key={num} className="text-purple-600">
+                                                    #{num}{idx < pendingDrawNumbers.length - 1 ? ',' : ''}
+                                                </span>
+                                            ))}
+                                        </>
+                                    )}
+                                    <span className="ml-1 text-green-600 font-semibold">Next: #{nextDrawNumber}</span>
+                                </div>
+                            )}
+                            
+                            {/* Show selected draw status */}
+                            {formData.drawNo && (
+                                <div className="mt-2">
+                                    {results && results.some(r => r.drawNo === Number(formData.drawNo)) ? (
+                                        <span className="text-xs text-red-600 font-semibold">
+                                            ⚠️ Draw #{formData.drawNo} already has a result!
+                                        </span>
+                                    ) : pendingGames && pendingGames.some(g => g.drawNo === Number(formData.drawNo)) ? (
+                                        <span className="text-xs text-orange-600 font-semibold">
+                                            ⏳ Draw #{formData.drawNo} has pending games
+                                        </span>
+                                    ) : (
+                                        <span className="text-xs text-green-600 font-semibold">
+                                            ✅ Draw #{formData.drawNo} is ready to declare
+                                        </span>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         <div className="mb-4">
@@ -350,10 +500,49 @@ const PowerballResult = () => {
                             />
                         </div>
 
+                        {/* Show current draw number being declared */}
+                        {formData.drawNo && (
+                            <div className={`mb-4 p-3 rounded-md ${
+                                results && results.some(r => r.drawNo === Number(formData.drawNo))
+                                    ? 'bg-red-50 border border-red-200'
+                                    : pendingGames && pendingGames.some(g => g.drawNo === Number(formData.drawNo))
+                                    ? 'bg-orange-50 border border-orange-200'
+                                    : 'bg-green-50 border border-green-200'
+                            }`}>
+                                <p className={`text-sm ${
+                                    results && results.some(r => r.drawNo === Number(formData.drawNo))
+                                        ? 'text-red-800'
+                                        : pendingGames && pendingGames.some(g => g.drawNo === Number(formData.drawNo))
+                                        ? 'text-orange-800'
+                                        : 'text-green-800'
+                                }`}>
+                                    <span className="font-semibold">
+                                        {results && results.some(r => r.drawNo === Number(formData.drawNo))
+                                            ? '⚠️ '
+                                            : pendingGames && pendingGames.some(g => g.drawNo === Number(formData.drawNo))
+                                            ? '⏳ '
+                                            : '✅ '
+                                        }
+                                        Declaring result for Draw #{formData.drawNo}
+                                    </span>
+                                    {results && results.some(r => r.drawNo === Number(formData.drawNo)) && (
+                                        <span className="ml-2 font-semibold">(⚠️ This draw already has a result!)</span>
+                                    )}
+                                    {pendingGames && pendingGames.some(g => g.drawNo === Number(formData.drawNo)) && (
+                                        <span className="ml-2">({pendingGames.filter(g => g.drawNo === Number(formData.drawNo)).length} pending games)</span>
+                                    )}
+                                    {!results?.some(r => r.drawNo === Number(formData.drawNo)) && 
+                                     !pendingGames?.some(g => g.drawNo === Number(formData.drawNo)) && (
+                                        <span className="ml-2">(✓ New draw)</span>
+                                    )}
+                                </p>
+                            </div>
+                        )}
+
                         <button
                             type="submit"
                             className="w-full sm:w-auto px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            disabled={isSubmitting || createLoading}
+                            disabled={isSubmitting || createLoading || !formData.drawNo}
                         >
                             {isSubmitting || createLoading ? "Declaring..." : "Declare Result"}
                         </button>
@@ -419,7 +608,7 @@ const PowerballResult = () => {
                                             {index + 1}
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            {item.drawNo}
+                                            #{item.drawNo}
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap text-sm">
                                             <div className="flex flex-wrap gap-1.5">
@@ -467,22 +656,59 @@ const PowerballResult = () => {
                 </div>
             </div>
 
-            {/* Pending Games Section - Grouped by Pool ID */}
+            {/* Pending Games Section - Grouped by Pool ID with Draw Number Filter */}
             {showPendingGames && (
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden mt-8">
-                    <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4 flex justify-between items-center">
-                        <h5 className="text-lg font-semibold text-white">
-                            Pending Games by Pool
-                            <span className="ml-2 text-sm font-normal text-purple-200">
-                                ({Object.keys(groupedGames).length} pools)
-                            </span>
-                        </h5>
-                        <button
-                            className="px-3 py-1 bg-white text-purple-600 font-semibold rounded hover:bg-gray-100 transition duration-200"
-                            onClick={handleClosePendingGames}
-                        >
-                            Close
-                        </button>
+                    <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
+                        <div className="flex justify-between items-center flex-wrap gap-4">
+                            <div>
+                                <h5 className="text-lg font-semibold text-white">
+                                    Pending Games by Pool
+                                    <span className="ml-2 text-sm font-normal text-purple-200">
+                                        ({Object.keys(filteredGroupedGames).length} pools)
+                                    </span>
+                                </h5>
+                            </div>
+                            <div className="flex items-center gap-4 flex-wrap">
+                                {/* Draw Number Filter Dropdown */}
+                                {uniqueDrawNumbers.length > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <label className="text-white text-sm font-medium">Filter by Draw:</label>
+                                        <select
+                                            value={selectedDrawNo}
+                                            onChange={(e) => setSelectedDrawNo(e.target.value)}
+                                            className="px-3 py-1.5 bg-white/20 text-white border border-white/30 rounded-md focus:outline-none focus:ring-2 focus:ring-white/50 text-sm"
+                                        >
+                                            <option value="all" className="text-gray-900">All Draws</option>
+                                            {uniqueDrawNumbers.map((drawNo) => (
+                                                <option key={drawNo} value={drawNo} className="text-gray-900">
+                                                    Draw #{drawNo}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
+                                <button
+                                    className="px-3 py-1.5 bg-white text-purple-600 font-semibold rounded hover:bg-gray-100 transition duration-200 text-sm"
+                                    onClick={handleClosePendingGames}
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {/* Show current filter status */}
+                        {selectedDrawNo !== "all" && (
+                            <div className="mt-2 text-purple-200 text-sm">
+                                Showing games for Draw #{selectedDrawNo}
+                                <button
+                                    onClick={() => setSelectedDrawNo("all")}
+                                    className="ml-2 text-white underline hover:no-underline"
+                                >
+                                    Clear filter
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <div className="p-6">
@@ -491,22 +717,27 @@ const PowerballResult = () => {
                                 <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent"></div>
                                 <p className="mt-2 text-gray-500">Loading pending games...</p>
                             </div>
-                        ) : Object.keys(groupedGames).length > 0 ? (
+                        ) : Object.keys(filteredGroupedGames).length > 0 ? (
                             <div className="grid grid-cols-1 gap-6">
-                                {Object.values(groupedGames).map((pool) => (
+                                {Object.values(filteredGroupedGames).map((pool) => (
                                     <div key={pool.poolId} className="border-2 border-purple-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                                        {/* Pool Header */}
+                                        {/* Pool Header with Draw Number */}
                                         <div className="bg-gradient-to-r from-purple-500 to-indigo-500 px-6 py-3">
                                             <div className="flex justify-between items-center flex-wrap gap-2">
                                                 <div>
-                                                    <h6 className="text-white font-bold text-lg">
-                                                        Pool #{pool.poolId ? pool.poolId.slice(-6) : "N/A"}
-                                                    </h6>
-                                                    <p className="text-purple-100 text-sm">
-                                                        Draw #{pool.drawNo || "N/A"} • {pool.games ? pool.games.length : 0} tickets
+                                                    <div className="flex items-center gap-3">
+                                                        <h6 className="text-white font-bold text-lg">
+                                                            Pool #{pool.poolId ? pool.poolId.slice(-6) : "N/A"}
+                                                        </h6>
+                                                        <span className="bg-yellow-400 text-purple-900 font-bold px-3 py-1 rounded-full text-sm">
+                                                            Draw #{pool.drawNo || "N/A"}
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-purple-100 text-sm mt-1">
+                                                        {pool.games ? pool.games.length : 0} tickets
                                                     </p>
                                                 </div>
-                                                <div className="flex gap-4 text-white text-sm">
+                                                <div className="flex gap-4 text-white text-sm flex-wrap">
                                                     <span className="bg-white/20 px-3 py-1 rounded-full">
                                                         👥 {pool.poolTotalPlayers || 0} players
                                                     </span>
@@ -534,9 +765,14 @@ const PowerballResult = () => {
                                                         onClick={() => handleGameClick(game)}
                                                     >
                                                         <div className="flex justify-between items-start mb-2">
-                                                            <span className="text-sm font-medium text-gray-500">
-                                                                Game #{game.gameNo || idx + 1}
-                                                            </span>
+                                                            <div>
+                                                                <span className="text-sm font-medium text-gray-500">
+                                                                    Game #{game.gameNo || idx + 1}
+                                                                </span>
+                                                                <span className="ml-2 text-xs font-bold text-purple-600">
+                                                                    Draw #{game.drawNo}
+                                                                </span>
+                                                            </div>
                                                             <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
                                                                 Pending
                                                             </span>
@@ -600,7 +836,9 @@ const PowerballResult = () => {
                             </div>
                         ) : (
                             <div className="text-center py-8 text-gray-500">
-                                No pending games found.
+                                {selectedDrawNo === "all" 
+                                    ? "No pending games found." 
+                                    : `No pending games found for Draw #${selectedDrawNo}.`}
                             </div>
                         )}
                     </div>
@@ -655,7 +893,7 @@ const PowerballResult = () => {
                             <div className="mb-6">
                                 <h6 className="text-sm font-medium text-gray-500 mb-3">Game Information</h6>
                                 <div className="bg-gray-50 rounded-lg p-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                         <div>
                                             <label className="block text-xs font-medium text-gray-400">Draw Number</label>
                                             <p className="text-base font-semibold text-gray-900">#{selectedGame.drawNo || "N/A"}</p>
@@ -669,6 +907,12 @@ const PowerballResult = () => {
                                             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
                                                 {selectedGame.playerStatus || "Pending"}
                                             </span>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-medium text-gray-400">Pool ID</label>
+                                            <p className="text-base font-semibold text-gray-900 text-sm">
+                                                {selectedGame.poolId || "N/A"}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
