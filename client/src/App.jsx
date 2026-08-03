@@ -1,31 +1,32 @@
 // src/App.jsx
-import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Route, Routes } from "react-router-dom";
 
-import Homme from "./pages/Homme.jsx";
-import Login from "./Pages/Login.jsx";
-import Register from "./Pages/Register.jsx";
-import Navbar from "./components/Navbar.jsx";
-import WalletDashboard from "./Pages/WalletDashboard.jsx";
-import ProfilePage from "./Pages/ProfilePage.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Activity from "./components/Activity.jsx";
-import PromoPage from "./pages/Promo/PromoPage.jsx";
-import Withdrawal from "./Pages/Withdrawal.jsx";
 import AppInitializer from "./components/AppInitializer.jsx";
-import AllWithdrawal from "./pages/All_Withdrawal.jsx";
+import Navbar from "./components/Navbar.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import WithdrawalHistory from "./components/WithdrawalHistory.jsx";
 import Deposit from "./Pages/Deposit.jsx";
 import DepositHistory from "./pages/DepositHistory.jsx";
-import WithdrawalHistory from "./components/WithdrawalHistory.jsx";
 import GameCounts from "./Pages/GameCounts.jsx";
+import Homme from "./pages/Homme.jsx";
+import Login from "./Pages/Login.jsx";
+import ProfilePage from "./Pages/ProfilePage.jsx";
+import PromoPage from "./pages/Promo/PromoPage.jsx";
+import Register from "./Pages/Register.jsx";
+import WalletDashboard from "./Pages/WalletDashboard.jsx";
+import Withdrawal from "./Pages/Withdrawal.jsx";
 
 // 👇 Matka Game Imports
+import Account from "./Pages/Account.jsx";
+import GameEntryResultPage from "./Pages/GameEntryResultPage .jsx";
+import Maintenance from "./Pages/Maintenance.jsx";
+import BidsHistory from "./Pages/user/BidsHistory.jsx";
 import MatkaDashboard from "./Pages/user/Dashboard.jsx";
 import MatkaMarkets from "./Pages/user/Markets.jsx";
 import PlaceBid from "./Pages/user/PlaceBid.jsx";
-import BidsHistory from "./Pages/user/BidsHistory.jsx";
 import MatkaResults from "./Pages/user/Results.jsx";
-import GameEntryResultPage from "./Pages/GameEntryResultPage .jsx";
 
 function App() {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -104,12 +105,28 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <Account />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/deposit-history"
             element={
               <ProtectedRoute>
                 <DepositHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/powerhit/history"
+            element={
+              <ProtectedRoute>
+                <GameEntryResultPage />
               </ProtectedRoute>
             }
           />
@@ -140,10 +157,7 @@ function App() {
             }
           />
 
-          <Route
-            path="/game-entry-result"
-            element={<GameEntryResultPage />}
-          />
+          {/* <Route path="/game-entry-result" element={<GameEntryResultPage />} /> */}
           <Route
             path="/matka/bids-history"
             element={
@@ -162,7 +176,7 @@ function App() {
           />
 
           {/* 404 */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Maintenance />} />
         </Routes>
       </Navbar>
     </AppInitializer>

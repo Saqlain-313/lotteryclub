@@ -124,6 +124,12 @@ const Navbar = ({ children }) => {
       color: "text-indigo-500",
     },
     {
+      icon: ClipboardList,
+      label: "PowerHit History",
+      path: "/powerhit/history",
+      color: "text-indigo-500",
+    },
+    {
       icon: Key,
       label: "Change Password",
       path: "/change-password",
