@@ -7,7 +7,6 @@ import {
     deletePowerballResult,
     getAllPendingGames,
     clearPendingGames,
-    getPendingGameByPlayerId,
 } from "../redux/powerballResultSlice";
 import { toast } from "react-toastify";
 
@@ -24,7 +23,6 @@ const PowerballResult = () => {
         deleteLoading,
         pendingGames,
         pendingGamesLoading,
-        selectedGame: selectedGameFromRedux,
     } = useSelector(
         (state) => state.powerballResult
     );
@@ -39,22 +37,25 @@ const PowerballResult = () => {
     const [showPendingGames, setShowPendingGames] = useState(false);
     const [selectedGame, setSelectedGame] = useState(null);
     const [groupedGames, setGroupedGames] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [notificationShown, setNotificationShown] = useState(false);
 
+    // Load initial data
     useEffect(() => {
         dispatch(getAllPowerballResults());
         dispatch(getAllPendingGames());
     }, [dispatch]);
 
+    // Group pending games by pool
     useEffect(() => {
-        if (pendingGames.length > 0) {
-            // Group games by poolId
+        if (pendingGames && pendingGames.length > 0) {
             const grouped = pendingGames.reduce((acc, game) => {
                 if (!acc[game.poolId]) {
                     acc[game.poolId] = {
                         poolId: game.poolId,
-                        poolTotalPlayers: game.poolTotalPlayers,
-                        poolTotalAmount: game.poolTotalAmount,
-                        poolStatus: game.poolStatus,
+                        poolTotalPlayers: game.poolTotalPlayers || 0,
+                        poolTotalAmount: game.poolTotalAmount || 0,
+                        poolStatus: game.poolStatus || "Open",
                         drawNo: game.drawNo,
                         games: []
                     };
@@ -68,28 +69,43 @@ const PowerballResult = () => {
         }
     }, [pendingGames]);
 
+    // Handle success and error states
     useEffect(() => {
-        if (success) {
+        if (success && !notificationShown) {
+            setNotificationShown(true);
             toast.success(message || "Result Declared Successfully");
-
+            
+            // Reset form
             setFormData({
                 drawNo: "",
                 powerball: "",
                 numbers: ["", "", "", "", "", "", ""],
             });
-
-            dispatch(clearPowerballResultState());
+            
+            // Refresh data
             dispatch(getAllPowerballResults());
             dispatch(getAllPendingGames());
+            
+            // Clear state after delay
+            setTimeout(() => {
+                dispatch(clearPowerballResultState());
+                setIsSubmitting(false);
+                setNotificationShown(false);
+            }, 1000);
         }
 
-        if (error) {
-            toast.error(error);
-            dispatch(clearPowerballResultState());
+        if (error && !notificationShown) {
+            setNotificationShown(true);
+            toast.error(typeof error === 'string' ? error : error.message || "Failed to declare result");
+            
+            setTimeout(() => {
+                dispatch(clearPowerballResultState());
+                setIsSubmitting(false);
+                setNotificationShown(false);
+            }, 1000);
         }
-    }, [success, error, dispatch, message]);
+    }, [success, error, dispatch, message, notificationShown]);
 
-    // Draw No & Powerball
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -97,7 +113,6 @@ const PowerballResult = () => {
         });
     };
 
-    // Winning Numbers
     const handleNumberChange = (index, value) => {
         const updated = [...formData.numbers];
         updated[index] = value;
@@ -108,30 +123,77 @@ const PowerballResult = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (isSubmitting || createLoading) {
+            return;
+        }
 
         const numbers = formData.numbers.map(Number);
 
-        if (
-            !formData.drawNo ||
-            !formData.powerball ||
-            numbers.some((n) => isNaN(n))
-        ) {
-            return toast.error("Please fill all fields.");
+        // Validate all fields are filled
+        if (!formData.drawNo || !formData.powerball || numbers.some((n) => isNaN(n))) {
+            toast.error("Please fill all fields.");
+            return;
         }
 
+        // Validate unique numbers
         if (new Set(numbers).size !== 7) {
-            return toast.error("Winning numbers must be unique.");
+            toast.error("Winning numbers must be unique.");
+            return;
         }
 
-        dispatch(
-            createPowerballResult({
-                drawNo: Number(formData.drawNo),
-                numbers,
-                powerball: Number(formData.powerball),
-            })
-        );
+        // Check for duplicate draw number
+        if (results && results.some(r => r.drawNo === Number(formData.drawNo))) {
+            toast.error(`Draw #${formData.drawNo} already exists!`);
+            return;
+        }
+
+        setIsSubmitting(true);
+        setNotificationShown(false);
+
+        console.log('Submitting Powerball Result:', {
+            drawNo: Number(formData.drawNo),
+            numbers: numbers,
+            powerball: Number(formData.powerball),
+        });
+
+        try {
+            const result = await dispatch(
+                createPowerballResult({
+                    drawNo: Number(formData.drawNo),
+                    numbers: numbers,
+                    powerball: Number(formData.powerball),
+                })
+            ).unwrap();
+
+            console.log('Result created successfully:', result);
+            
+            // Success will be handled by the useEffect
+            // But we also manually handle it here for immediate feedback
+            toast.success(result.message || "Result Declared Successfully!");
+            
+            // Reset form immediately
+            setFormData({
+                drawNo: "",
+                powerball: "",
+                numbers: ["", "", "", "", "", "", ""],
+            });
+
+            // Refresh data
+            await dispatch(getAllPowerballResults());
+            await dispatch(getAllPendingGames());
+            
+            // Clear Redux state
+            dispatch(clearPowerballResultState());
+            
+        } catch (error) {
+            console.error('Submission error:', error);
+            toast.error(typeof error === 'string' ? error : error.message || "Failed to declare result");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleViewPendingGames = () => {
@@ -146,20 +208,31 @@ const PowerballResult = () => {
             const transformedGame = {
                 ...game,
                 userId: {
-                    username: game.userId?.name || "Unknown",
+                    username: game.userId?.name || game.userId?.username || "Unknown",
                     email: game.userId?.email || "",
                     _id: game.userId?._id
                 },
                 ticketType: {
-                    title: game.ticketType?.title || "N/A",
-                    name: game.ticketType?.title || "N/A",
+                    title: game.ticketType?.title || game.ticketType?.name || "N/A",
+                    name: game.ticketType?.title || game.ticketType?.name || "N/A",
                     _id: game.ticketType?._id
                 },
                 games: [{
-                    gameNo: game.gameNo,
-                    numbers: game.numbers,
-                    powerball: game.powerball
-                }]
+                    gameNo: game.gameNo || 0,
+                    numbers: game.numbers || [],
+                    powerball: game.powerball || 0
+                }],
+                numbers: game.numbers || [],
+                powerball: game.powerball || 0,
+                drawNo: game.drawNo || 0,
+                gameNo: game.gameNo || 0,
+                playerStatus: game.playerStatus || "Pending",
+                bidAmount: game.bidAmount || 0,
+                poolId: game.poolId || "",
+                poolTotalPlayers: game.poolTotalPlayers || 0,
+                poolTotalAmount: game.poolTotalAmount || 0,
+                poolStatus: game.poolStatus || "Open",
+                createdAt: game.createdAt || new Date().toISOString()
             };
             
             setSelectedGame(transformedGame);
@@ -180,8 +253,8 @@ const PowerballResult = () => {
         dispatch(clearPendingGames());
     };
 
-    // Get unique users in a pool
     const getUniqueUsers = (games) => {
+        if (!games || !Array.isArray(games)) return [];
         const uniqueUsers = {};
         games.forEach(game => {
             if (game.userId && game.userId._id) {
@@ -189,6 +262,21 @@ const PowerballResult = () => {
             }
         });
         return Object.values(uniqueUsers);
+    };
+
+    const handleDeleteResult = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this result?")) {
+            return;
+        }
+
+        try {
+            await dispatch(deletePowerballResult(id)).unwrap();
+            toast.success("Result Deleted Successfully");
+            await dispatch(getAllPowerballResults());
+            await dispatch(getAllPendingGames());
+        } catch (err) {
+            toast.error(typeof err === 'string' ? err : err.message || "Failed to delete result");
+        }
     };
 
     return (
@@ -201,7 +289,6 @@ const PowerballResult = () => {
 
                 <div className="p-6">
                     <form onSubmit={handleSubmit}>
-                        {/* Draw Number */}
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Draw Number
@@ -213,10 +300,11 @@ const PowerballResult = () => {
                                 name="drawNo"
                                 value={formData.drawNo}
                                 onChange={handleChange}
+                                disabled={isSubmitting || createLoading}
+                                required
                             />
                         </div>
 
-                        {/* Winning Numbers */}
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Winning Numbers
@@ -237,12 +325,13 @@ const PowerballResult = () => {
                                                 e.target.value
                                             )
                                         }
+                                        disabled={isSubmitting || createLoading}
+                                        required
                                     />
                                 ))}
                             </div>
                         </div>
 
-                        {/* Powerball */}
                         <div className="mb-6">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Winning Powerball
@@ -256,16 +345,17 @@ const PowerballResult = () => {
                                 name="powerball"
                                 value={formData.powerball}
                                 onChange={handleChange}
+                                disabled={isSubmitting || createLoading}
+                                required
                             />
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             className="w-full sm:w-auto px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            disabled={createLoading}
+                            disabled={isSubmitting || createLoading}
                         >
-                            {createLoading ? "Declaring..." : "Declare Result"}
+                            {isSubmitting || createLoading ? "Declaring..." : "Declare Result"}
                         </button>
                     </form>
                 </div>
@@ -322,7 +412,7 @@ const PowerballResult = () => {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {results?.length > 0 ? (
+                            {results && results.length > 0 ? (
                                 results.map((item, index) => (
                                     <tr key={item._id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
@@ -333,7 +423,7 @@ const PowerballResult = () => {
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap text-sm">
                                             <div className="flex flex-wrap gap-1.5">
-                                                {item.numbers.map((num, i) => (
+                                                {item.numbers && item.numbers.map((num, i) => (
                                                     <span
                                                         key={i}
                                                         className="inline-flex items-center justify-center w-9 h-9 bg-blue-100 text-blue-800 font-semibold rounded-full text-sm"
@@ -349,32 +439,13 @@ const PowerballResult = () => {
                                             </span>
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                                            {new Date(item.createdAt).toLocaleString()}
+                                            {item.createdAt ? new Date(item.createdAt).toLocaleString() : "N/A"}
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap text-sm">
                                             <button
                                                 className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 disabled={deleteLoading}
-                                                onClick={() => {
-                                                    if (
-                                                        window.confirm(
-                                                            "Are you sure you want to delete this result?"
-                                                        )
-                                                    ) {
-                                                        dispatch(deletePowerballResult(item._id))
-                                                            .unwrap()
-                                                            .then(() => {
-                                                                toast.success(
-                                                                    "Result Deleted Successfully"
-                                                                );
-                                                                dispatch(getAllPowerballResults());
-                                                                dispatch(getAllPendingGames());
-                                                            })
-                                                            .catch((err) => {
-                                                                toast.error(err);
-                                                            });
-                                                    }
-                                                }}
+                                                onClick={() => handleDeleteResult(item._id)}
                                             >
                                                 Delete
                                             </button>
@@ -429,25 +500,25 @@ const PowerballResult = () => {
                                             <div className="flex justify-between items-center flex-wrap gap-2">
                                                 <div>
                                                     <h6 className="text-white font-bold text-lg">
-                                                        Pool #{pool.poolId.slice(-6)}
+                                                        Pool #{pool.poolId ? pool.poolId.slice(-6) : "N/A"}
                                                     </h6>
                                                     <p className="text-purple-100 text-sm">
-                                                        Draw #{pool.drawNo} • {pool.games.length} tickets
+                                                        Draw #{pool.drawNo || "N/A"} • {pool.games ? pool.games.length : 0} tickets
                                                     </p>
                                                 </div>
                                                 <div className="flex gap-4 text-white text-sm">
                                                     <span className="bg-white/20 px-3 py-1 rounded-full">
-                                                        👥 {pool.poolTotalPlayers} players
+                                                        👥 {pool.poolTotalPlayers || 0} players
                                                     </span>
                                                     <span className="bg-white/20 px-3 py-1 rounded-full">
-                                                        💰 ${pool.poolTotalAmount}
+                                                        💰 ${pool.poolTotalAmount || 0}
                                                     </span>
                                                     <span className={`px-3 py-1 rounded-full ${
                                                         pool.poolStatus === 'Open' 
                                                             ? 'bg-green-500/30 text-green-100' 
                                                             : 'bg-gray-500/30 text-gray-100'
                                                     }`}>
-                                                        {pool.poolStatus}
+                                                        {pool.poolStatus || "N/A"}
                                                     </span>
                                                 </div>
                                             </div>
@@ -456,7 +527,7 @@ const PowerballResult = () => {
                                         {/* Pool Games */}
                                         <div className="p-4">
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                {pool.games.map((game, idx) => (
+                                                {pool.games && pool.games.map((game, idx) => (
                                                     <div
                                                         key={idx}
                                                         className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer hover:border-purple-400 bg-white"
@@ -464,7 +535,7 @@ const PowerballResult = () => {
                                                     >
                                                         <div className="flex justify-between items-start mb-2">
                                                             <span className="text-sm font-medium text-gray-500">
-                                                                Game #{game.gameNo}
+                                                                Game #{game.gameNo || idx + 1}
                                                             </span>
                                                             <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
                                                                 Pending
@@ -472,36 +543,42 @@ const PowerballResult = () => {
                                                         </div>
                                                         
                                                         <div className="flex flex-wrap gap-1 mb-2">
-                                                            {game.numbers.map((num, i) => (
-                                                                <span
-                                                                    key={i}
-                                                                    className="inline-flex items-center justify-center w-7 h-7 bg-blue-100 text-blue-800 font-semibold rounded-full text-xs"
-                                                                >
-                                                                    {num}
+                                                            {game.numbers && game.numbers.length > 0 ? (
+                                                                game.numbers.map((num, i) => (
+                                                                    <span
+                                                                        key={i}
+                                                                        className="inline-flex items-center justify-center w-7 h-7 bg-blue-100 text-blue-800 font-semibold rounded-full text-xs"
+                                                                    >
+                                                                        {num}
+                                                                    </span>
+                                                                ))
+                                                            ) : (
+                                                                <span className="text-xs text-gray-400">No numbers</span>
+                                                            )}
+                                                            {game.powerball && (
+                                                                <span className="inline-flex items-center justify-center w-7 h-7 bg-red-100 text-red-800 font-semibold rounded-full text-xs">
+                                                                    {game.powerball}
                                                                 </span>
-                                                            ))}
-                                                            <span className="inline-flex items-center justify-center w-7 h-7 bg-red-100 text-red-800 font-semibold rounded-full text-xs">
-                                                                {game.powerball}
-                                                            </span>
+                                                            )}
                                                         </div>
                                                         
                                                         <div className="text-xs text-gray-500 space-y-1">
                                                             <div className="flex justify-between">
                                                                 <span>User:</span>
                                                                 <span className="font-medium text-gray-700">
-                                                                    {game.userId?.name || "Unknown"}
+                                                                    {game.userId?.name || game.userId?.username || "Unknown"}
                                                                 </span>
                                                             </div>
                                                             <div className="flex justify-between">
                                                                 <span>Bid:</span>
                                                                 <span className="font-medium text-gray-700">
-                                                                    ${game.bidAmount}
+                                                                    ${game.bidAmount || 0}
                                                                 </span>
                                                             </div>
                                                             <div className="flex justify-between">
                                                                 <span>Ticket:</span>
                                                                 <span className="font-medium text-gray-700">
-                                                                    {game.ticketType?.title || "N/A"}
+                                                                    {game.ticketType?.title || game.ticketType?.name || "N/A"}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -510,11 +587,13 @@ const PowerballResult = () => {
                                             </div>
 
                                             {/* Unique Users in Pool */}
-                                            <div className="mt-4 pt-3 border-t border-gray-200">
-                                                <p className="text-xs text-gray-500">
-                                                    Players: {getUniqueUsers(pool.games).map(u => u.name).join(', ')}
-                                                </p>
-                                            </div>
+                                            {pool.games && pool.games.length > 0 && (
+                                                <div className="mt-4 pt-3 border-t border-gray-200">
+                                                    <p className="text-xs text-gray-500">
+                                                        Players: {getUniqueUsers(pool.games).map(u => u.name || u.username || "Unknown").join(', ')}
+                                                    </p>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 ))}
@@ -534,7 +613,7 @@ const PowerballResult = () => {
                     <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                         <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-4 flex justify-between items-center sticky top-0">
                             <h5 className="text-xl font-bold text-white">
-                                Game Details - Draw #{selectedGame.drawNo}
+                                Game Details - Draw #{selectedGame.drawNo || "N/A"}
                             </h5>
                             <button
                                 className="text-white hover:text-gray-200 text-2xl font-bold"
@@ -579,11 +658,11 @@ const PowerballResult = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
                                             <label className="block text-xs font-medium text-gray-400">Draw Number</label>
-                                            <p className="text-base font-semibold text-gray-900">#{selectedGame.drawNo}</p>
+                                            <p className="text-base font-semibold text-gray-900">#{selectedGame.drawNo || "N/A"}</p>
                                         </div>
                                         <div>
                                             <label className="block text-xs font-medium text-gray-400">Game Number</label>
-                                            <p className="text-base font-semibold text-gray-900">#{selectedGame.gameNo}</p>
+                                            <p className="text-base font-semibold text-gray-900">#{selectedGame.gameNo || "N/A"}</p>
                                         </div>
                                         <div>
                                             <label className="block text-xs font-medium text-gray-400">Status</label>
@@ -609,7 +688,7 @@ const PowerballResult = () => {
                                         <div>
                                             <label className="block text-xs font-medium text-gray-400">Bid Amount</label>
                                             <p className="text-base font-semibold text-gray-900">
-                                                ${selectedGame.bidAmount}
+                                                ${selectedGame.bidAmount || 0}
                                             </p>
                                         </div>
                                         <div>
@@ -631,25 +710,25 @@ const PowerballResult = () => {
                                             <div>
                                                 <label className="block text-xs font-medium text-gray-400">USD Amount</label>
                                                 <p className="text-base font-semibold text-gray-900">
-                                                    ${selectedGame.currencyDetails.usdAmount}
+                                                    ${selectedGame.currencyDetails.usdAmount || 0}
                                                 </p>
                                             </div>
                                             <div>
                                                 <label className="block text-xs font-medium text-gray-400">Local Amount</label>
                                                 <p className="text-base font-semibold text-gray-900">
-                                                    {selectedGame.currencyDetails.localCurrency} {selectedGame.currencyDetails.localAmount}
+                                                    {selectedGame.currencyDetails.localCurrency || ""} {selectedGame.currencyDetails.localAmount || 0}
                                                 </p>
                                             </div>
                                             <div>
                                                 <label className="block text-xs font-medium text-gray-400">Exchange Rate</label>
                                                 <p className="text-base font-semibold text-gray-900">
-                                                    {selectedGame.currencyDetails.exchangeRate}
+                                                    {selectedGame.currencyDetails.exchangeRate || 0}
                                                 </p>
                                             </div>
                                             <div>
                                                 <label className="block text-xs font-medium text-gray-400">Country</label>
                                                 <p className="text-base font-semibold text-gray-900">
-                                                    {selectedGame.currencyDetails.userCountry}
+                                                    {selectedGame.currencyDetails.userCountry || "N/A"}
                                                 </p>
                                             </div>
                                         </div>
@@ -662,17 +741,23 @@ const PowerballResult = () => {
                                 <h6 className="text-sm font-medium text-gray-500 mb-3">Game Numbers</h6>
                                 <div className="bg-gray-50 rounded-lg p-4">
                                     <div className="flex flex-wrap gap-2">
-                                        {selectedGame.numbers?.map((num, i) => (
-                                            <span
-                                                key={i}
-                                                className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-800 font-bold rounded-full text-lg border-2 border-blue-200"
-                                            >
-                                                {num}
+                                        {selectedGame.numbers && selectedGame.numbers.length > 0 ? (
+                                            selectedGame.numbers.map((num, i) => (
+                                                <span
+                                                    key={i}
+                                                    className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-800 font-bold rounded-full text-lg border-2 border-blue-200"
+                                                >
+                                                    {num}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span className="text-gray-500">No numbers available</span>
+                                        )}
+                                        {selectedGame.powerball && (
+                                            <span className="inline-flex items-center justify-center w-12 h-12 bg-red-100 text-red-800 font-bold rounded-full text-lg border-2 border-red-200">
+                                                {selectedGame.powerball}
                                             </span>
-                                        ))}
-                                        <span className="inline-flex items-center justify-center w-12 h-12 bg-red-100 text-red-800 font-bold rounded-full text-lg border-2 border-red-200">
-                                            {selectedGame.powerball}
-                                        </span>
+                                        )}
                                     </div>
                                     <div className="mt-2 text-center text-xs text-gray-500">
                                         <span className="font-medium">Powerball</span> highlighted in red
@@ -726,7 +811,7 @@ const PowerballResult = () => {
                                         <div>
                                             <label className="block text-xs font-medium text-gray-400">Created At</label>
                                             <p className="text-base font-semibold text-gray-900">
-                                                {new Date(selectedGame.createdAt).toLocaleString()}
+                                                {selectedGame.createdAt ? new Date(selectedGame.createdAt).toLocaleString() : "N/A"}
                                             </p>
                                         </div>
                                     </div>

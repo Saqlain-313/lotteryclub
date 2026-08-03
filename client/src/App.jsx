@@ -1,46 +1,31 @@
 // src/App.jsx
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Route, Routes, useLocation } from "react-router-dom";
 
-import Activity from "./components/Activity.jsx";
-import AppInitializer from "./components/AppInitializer.jsx";
-import ChangePassword from "./components/ChangePassword.jsx";
-import Navbar from "./components/Navbar.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import WithdrawalHistory from "./components/WithdrawalHistory.jsx";
-import Deposit from "./Pages/Deposit.jsx";
-import DepositHistory from "./pages/DepositHistory.jsx";
-import GameCounts from "./Pages/GameCounts.jsx";
 import Homme from "./pages/Homme.jsx";
 import Login from "./Pages/Login.jsx";
-import ProfilePage from "./Pages/ProfilePage.jsx";
-import PromoPage from "./pages/Promo/PromoPage.jsx";
 import Register from "./Pages/Register.jsx";
+import Navbar from "./components/Navbar.jsx";
 import WalletDashboard from "./Pages/WalletDashboard.jsx";
+import ProfilePage from "./Pages/ProfilePage.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Activity from "./components/Activity.jsx";
+import PromoPage from "./pages/Promo/PromoPage.jsx";
 import Withdrawal from "./Pages/Withdrawal.jsx";
+import AppInitializer from "./components/AppInitializer.jsx";
+import AllWithdrawal from "./pages/All_Withdrawal.jsx";
+import Deposit from "./Pages/Deposit.jsx";
+import DepositHistory from "./pages/DepositHistory.jsx";
+import WithdrawalHistory from "./components/WithdrawalHistory.jsx";
+import GameCounts from "./Pages/GameCounts.jsx";
 
 // 👇 Matka Game Imports
-import { useLayoutEffect } from "react";
-import Account from "./Pages/Account.jsx";
-import Maintenance from "./Pages/Maintenance.jsx";
-import BidsHistory from "./Pages/user/BidsHistory.jsx";
 import MatkaDashboard from "./Pages/user/Dashboard.jsx";
 import MatkaMarkets from "./Pages/user/Markets.jsx";
 import PlaceBid from "./Pages/user/PlaceBid.jsx";
+import BidsHistory from "./Pages/user/BidsHistory.jsx";
 import MatkaResults from "./Pages/user/Results.jsx";
-
-function ScrollToTop() {
-  const { pathname } = useLocation();
-
-  useLayoutEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, [pathname]);
-
-  return null;
-}
+import GameEntryResultPage from "./Pages/GameEntryResultPage .jsx";
 
 function App() {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -48,10 +33,11 @@ function App() {
   return (
     <AppInitializer>
       <Navbar>
-        <ScrollToTop />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Homme />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/powerhit" element={<GameCounts />} />
 
           {/* Promo */}
@@ -79,15 +65,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <WalletDashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/account"
-            element={
-              <ProtectedRoute>
-                <Account />
               </ProtectedRoute>
             }
           />
@@ -129,15 +106,6 @@ function App() {
           />
 
           <Route
-            path="/change-password"
-            element={
-              <ProtectedRoute>
-                <ChangePassword />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
             path="/deposit-history"
             element={
               <ProtectedRoute>
@@ -171,6 +139,11 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/game-entry-result"
+            element={<GameEntryResultPage />}
+          />
           <Route
             path="/matka/bids-history"
             element={
@@ -189,9 +162,7 @@ function App() {
           />
 
           {/* 404 */}
-          <Route path="*" element={<Maintenance />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Navbar>
     </AppInitializer>
