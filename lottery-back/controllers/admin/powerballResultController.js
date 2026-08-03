@@ -1,5 +1,6 @@
 const PowerballResult = require("../../models/PowerballResult");
 const GamePool = require("../../models/GameEntry");
+const User = require("../../models/User");
 const mongoose = require('mongoose');
 
 // Prize Divisions
@@ -73,7 +74,7 @@ exports.createPowerballResult = async (req, res) => {
     // Create result with gamePoolId
     const result = await PowerballResult.create({
       gamePoolId,
-      drawNo: gamePool.drawNo, // Store draw number for reference
+      drawNo: gamePool.drawNo,
       numbers,
       powerball,
       createdBy: req.user.id,
@@ -82,19 +83,19 @@ exports.createPowerballResult = async (req, res) => {
     // Update game pool with winning numbers
     let poolWinners = 0;
     let totalPrizeAmount = 0;
+    const userUpdates = [];
 
     for (const player of gamePool.players) {
-      if (player.status !== "Pending") continue; // Skip already processed
+      if (player.status !== "Pending") continue;
 
       let bestDivision = null;
+      let bestGameNo = null;
 
       for (const game of player.games) {
-        // Count Main Number Matches
         const matchedMain = game.numbers.filter((num) =>
           numbers.includes(num)
         ).length;
 
-        // Check Powerball
         const matchedPowerball = game.powerball === powerball;
 
         const division = divisions.find(
@@ -103,7 +104,6 @@ exports.createPowerballResult = async (req, res) => {
             d.powerball === matchedPowerball
         );
 
-        // Best Division Wins
         if (
           division &&
           (!bestDivision ||
@@ -116,6 +116,7 @@ exports.createPowerballResult = async (req, res) => {
             matchedPowerball,
             gameNo: game.gameNo,
           };
+          bestGameNo = game.gameNo;
         }
       }
 
@@ -124,9 +125,20 @@ exports.createPowerballResult = async (req, res) => {
         player.result = {
           division: bestDivision.division,
           prize: bestDivision.prize,
+          gameNo: bestGameNo,
         };
         poolWinners++;
         totalPrizeAmount += bestDivision.prize;
+
+        if (player.user) {
+          userUpdates.push({
+            userId: player.user,
+            amount: bestDivision.prize,
+            playerId: player._id,
+            division: bestDivision.division,
+            gameNo: bestGameNo
+          });
+        }
       } else {
         player.status = "Lost";
         player.result = {
@@ -146,9 +158,35 @@ exports.createPowerballResult = async (req, res) => {
 
     await gamePool.save();
 
+    // Update user balances
+    const updatedUsers = [];
+    for (const update of userUpdates) {
+      try {
+        const user = await User.findById(update.userId);
+        if (user) {
+          const oldBalance = user.balance || 0;
+          user.balance = oldBalance + update.amount;
+          await user.save();
+          
+          updatedUsers.push({
+            userId: user._id,
+            userName: user.name,
+            email: user.email,
+            oldBalance: oldBalance,
+            newBalance: user.balance,
+            amountAdded: update.amount,
+            division: update.division,
+            gameNo: update.gameNo
+          });
+        }
+      } catch (error) {
+        console.error(`Error updating user ${update.userId}:`, error);
+      }
+    }
+
     res.status(201).json({
       success: true,
-      message: "Powerball result declared successfully.",
+      message: "Powerball result declared successfully. Winners have been credited.",
       result,
       poolProcessed: {
         id: gamePool._id,
@@ -156,11 +194,11 @@ exports.createPowerballResult = async (req, res) => {
         totalPlayers: gamePool.totalPlayers,
         totalWinners: poolWinners,
         totalPrizeAmount: totalPrizeAmount,
-      }
+      },
+      winnersUpdated: updatedUsers
     });
   } catch (error) {
     console.error(error);
-
     res.status(500).json({
       success: false,
       message: error.message,
@@ -207,9 +245,31 @@ exports.getPowerballResultById = async (req, res) => {
       });
     }
 
+    const gamePool = await GamePool.findById(result.gamePoolId)
+      .populate("players.user", "name email balance username");
+
+    const winnerDetails = gamePool?.players
+      .filter(p => p.status === "Won")
+      .map(p => ({
+        userId: p.user?._id,
+        userName: p.user?.name,
+        email: p.user?.email,
+        username: p.user?.username,
+        balance: p.user?.balance,
+        prize: p.result?.prize,
+        division: p.result?.division,
+        gameNo: p.result?.gameNo
+      })) || [];
+
+    const totalWinners = winnerDetails.length;
+    const totalPrize = winnerDetails.reduce((sum, w) => sum + (w.prize || 0), 0);
+
     res.json({
       success: true,
       result,
+      winnerDetails,
+      totalWinners,
+      totalPrize
     });
   } catch (error) {
     res.status(500).json({
@@ -233,15 +293,46 @@ exports.deletePowerballResult = async (req, res) => {
       });
     }
 
-    // Reset game pool for this result
     const gamePool = await GamePool.findById(result.gamePoolId);
 
     if (gamePool) {
+      // Get winning players
+      const winningPlayers = gamePool.players.filter(
+        player => player.status === "Won" && player.result && player.result.prize > 0
+      );
+
+      // Reverse balances
+      const reversedUsers = [];
+      for (const player of winningPlayers) {
+        try {
+          if (player.user) {
+            const user = await User.findById(player.user);
+            if (user) {
+              const oldBalance = user.balance || 0;
+              user.balance = Math.max(0, oldBalance - player.result.prize);
+              await user.save();
+              
+              reversedUsers.push({
+                userId: user._id,
+                userName: user.name,
+                email: user.email,
+                oldBalance: oldBalance,
+                newBalance: user.balance,
+                amountDeducted: player.result.prize,
+                division: player.result.division
+              });
+            }
+          }
+        } catch (error) {
+          console.error(`Error reversing balance for user ${player.user}:`, error);
+        }
+      }
+
+      // Reset game pool
       gamePool.status = "Open";
       gamePool.resultDeclared = false;
       gamePool.winningNumbers = null;
       
-      // Reset player results
       for (const player of gamePool.players) {
         player.status = "Pending";
         player.result = {
@@ -251,14 +342,22 @@ exports.deletePowerballResult = async (req, res) => {
       }
       
       await gamePool.save();
+
+      await result.deleteOne();
+
+      res.json({
+        success: true,
+        message: `Result deleted successfully. Game pool has been reset and balances reversed.`,
+        reversedUsers: reversedUsers,
+        totalReversed: reversedUsers.length
+      });
+    } else {
+      await result.deleteOne();
+      res.json({
+        success: true,
+        message: `Result deleted successfully.`,
+      });
     }
-
-    await result.deleteOne();
-
-    res.json({
-      success: true,
-      message: `Result deleted successfully. Game pool has been reset.`,
-    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -285,16 +384,29 @@ exports.getResultsByGamePool = async (req, res) => {
       });
     }
 
-    // Get detailed pool data
     const gamePool = await GamePool.findById(gamePoolId)
       .populate("ticketType", "name price")
       .populate("gameCount", "name count")
-      .populate("players.user", "name email username");
+      .populate("players.user", "name email username balance");
+
+    // Get winners with their prizes
+    const winners = gamePool?.players
+      .filter(p => p.status === "Won")
+      .map(p => ({
+        userId: p.user?._id,
+        userName: p.user?.name,
+        email: p.user?.email,
+        balance: p.user?.balance,
+        prize: p.result?.prize,
+        division: p.result?.division
+      })) || [];
 
     res.json({
       success: true,
       result,
       poolDetails: gamePool,
+      winners: winners,
+      totalWinners: winners.length
     });
   } catch (error) {
     res.status(500).json({
@@ -318,7 +430,6 @@ exports.getPendingGameByPlayerId = async (req, res) => {
       });
     }
 
-    // Find the game pool that contains this player
     const gamePool = await GamePool.findOne({
       "players._id": playerId,
       status: "Open"
@@ -335,7 +446,6 @@ exports.getPendingGameByPlayerId = async (req, res) => {
       });
     }
 
-    // Find the specific player
     const player = gamePool.players.find(
       (p) => p._id.toString() === playerId.toString()
     );
@@ -347,7 +457,6 @@ exports.getPendingGameByPlayerId = async (req, res) => {
       });
     }
 
-    // Format the response
     const pendingGame = {
       poolId: gamePool._id,
       playerId: player._id,
@@ -381,8 +490,9 @@ exports.getPendingGameByPlayerId = async (req, res) => {
     });
   }
 };
+
 // ===============================
-// Get All Pending Games (All Open Pools)
+// Get All Pending Games
 // ===============================
 exports.getAllPendingGames = async (req, res) => {
   try {
@@ -441,7 +551,7 @@ exports.getGamePoolDetails = async (req, res) => {
     const gamePool = await GamePool.findById(poolId)
       .populate("ticketType", "name price description")
       .populate("gameCount", "name totalGames price")
-      .populate("players.user", "name email username");
+      .populate("players.user", "name email username balance");
 
     if (!gamePool) {
       return res.status(404).json({
@@ -450,9 +560,117 @@ exports.getGamePoolDetails = async (req, res) => {
       });
     }
 
+    // Calculate statistics
+    const totalPlayers = gamePool.players.length;
+    const pendingPlayers = gamePool.players.filter(p => p.status === "Pending").length;
+    const wonPlayers = gamePool.players.filter(p => p.status === "Won").length;
+    const lostPlayers = gamePool.players.filter(p => p.status === "Lost").length;
+    
+    const totalPrize = gamePool.players
+      .filter(p => p.status === "Won")
+      .reduce((sum, p) => sum + (p.result?.prize || 0), 0);
+
     res.json({
       success: true,
       pool: gamePool,
+      statistics: {
+        totalPlayers,
+        pendingPlayers,
+        wonPlayers,
+        lostPlayers,
+        totalPrize
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ===============================
+// Get User's Winning History
+// ===============================
+exports.getUserWinningHistory = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const gamePools = await GamePool.find({
+      "players.user": userId,
+      "players.status": "Won",
+      resultDeclared: true
+    })
+    .populate("ticketType", "name price")
+    .populate("gameCount", "name totalGames")
+    .sort({ createdAt: -1 });
+
+    const winningHistory = [];
+    let totalEarnings = 0;
+
+    gamePools.forEach(pool => {
+      const player = pool.players.find(
+        p => p.user.toString() === userId.toString() && p.status === "Won"
+      );
+      
+      if (player && player.result) {
+        totalEarnings += player.result.prize || 0;
+        winningHistory.push({
+          drawNo: pool.drawNo,
+          gamePoolId: pool._id,
+          ticketType: pool.ticketType,
+          gameCount: pool.gameCount,
+          division: player.result.division,
+          prize: player.result.prize,
+          gameNo: player.result.gameNo,
+          winningNumbers: pool.winningNumbers,
+          declaredAt: pool.updatedAt || pool.createdAt,
+          status: pool.status
+        });
+      }
+    });
+
+    res.json({
+      success: true,
+      total: winningHistory.length,
+      totalEarnings: totalEarnings,
+      history: winningHistory
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ===============================
+// Get User's Balance
+// ===============================
+exports.getUserBalance = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).select("balance name email username");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        username: user.username,
+        balance: user.balance || 0
+      }
     });
   } catch (error) {
     console.error(error);
