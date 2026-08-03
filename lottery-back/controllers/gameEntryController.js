@@ -25,7 +25,6 @@ exports.createGamePool = async (req, res) => {
     } = req.body;
 
     console.log(req.body);
-  
 
     // =========================
     // Required Validation
@@ -123,7 +122,7 @@ exports.createGamePool = async (req, res) => {
     let calculatedTotalPriceUSD = totalPrice;
 
     if (calculatedTotalPriceUSD === 0) {
-      calculatedTotalPriceUSD = gameCountData.price;
+      calculatedTotalPriceUSD = gameCountData.price * actualGameCount;
 
       if (autoPlay) {
         calculatedTotalPriceUSD = calculatedTotalPriceUSD * drawCount;
@@ -163,6 +162,7 @@ exports.createGamePool = async (req, res) => {
         );
       }
     } catch (error) {
+      console.error("Currency conversion error:", error);
       localCurrencyAmount = {
         convertedAmount: calculatedTotalPriceUSD,
         convertedCurrency: "USD",
@@ -191,29 +191,48 @@ exports.createGamePool = async (req, res) => {
     }
 
     // =========================
-    // Game Type Validation
+    // Game Type Validation - FIXED
     // =========================
     let selectedGameType = null;
+    const isStandardTicket = !ticket.gameTypes || ticket.gameTypes.length === 0;
 
-    if (ticket.gameTypes && ticket.gameTypes.length > 0) {
+    // Only validate gameType if ticket has gameTypes defined
+    if (!isStandardTicket) {
       if (!gameType) {
         await session.abortTransaction();
         session.endSession();
         return res.status(400).json({
           success: false,
-          message: "Game Type is required."
+          message: "Game Type is required for this ticket."
         });
       }
 
-      selectedGameType = ticket.gameTypes.id(gameType);
+      if (!mongoose.Types.ObjectId.isValid(gameType)) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(400).json({
+          success: false,
+          message: "Invalid Game Type ID."
+        });
+      }
+
+      selectedGameType = ticket.gameTypes.find(
+        gt => gt._id.toString() === gameType.toString()
+      );
 
       if (!selectedGameType) {
         await session.abortTransaction();
         session.endSession();
         return res.status(404).json({
           success: false,
-          message: "Game Type not found."
+          message: "Game Type not found in this ticket."
         });
+      }
+    } else {
+      // For standard tickets, gameType is optional
+      if (gameType) {
+        console.log(`Standard ticket with gameType: ${gameType} - gameType will be ignored`);
+        // Optionally validate gameType exists in global collection if needed
       }
     }
 
@@ -284,7 +303,7 @@ exports.createGamePool = async (req, res) => {
         });
       }
 
-      const gameKey = [...game.numbers].sort().join(",") + "|" + game.powerball;
+      const gameKey = [...game.numbers].sort((a, b) => a - b).join(",") + "|" + game.powerball;
 
       if (numberSets.has(gameKey)) {
         await session.abortTransaction();
@@ -305,7 +324,7 @@ exports.createGamePool = async (req, res) => {
     }
 
     // =========================
-    // Find Existing Pool
+    // Find Existing Pool - FIXED
     // =========================
     const poolQuery = {
       ticketType,
@@ -313,7 +332,8 @@ exports.createGamePool = async (req, res) => {
       status: "Open"
     };
 
-    if (gameType) {
+    // Only add gameType to query if ticket has gameTypes and gameType is provided
+    if (!isStandardTicket && gameType) {
       poolQuery.gameType = gameType;
     }
 
@@ -334,7 +354,7 @@ exports.createGamePool = async (req, res) => {
     };
 
     // =========================
-    // Add Player In Pool
+    // Add Player In Pool - FIXED
     // =========================
     if (pool) {
       // Check if user already in this pool
@@ -356,26 +376,39 @@ exports.createGamePool = async (req, res) => {
       pool.totalAmount += calculatedTotalPriceUSD;
       await pool.save({ session });
     } else {
-      if (!gameType) {
-        await session.abortTransaction();
-        session.endSession();
-        return res.status(400).json({
-          success: false,
-          message: "Game Type is required to create a new pool."
-        });
-      }
+      // Get next draw number only when creating a new pool
+      const lastPool = await GamePool.findOne({})
+        .sort({ drawNo: -1 })
+        .select("drawNo")
+        .session(session);
 
-      const newPool = await GamePool.create([{
+      const nextDrawNo = lastPool ? lastPool.drawNo + 1 : 1;
+
+      // Prepare pool data
+      const poolData = {
         ticketType,
-        gameType: gameType,
         gameCount,
-        drawNo: 1,
+        drawNo: nextDrawNo,
         players: [playerData],
         totalPlayers: 1,
         totalAmount: calculatedTotalPriceUSD,
         status: "Open"
-      }], { session });
+      };
 
+      // Only add gameType if ticket has gameTypes
+      if (!isStandardTicket) {
+        if (!gameType) {
+          await session.abortTransaction();
+          session.endSession();
+          return res.status(400).json({
+            success: false,
+            message: "Game Type is required to create a new pool for this ticket."
+          });
+        }
+        poolData.gameType = gameType;
+      }
+
+      const newPool = await GamePool.create([poolData], { session });
       pool = newPool[0];
     }
 
@@ -395,6 +428,15 @@ exports.createGamePool = async (req, res) => {
       }
     );
 
+    if (!updatedUser) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({
+        success: false,
+        message: "User not found during balance update."
+      });
+    }
+
     // =========================
     // Create Transaction
     // =========================
@@ -405,7 +447,7 @@ exports.createGamePool = async (req, res) => {
       usdAmount: calculatedTotalPriceUSD,
       type: "DEBIT",
       category: "GAME_ENTRY",
-      description: `Game Pool Entry - ${actualGameCount} Games`,
+      description: `Game Pool Entry - ${actualGameCount} Games${!isStandardTicket ? ` - ${selectedGameType?.name || ''}` : ''}`,
       reference: pool._id,
       referenceModel: "GamePool",
       status: "completed",
@@ -419,23 +461,56 @@ exports.createGamePool = async (req, res) => {
     await session.commitTransaction();
     session.endSession();
 
+    // Format balance
+    let formattedBalance = updatedUser.balance;
+    try {
+      if (typeof formatCurrency === 'function') {
+        formattedBalance = formatCurrency(
+          updatedUser.balance,
+          user.country || "US"
+        );
+      } else {
+        formattedBalance = `${updatedUser.balance} ${localCurrencyAmount.convertedCurrency}`;
+      }
+    } catch (error) {
+      formattedBalance = `${updatedUser.balance} ${localCurrencyAmount.convertedCurrency}`;
+    }
+
     return res.status(201).json({
       success: true,
       message: "Game Pool joined successfully.",
-      data: pool,
+      data: {
+        pool,
+        ticketType: isStandardTicket ? 'standard' : 'premium',
+        gameType: !isStandardTicket ? selectedGameType?.name : null
+      },
       balance: {
         amount: updatedUser.balance,
         currency: localCurrencyAmount.convertedCurrency,
-        formatted: formatCurrency(
-          updatedUser.balance,
-          user.country || "US"
-        )
+        formatted: formattedBalance
       }
     });
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     console.error("Create Game Pool Error:", error);
+
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        success: false,
+        message: "Validation error",
+        details: error.message
+      });
+    }
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "Duplicate entry detected.",
+        details: error.message
+      });
+    }
+
     return res.status(500).json({
       success: false,
       message: error.message || "Internal Server Error"
@@ -443,6 +518,9 @@ exports.createGamePool = async (req, res) => {
   }
 };
 
+// =========================
+// GET MY GAME ENTRIES
+// =========================
 // =========================
 // GET MY GAME ENTRIES
 // =========================
@@ -469,6 +547,38 @@ exports.getMyGameEntries = async (req, res) => {
       const player = pool.players.find(
         p => p.user.toString() === req.user.id.toString()
       );
+
+      // Enhanced result processing
+      let resultInfo = {
+        status: player?.status || 'Pending',
+        division: player?.result?.division || null,
+        prize: player?.result?.prize || 0,
+        isWinner: player?.result?.prize > 0,
+        winningNumbers: pool.winningNumbers || null,
+        resultDeclared: pool.resultDeclared || false
+      };
+
+      // Calculate match details if result is declared
+      if (pool.resultDeclared && pool.winningNumbers && player?.games) {
+        const matchDetails = player.games.map(game => {
+          const matchedNumbers = game.numbers.filter(num =>
+            pool.winningNumbers.numbers.includes(num)
+          );
+          const powerballMatch = game.powerball === pool.winningNumbers.powerball;
+
+          return {
+            gameNo: game.gameNo,
+            matchedNumbers: matchedNumbers,
+            matchedCount: matchedNumbers.length,
+            powerballMatch: powerballMatch,
+            numbers: game.numbers,
+            powerball: game.powerball
+          };
+        });
+
+        resultInfo.matchDetails = matchDetails;
+      }
+
       return {
         poolId: pool._id,
         ticketType: pool.ticketType,
@@ -480,7 +590,7 @@ exports.getMyGameEntries = async (req, res) => {
         games: player ? player.games : [],
         bidAmount: player ? player.bidAmount : 0,
         currencyDetails: player ? player.currencyDetails : {},
-        result: player ? player.result : null,
+        result: resultInfo,
         createdAt: pool.createdAt,
         updatedAt: pool.updatedAt,
         totalPlayers: pool.totalPlayers,
@@ -541,6 +651,44 @@ exports.getSingleGameEntry = async (req, res) => {
       });
     }
 
+    // Enhanced result processing
+    let resultInfo = {
+      status: player.status || 'Pending',
+      division: player.result?.division || null,
+      prize: player.result?.prize || 0,
+      isWinner: player.result?.prize > 0,
+      winningNumbers: pool.winningNumbers || null,
+      resultDeclared: pool.resultDeclared || false
+    };
+
+    // Calculate match details if result is declared
+    if (pool.resultDeclared && pool.winningNumbers && player.games) {
+      const matchDetails = player.games.map(game => {
+        const matchedNumbers = game.numbers.filter(num =>
+          pool.winningNumbers.numbers.includes(num)
+        );
+        const powerballMatch = game.powerball === pool.winningNumbers.powerball;
+
+        return {
+          gameNo: game.gameNo,
+          matchedNumbers: matchedNumbers,
+          matchedCount: matchedNumbers.length,
+          powerballMatch: powerballMatch,
+          numbers: game.numbers,
+          powerball: game.powerball
+        };
+      });
+
+      resultInfo.matchDetails = matchDetails;
+
+      // Check if any game won
+      const anyWin = matchDetails.some(m =>
+        (m.matchedCount >= 3 && m.powerballMatch) ||
+        m.matchedCount >= 6
+      );
+      resultInfo.hasWinningGame = anyWin;
+    }
+
     const response = {
       poolId: pool._id,
       ticketType: pool.ticketType,
@@ -552,7 +700,7 @@ exports.getSingleGameEntry = async (req, res) => {
       games: player.games,
       bidAmount: player.bidAmount,
       currencyDetails: player.currencyDetails,
-      result: player.result,
+      result: resultInfo,
       totalPlayers: pool.totalPlayers,
       totalAmount: pool.totalAmount,
       winningNumbers: pool.winningNumbers,
