@@ -1,6 +1,6 @@
 const PowerballResult = require("../../models/PowerballResult");
 const GamePool = require("../../models/GameEntry");
-const User = require("../../models/User");
+const User = require("../../models/authmodel");
 const mongoose = require('mongoose');
 
 // Prize Divisions
