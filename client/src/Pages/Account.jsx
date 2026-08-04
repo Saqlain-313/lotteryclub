@@ -277,10 +277,10 @@ const Account = () => {
     },
   ];
 
-  if (!user) {
-    navigate("/login");
-    return null;
-  }
+  // if (!user) {
+  //   navigate("/login");
+  //   return null;
+  // }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50/40 via-orange-50/20 to-amber-50/40 py-4 px-4">

@@ -88,39 +88,39 @@ export default function TopWinners() {
   }, []);
 
   return (
-    <div className="w-full max-w-8xl mx-auto px-3 sm:px-6 py-6">
-      {/* Header */}
-      <div className="flex items-center gap-2 mb-4">
-        <Trophy className="text-yellow-500" size={22} fill="currentColor" />
-        <h2 className="text-lg sm:text-xl font-extrabold text-gray-900 tracking-tight uppercase">
+    <div className="w-full max-w-2xl mx-auto px-3 py-5 bg-gray-50">
+      {/* Header — matches reference: bold trophy icon + bold uppercase title */}
+      <div className="flex items-center gap-2 mb-3">
+        <Trophy className="text-yellow-500" size={20} fill="currentColor" />
+        <h2 className="text-[15px] font-extrabold text-gray-900 tracking-wide uppercase">
           Top Winners
         </h2>
       </div>
 
-      {/* Two-panel grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+      {/* Side-by-side panels, matching the reference layout */}
+      <div className="grid grid-cols-2 gap-2.5">
         {/* Top 3 Winners panel */}
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-          <div className="text-center py-3 border-b border-gray-100">
-            <span className="text-orange-500 font-bold text-sm tracking-wide">
+        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="text-center py-2 px-1 border-b border-gray-100">
+            <span className="text-orange-500 font-bold text-[10px] sm:text-[11px] tracking-wide">
               TOP 3 WINNERS
             </span>
           </div>
-          <div className="px-4 py-3 space-y-3">
+          <div className="px-2.5 py-2.5 space-y-5">
             {topWinners.map((w) => (
-              <div key={w.rank} className="flex items-center gap-3">
+              <div key={w.rank} className="flex items-center gap-1.5">
                 <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${rankBadgeStyle[w.rank]}`}
+                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[14px] font-bold flex-shrink-0 ${rankBadgeStyle[w.rank]}`}
                 >
                   {w.rank}
                 </div>
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                  <UserCircle2 className="text-gray-400" size={20} />
+                <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                  <UserCircle2 className="text-gray-400" size={15} />
                 </div>
-                <span className="flex-1 text-gray-800 font-semibold text-sm truncate">
+                <span className="flex-1 min-w-0 text-gray-800 font-semibold text-[11px] truncate">
                   {w.name}
                 </span>
-                <span className="text-orange-500 font-bold text-sm whitespace-nowrap">
+                <span className="text-orange-500 font-bold text-[10px] sm:text-[11px] whitespace-nowrap">
                   {w.amount}
                 </span>
               </div>
@@ -129,22 +129,22 @@ export default function TopWinners() {
         </div>
 
         {/* 4-10 Rank Winners panel */}
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-          <div className="text-center py-3 border-b border-gray-100">
-            <span className="text-orange-500 font-bold text-sm tracking-wide">
+        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="text-center py-2 px-1 border-b border-gray-100">
+            <span className="text-orange-500 font-bold text-[10px] sm:text-[11px] tracking-wide">
               4 - 10 RANK WINNERS
             </span>
           </div>
-          <div className="px-4 py-3 space-y-2.5">
+          <div className="px-2.5 py-2">
             {winners.map((w) => (
-              <div key={w.rank} className="flex items-center gap-3">
-                <span className="w-4 text-gray-500 text-sm font-medium flex-shrink-0">
+              <div key={w.rank} className="flex items-center gap-1.5">
+                <span className="w-3 text-gray-500 text-[10px] sm:text-[11px] font-medium flex-shrink-0">
                   {w.rank}
                 </span>
-                <span className="flex-1 text-gray-800 font-medium text-sm truncate">
+                <span className="flex-1 min-w-0 text-gray-800 font-medium text-[11px] truncate">
                   {w.name}
                 </span>
-                <span className="text-gray-700 font-semibold text-sm whitespace-nowrap">
+                <span className="text-gray-700 font-semibold text-[10px] sm:text-[11px] whitespace-nowrap">
                   {w.amount}
                 </span>
               </div>
