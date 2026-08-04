@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Globe, MapPin, CheckCircle
-} from "lucide-react";
+import { Globe, MapPin, CheckCircle } from "lucide-react";
 
 const countries = [
   { name: "India", flag: "https://flagcdn.com/w80/in.png", code: "IN" },
@@ -9,7 +7,7 @@ const countries = [
   { name: "Pakistan", flag: "https://flagcdn.com/w80/pk.png", code: "PK" },
   { name: "Bangladesh", flag: "https://flagcdn.com/w80/bd.png", code: "BD" },
   { name: "Nepal", flag: "https://flagcdn.com/w80/np.png", code: "NP" },
-  { name: "Dubai (UAE)", flag: "https://flagcdn.com/w80/ae.png", code: "AE" },
+  { name: "Dubai", flag: "https://flagcdn.com/w80/ae.png", code: "UAE" },
 ];
 
 const CountriesAndDailyClaim = () => {
@@ -21,90 +19,102 @@ const CountriesAndDailyClaim = () => {
   };
 
   return (
-    <section className="bg-surface px-3 md:px-6 py-6 md:py-10">
-      <div className="w-full max-w-3xl mx-auto">
-        {/* Participating Countries - WINZOX Style */}
-        <div className="bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 md:p-6 shadow-lg">
-          {/* Header */}
-          <div className="flex items-center gap-3 mb-4 md:mb-6">
+    <section className="bg-surface px-4 md:px-8 py-6 md:py-10">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
             <div className="relative">
               <div className="absolute -inset-1 bg-yellow-400 rounded-full blur-md opacity-30 animate-pulse"></div>
+
               <div className="relative bg-gradient-to-br from-yellow-400 to-yellow-600 p-2 rounded-xl shadow-lg">
                 <Globe className="text-white" size={20} />
               </div>
             </div>
+
             <div>
-              <h3 className="text-lg md:text-xl font-black tracking-tight" style={goldenTextStyle}>
+              <h2
+                className="text-xl md:text-2xl font-black"
+                style={goldenTextStyle}
+              >
                 Participating Countries
-              </h3>
-              <p className="text-gray-500 text-xs font-medium">Global lottery access</p>
+              </h2>
+
+              <p className="text-xs text-gray-500 font-medium">
+                Global Lottery Access
+              </p>
             </div>
           </div>
 
-          {/* Countries Row - Single Line with Scroll on Mobile - Scrollbar Hidden */}
-          <div className="flex gap-4 md:gap-6 justify-center items-center overflow-x-auto pb-2 px-1 scrollbar-hide">
-            {countries.map((country) => (
+          <div className="hidden md:flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-3 py-1">
+            <CheckCircle className="w-4 h-4 text-green-600" />
+            <span className="text-xs font-bold text-green-600">ACTIVE</span>
+          </div>
+        </div>
+
+        {/* Countries */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+          <div className="grid grid-cols-6">
+            {countries.map((country, index) => (
               <div
                 key={country.code}
-                className="group flex flex-col items-center gap-1.5 cursor-pointer transition-all duration-300 hover:scale-110 flex-shrink-0"
-                title={country.name}
+                className={`group flex flex-col items-center justify-center px-2 py-4 md:py-6 transition-all duration-300 hover:bg-gray-50 hover:-translate-y-1 ${
+                  index !== countries.length - 1
+                    ? "border-r border-gray-200"
+                    : ""
+                }`}
               >
                 <div className="relative">
-                  <div className="absolute -inset-1 rounded-full bg-yellow-400/0 group-hover:bg-yellow-400/20 transition-all duration-300 blur-md"></div>
                   <img
                     src={country.flag}
-                    alt={`Flag of ${country.name}`}
+                    alt={country.name}
                     loading="lazy"
-                    className="relative w-10 h-10 md:w-16 md:h-16 rounded-full border-2 border-gray-200 group-hover:border-yellow-400 object-cover shadow-md group-hover:shadow-lg transition-all duration-300"
+                    className="w-9 h-9 sm:w-10 sm:h-10 md:w-16 md:h-16 rounded-full border-2 border-gray-200 object-cover transition-all duration-300 group-hover:border-yellow-400 group-hover:scale-110 shadow-sm"
                   />
-                  <div className="absolute -bottom-1 -right-1 bg-yellow-400 text-yellow-900 text-[8px] font-bold px-1.5 py-0.5 rounded-full border border-white shadow-sm">
+
+                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-[7px] md:text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-white shadow">
                     {country.code}
                   </div>
                 </div>
-                <span className="text-[10px] md:text-xs font-medium text-gray-600 group-hover:text-yellow-600 transition-colors duration-300 text-center whitespace-nowrap">
+
+                <span className="mt-3 text-[8px] sm:text-[9px] md:text-xs font-medium text-gray-600 text-center leading-tight">
                   {country.name}
                 </span>
               </div>
             ))}
           </div>
+        </div>
 
-          {/* Footer Stats */}
-          <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-gray-200/50 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <MapPin className="text-yellow-500" size={14} />
-              <span className="text-xs text-gray-500 font-medium">
-                {countries.length} Countries Supported
-              </span>
-            </div>
-            <div className="flex items-center gap-1 bg-green-50 px-2 py-1 rounded-full border border-green-200">
-              <CheckCircle className="text-green-500" size={12} />
-              <span className="text-[10px] font-bold text-green-600">Active</span>
-            </div>
+        {/* Footer */}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-gray-200">
+          <div className="flex items-center gap-2">
+            <MapPin className="text-yellow-500" size={15} />
+            <span className="text-xs text-gray-500 font-medium">
+              {countries.length} Countries Supported
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span className="text-xs text-gray-500">
+              Available Worldwide
+            </span>
           </div>
         </div>
       </div>
 
       <style>{`
-        .bg-surface {
-          background-color: #f7f9fb;
+        .bg-surface{
+          background:#f7f9fb;
         }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; }
+
+        @keyframes pulse{
+          0%,100%{opacity:1;}
+          50%{opacity:.5;}
         }
-        .animate-pulse {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        
-        /* Hide scrollbar for IE, Edge and Firefox */
-        .scrollbar-hide {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;  /* Firefox */
+
+        .animate-pulse{
+          animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite;
         }
       `}</style>
     </section>
