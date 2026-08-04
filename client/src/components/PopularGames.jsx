@@ -68,7 +68,7 @@ export default function PopularGames() {
   const totalGames = games.length;
 
   return (
-    <section className="py-6 md:py-12 bg-gradient-to-b from-white to-gray-50">
+    <section className="py-6 md:py-12 ">
       <div className="max-w-8xl mx-auto px-3 md:px-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">

@@ -101,7 +101,7 @@ export default function HeroSection() {
           loop={displayBanners.length > 1}
           className="heroSwiper"
         >
-          {fallbackBanners.map((banner, index) => (
+          {displayBanners.map((banner, index) => (
             <SwiperSlide key={banner._id || index}>
 
               {/* Banner */}
