@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Bid = require("../models/Bid");
 const Market = require("../models/Market");
 
-// Single controller for public bid results page
 exports.getPublicBidResults = async (req, res) => {
   try {
     const { 
