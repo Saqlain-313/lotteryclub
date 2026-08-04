@@ -451,10 +451,7 @@ const Navbar = ({ children }) => {
                   </Link>
 
                   {/* Mobile Avatar only */}
-                  <Link
-                    to="/account"
-                    className="md:hidden flex items-center"
-                  >
+                  <Link to="/account" className="md:hidden flex items-center">
                     <div
                       className={`w-8 h-8 rounded-full bg-gradient-to-r ${getAvatarGradient()} flex items-center justify-center text-white text-xs font-bold shadow-lg transform-gpu hover:scale-110 transition-all duration-300`}
                     >
@@ -466,7 +463,7 @@ const Navbar = ({ children }) => {
                 <>
                   <Link
                     to="/login"
-                    className="flex items-center gap-1.5 px-4 py-1.5 rounded bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-black text-sm font-bold hover:shadow-2xl hover:shadow-yellow-500/35 transition-all duration-500 transform-gpu hover:scale-105 hover:-translate-y-0.5 hover:rotate-y-3 [transform-style:preserve-3d]"
+                    className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-gray-400 text-black text-sm"
                   >
                     <LogIn size={16} />
                     <span className="hidden sm:inline">LOGIN</span>
@@ -474,7 +471,7 @@ const Navbar = ({ children }) => {
                   </Link>
                   <Link
                     to="/register"
-                    className="flex items-center gap-1.5 px-4 py-1.5 rounded bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-black text-sm font-bold hover:shadow-2xl hover:shadow-yellow-500/35 transition-all duration-500 transform-gpu hover:scale-105 hover:-translate-y-0.5 hover:rotate-y-3 [transform-style:preserve-3d]"
+                    className="flex ml-3 items-center gap-1.5 px-2 py-1.5 rounded-lg bg-yellow-400 text-black text-sm"
                   >
                     <UserPlus size={16} />
                     <span className="hidden sm:inline">REGISTER</span>

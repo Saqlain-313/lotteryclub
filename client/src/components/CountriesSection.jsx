@@ -1,5 +1,4 @@
-import React from "react";
-import { Globe, MapPin, CheckCircle } from "lucide-react";
+import { CheckCircle, Globe, MapPin } from "lucide-react";
 
 const countries = [
   { name: "India", flag: "https://flagcdn.com/w80/in.png", code: "IN" },
@@ -25,19 +24,19 @@ const CountriesAndDailyClaim = () => {
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="absolute -inset-1 bg-yellow-400 rounded-full blur-md opacity-30 animate-pulse"></div>
+              {/* <div className="absolute -inset-1  rounded-full blur-md opacity-30 animate-pulse"></div> */}
 
-              <div className="relative bg-gradient-to-br from-yellow-400 to-yellow-600 p-2 rounded-xl shadow-lg">
-                <Globe className="text-white" size={20} />
+              <div className="relative p-2 ">
+                <Globe className="text-black" size={20} />
               </div>
             </div>
 
             <div>
               <h2
-                className="text-xl md:text-2xl font-black"
-                style={goldenTextStyle}
+                className="text-lg md:text-2xl font-black"
+                // style={goldenTextStyle}
               >
-                Participating Countries
+                Available in Countries
               </h2>
 
               <p className="text-xs text-gray-500 font-medium">
@@ -59,9 +58,7 @@ const CountriesAndDailyClaim = () => {
               <div
                 key={country.code}
                 className={`group flex flex-col items-center justify-center px-2 py-4 md:py-6 transition-all duration-300 hover:bg-gray-50 hover:-translate-y-1 ${
-                  index !== countries.length - 1
-                    ? "border-r border-gray-200"
-                    : ""
+                  index !== countries.length - 1 ? "" : ""
                 }`}
               >
                 <div className="relative">
@@ -72,9 +69,9 @@ const CountriesAndDailyClaim = () => {
                     className="w-9 h-9 sm:w-10 sm:h-10 md:w-16 md:h-16 rounded-full border-2 border-gray-200 object-cover transition-all duration-300 group-hover:border-yellow-400 group-hover:scale-110 shadow-sm"
                   />
 
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-[7px] md:text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-white shadow">
+                  {/* <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-[7px] md:text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-white shadow">
                     {country.code}
-                  </div>
+                  </div> */}
                 </div>
 
                 <span className="mt-3 text-[8px] sm:text-[9px] md:text-xs font-medium text-gray-600 text-center leading-tight">
@@ -96,9 +93,7 @@ const CountriesAndDailyClaim = () => {
 
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            <span className="text-xs text-gray-500">
-              Available Worldwide
-            </span>
+            <span className="text-xs text-gray-500">Available Worldwide</span>
           </div>
         </div>
       </div>

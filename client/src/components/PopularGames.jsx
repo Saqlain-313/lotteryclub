@@ -1,4 +1,4 @@
-import { ArrowRight, Crown, Gift, Sparkles, TrendingUp } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 
 const games = [
@@ -72,15 +72,12 @@ export default function PopularGames() {
       <div className="max-w-8xl mx-auto px-3 md:px-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
-
           <div className="flex items-center gap-2">
-
             <span className="text-xl">🔥</span>
 
             <h2 className="text-lg md:text-2xl font-bold uppercase text-gray-800">
               Popular Games
             </h2>
-
           </div>
 
           <button
@@ -89,7 +86,6 @@ export default function PopularGames() {
           >
             {showAll ? "View Less" : "View All"}
           </button>
-
         </div>
 
         {/* Cards Grid - 4 columns on all devices */}
@@ -98,7 +94,7 @@ export default function PopularGames() {
             <a
               key={index}
               href={game.link}
-              className="group relative rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-white aspect-[3/5] md:aspect-[3/4]"
+              className="group relative rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-white aspect-[3/5.5] md:aspect-[3/4.5]"
             >
               {/* Background Image */}
               <div
@@ -107,11 +103,11 @@ export default function PopularGames() {
               />
 
               {/* Overlay Layers */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" /> */}
+              {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" /> */}
 
               {/* Border Glow on Hover */}
-              <div className="absolute inset-0 border-2 border-transparent group-hover:border-yellow-400/50 rounded-xl md:rounded-2xl transition-all duration-300" />
+              {/* <div className="absolute inset-0 border-2 border-transparent group-hover:border-yellow-400/50 rounded-xl md:rounded-2xl transition-all duration-300" /> */}
 
               {/* Top Section - Badges */}
               <div className="absolute top-2 left-2 right-2 md:top-3 md:left-3 md:right-3 z-20 flex items-start justify-between">
@@ -170,13 +166,14 @@ export default function PopularGames() {
         </div>
 
         {/* Show More/Less Button */}
-        <div className="mt-6 md:mt-8 text-center">
+        {/* <div className="mt-6 md:mt-8 text-center">
           <button
             onClick={() => setShowAll(!showAll)}
-            className={`group inline-flex items-center gap-2 px-6 md:px-10 py-2.5 md:py-3.5 rounded-full font-bold text-sm md:text-base transition-all duration-300 shadow-md ${showAll
-              ? "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-lg"
-              : "bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:shadow-lg hover:shadow-yellow-500/30 hover:-translate-y-0.5"
-              }`}
+            className={`group inline-flex items-center gap-2 px-6 md:px-10 py-2.5 md:py-3.5 rounded-full font-bold text-sm md:text-base transition-all duration-300 shadow-md ${
+              showAll
+                ? "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-lg"
+                : "bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:shadow-lg hover:shadow-yellow-500/30 hover:-translate-y-0.5"
+            }`}
           >
             {showAll ? (
               <>
@@ -193,10 +190,9 @@ export default function PopularGames() {
               </>
             )}
           </button>
-        </div>
+        </div> */}
 
         {/* Bottom Trust Indicator */}
-
       </div>
 
       <style>{`
