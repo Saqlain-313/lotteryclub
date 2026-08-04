@@ -21,7 +21,7 @@ const CountriesAndDailyClaim = () => {
     <section className="bg-surface px-4 md:px-8 py-6 md:py-10">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
             <div className="relative">
               {/* <div className="absolute -inset-1  rounded-full blur-md opacity-30 animate-pulse"></div> */}
@@ -52,7 +52,7 @@ const CountriesAndDailyClaim = () => {
         </div>
 
         {/* Countries */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className=" overflow-hidden">
           <div className="grid grid-cols-6">
             {countries.map((country, index) => (
               <div
