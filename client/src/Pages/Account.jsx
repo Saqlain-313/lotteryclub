@@ -11,6 +11,7 @@ import {
   Coins,
   Gift,
   History,
+  HistoryIcon,
   Key,
   LogOut,
   MessageCircle,
@@ -31,19 +32,19 @@ import { logout } from "../redux/slices/authSlice";
 // Helper function to get currency symbol based on country
 const getCurrencySymbol = (country) => {
   const symbols = {
-    'IN': '₹',
-    'US': '$',
-    'GB': '£',
-    'EU': '€',
-    'JP': '¥',
-    'CN': '¥',
-    'AU': '$',
-    'CA': '$',
-    'SG': 'S$',
-    'MY': 'RM',
-    'AE': 'د.إ',
-    'SA': '﷼',
-    'default': '₹'
+    IN: "₹",
+    US: "$",
+    GB: "£",
+    EU: "€",
+    JP: "¥",
+    CN: "¥",
+    AU: "$",
+    CA: "$",
+    SG: "S$",
+    MY: "RM",
+    AE: "د.إ",
+    SA: "﷼",
+    default: "₹",
   };
   return symbols[country] || symbols.default;
 };
@@ -60,9 +61,9 @@ const Account = () => {
 
   // Format currency function with proper number formatting
   const formatCurrency = (amount) => {
-    return `${currencySymbol}${Number(amount).toLocaleString('en-IN', {
+    return `${currencySymbol}${Number(amount).toLocaleString("en-IN", {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })}`;
   };
 
@@ -97,6 +98,15 @@ const Account = () => {
       icon: History,
       label: "Deposit History",
       path: "/deposit-history",
+      color: "text-purple-700",
+      bgColor: "bg-purple-50",
+      borderColor: "border-purple-200/60",
+      description: "View your deposit records",
+    },
+    {
+      icon: HistoryIcon,
+      label: "Powerhit History",
+      path: "/powerhit/history",
       color: "text-purple-700",
       bgColor: "bg-purple-50",
       borderColor: "border-purple-200/60",
