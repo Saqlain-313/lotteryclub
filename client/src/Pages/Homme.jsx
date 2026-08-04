@@ -14,7 +14,7 @@ const Homme = () => {
       <Herosection />
       {/* <StatsSection /> */}
       <PopularGames />
-      {/* <FeatureBar /> */}
+      <FeatureBar />
       <TopWinners />
       <StatsSection2 />
       <CountriesSection />

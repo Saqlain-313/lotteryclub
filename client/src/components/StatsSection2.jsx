@@ -122,20 +122,6 @@ export default function StatsSection2() {
       </div>
 
       {/* Footer */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-gray-500">
-        <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-green-500" />
-          <span>
-            <span className="font-semibold text-green-600">+12.5%</span> vs
-            last week
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-          <span>Updated 2 min ago</span>
-        </div>
-      </div>
     </section>
   );
 }

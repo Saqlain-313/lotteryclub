@@ -3,76 +3,60 @@ import { useState } from "react";
 
 const games = [
   {
-    title: "WORLDWIDE",
+    title: "WORLD WIDE",
     name: "MATKA",
-    number: "5",
     image: "https://i.ibb.co/jPm1b0df/card-1.png",
     link: "/matka",
-    prize: "25M",
-    hot: true,
+    bg: "from-purple-500 to-violet-400",
   },
   {
     title: "AUSTRALIAN",
     name: "POWERBALL",
-    number: "8",
     image: "https://i.ibb.co/bRHBMCM9/card-2.png",
-    link: "/powerhit",
-    prize: "40M",
-    hot: true,
+    link: "/powerball",
+    bg: "from-lime-500 to-green-400",
   },
   {
     title: "INDIAN",
     name: "POWERBALL",
-    number: "2",
     image: "https://i.ibb.co/B2CJ9CB0/card-3.png",
-    link: "/powerhit",
-    prize: "15M",
-    hot: false,
+    link: "/powerball",
+    bg: "from-orange-500 to-yellow-400",
   },
   {
     title: "NEPALI",
     name: "POWERBALL",
-    number: "7",
     image: "https://i.ibb.co/Kx2qtpjk/card-4.png",
-    link: "/powerhit",
-    prize: "20M",
-    hot: true,
+    link: "/powerball",
+    bg: "from-pink-500 to-rose-400",
   },
   {
-    title: "UNITED STATES",
+    title: "USA",
     name: "POWERBALL",
-    number: "5",
     image: "https://i.ibb.co/jPm1b0df/card-1.png",
-    link: "/powerhit",
-    prize: "35M",
-    hot: false,
+    link: "/powerball",
+    bg: "from-blue-500 to-cyan-400",
   },
   {
-    title: "UNITED KINGDOM",
+    title: "UK",
     name: "LOTTO",
-    number: "8",
     image: "https://i.ibb.co/bRHBMCM9/card-2.png",
-    link: "/powerhit",
-    prize: "18M",
-    hot: false,
+    link: "/powerball",
+    bg: "from-indigo-500 to-blue-400",
   },
   {
     title: "CANADA",
     name: "LOTTO MAX",
-    number: "2",
     image: "https://i.ibb.co/B2CJ9CB0/card-3.png",
-    link: "/powerhit",
-    prize: "22M",
-    hot: false,
+    link: "/powerball",
+    bg: "from-red-500 to-orange-400",
   },
   {
     title: "JAPAN",
     name: "LOTO 7",
-    number: "7",
     image: "https://i.ibb.co/Kx2qtpjk/card-4.png",
-    link: "/powerhit",
-    prize: "30M",
-    hot: false,
+    link: "/powerball",
+    bg: "from-emerald-500 to-green-400",
   },
 ];
 
@@ -87,28 +71,25 @@ export default function PopularGames() {
     <section className="py-6 md:py-12 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-8xl mx-auto px-3 md:px-6">
         {/* Header */}
-        <div className="flex flex-wrap items-end justify-between mb-6 md:mb-10">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-1 bg-gradient-to-b from-yellow-400 to-orange-500 rounded-full"></div>
-              <div>
-                <h2 className="text-2xl md:text-4xl font-black tracking-tight">
-                  <span className="bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 bg-clip-text text-transparent">
-                    Popular Games
-                  </span>
-                </h2>
-                <p className="text-gray-500 text-xs md:text-sm font-medium flex items-center gap-1.5 mt-0.5">
-                  <Sparkles size={14} className="text-yellow-500" />
-                  Hand-picked lotteries for the best odds
-                </p>
-              </div>
-            </div>
+        <div className="flex items-center justify-between mb-5">
+
+          <div className="flex items-center gap-2">
+
+            <span className="text-xl">🔥</span>
+
+            <h2 className="text-lg md:text-2xl font-bold uppercase text-gray-800">
+              Popular Games
+            </h2>
+
           </div>
 
-          <button className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm bg-transparent text-black border border-amber-300 transition-all duration-300 hover:-translate-y-0.5">
-            <span>View All</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="border border-gray-300 rounded-lg px-4 py-1.5 text-sm font-medium hover:bg-gray-100"
+          >
+            {showAll ? "View Less" : "View All"}
           </button>
+
         </div>
 
         {/* Cards Grid - 4 columns on all devices */}
@@ -154,14 +135,6 @@ export default function PopularGames() {
                 </div>
 
                 {/* Right Side - Number Badge */}
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur-sm opacity-60"></div>
-                  <div className="relative w-6 h-6 md:w-11 md:h-11 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-lg border-2 border-yellow-300">
-                    <span className="text-black font-black text-[8px] md:text-base">
-                      {game.number}
-                    </span>
-                  </div>
-                </div>
               </div>
 
               {/* Bottom Section - Content */}
@@ -200,11 +173,10 @@ export default function PopularGames() {
         <div className="mt-6 md:mt-8 text-center">
           <button
             onClick={() => setShowAll(!showAll)}
-            className={`group inline-flex items-center gap-2 px-6 md:px-10 py-2.5 md:py-3.5 rounded-full font-bold text-sm md:text-base transition-all duration-300 shadow-md ${
-              showAll
-                ? "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-lg"
-                : "bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:shadow-lg hover:shadow-yellow-500/30 hover:-translate-y-0.5"
-            }`}
+            className={`group inline-flex items-center gap-2 px-6 md:px-10 py-2.5 md:py-3.5 rounded-full font-bold text-sm md:text-base transition-all duration-300 shadow-md ${showAll
+              ? "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-lg"
+              : "bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:shadow-lg hover:shadow-yellow-500/30 hover:-translate-y-0.5"
+              }`}
           >
             {showAll ? (
               <>
@@ -224,23 +196,7 @@ export default function PopularGames() {
         </div>
 
         {/* Bottom Trust Indicator */}
-        <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-center gap-4 md:gap-6 pt-4 border-t border-gray-200/50">
-          {[
-            { icon: Crown, text: "Premium Games" },
-            { icon: Gift, text: "Big Jackpots" },
-            { icon: TrendingUp, text: "High Odds" },
-          ].map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-1.5 text-gray-500"
-            >
-              <item.icon className="w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-500" />
-              <span className="text-[9px] md:text-xs font-medium">
-                {item.text}
-              </span>
-            </div>
-          ))}
-        </div>
+
       </div>
 
       <style>{`
