@@ -7,48 +7,56 @@ const games = [
     name: "MATKA",
     number: "5",
     image: "https://i.ibb.co/jPm1b0df/card-1.png",
+    link: "/matka",
   },
   {
     title: "AUSTRALIAN",
     name: "POWERBALL",
     number: "8",
     image: "https://i.ibb.co/bRHBMCM9/card-2.png",
+    link: "/powerhit",
   },
   {
     title: "INDIAN",
     name: "POWERBALL",
     number: "2",
     image: "https://i.ibb.co/B2CJ9CB0/card-3.png",
+    link: "/powerhit",
   },
   {
     title: "NEPALI",
     name: "POWERBALL",
     number: "7",
     image: "https://i.ibb.co/Kx2qtpjk/card-4.png",
+    link: "/powerhit",
   },
   {
     title: "UNITED STATES",
     name: "POWERBALL",
     number: "5",
     image: "https://i.ibb.co/jPm1b0df/card-1.png",
+    link: "/powerhit",
   },
   {
     title: "UNITED KINGDOM",
     name: "LOTTO",
     number: "8",
     image: "https://i.ibb.co/bRHBMCM9/card-2.png",
+    link: "/powerhit",
   },
   {
     title: "CANADA",
     name: "LOTTO MAX",
     number: "2",
     image: "https://i.ibb.co/B2CJ9CB0/card-3.png",
+    link: "/powerhit",
   },
   {
     title: "JAPAN",
     name: "LOTO 7",
     number: "7",
     image: "https://i.ibb.co/Kx2qtpjk/card-4.png",
+    link: "/powerhit",
   },
 ];
 
@@ -109,9 +117,10 @@ export default function PopularGames() {
         {/* Cards - WINZOX Glass Style */}
         <div className="grid grid-cols-4 md:grid-cols-4 gap-2 md:gap-4">
           {displayGames.map((game, index) => (
-            <div
+            <a
               key={index}
-              className="relative rounded-2xl overflow-hidden border border-white/40 shadow-md hover:shadow-xl transition-all duration-300 group hover:-translate-y-2 bg-white/60 backdrop-blur-sm"
+              href={game.link}
+              className="relative rounded-2xl overflow-hidden border border-white/40 shadow-md hover:shadow-xl transition-all duration-300 group hover:-translate-y-2 bg-white/60 backdrop-blur-sm cursor-pointer no-underline"
             >
               {/* Background Image */}
               <div
@@ -163,12 +172,12 @@ export default function PopularGames() {
                 </div>
 
                 {/* Button - Golden Gradient */}
-                <button className="inline-flex items-center gap-1 md:gap-2 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-lg px-2 py-1 md:px-6 md:py-2.5 text-[7px] md:text-sm transition-all duration-300 shadow-lg hover:shadow-xl border border-yellow-300 hover:border-yellow-400 whitespace-nowrap">
+                <div className="inline-flex items-center gap-1 md:gap-2 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-lg px-2 py-1 md:px-6 md:py-2.5 text-[7px] md:text-sm transition-all duration-300 shadow-lg hover:shadow-xl border border-yellow-300 hover:border-yellow-400 whitespace-nowrap">
                   PLAY NOW
                   <ArrowRight className="w-2 h-2 md:w-4 md:h-4" />
-                </button>
+                </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
 

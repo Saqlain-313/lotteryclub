@@ -3,7 +3,6 @@ import {
   Gamepad2,
   Trophy,
   Wifi,
-  Zap,
   TrendingUp,
 } from "lucide-react";
 
@@ -13,129 +12,130 @@ const stats = [
     value: "1,240",
     label: "Today's Winners",
     color: "text-green-500",
-    bgColor: "bg-green-50",
-    borderColor: "border-green-200",
+    bgColor: "bg-green-100",
   },
   {
     icon: Gamepad2,
     value: "32,500",
     label: "Games Played",
     color: "text-purple-500",
-    bgColor: "bg-purple-50",
-    borderColor: "border-purple-200",
+    bgColor: "bg-purple-100",
   },
   {
     icon: Trophy,
     value: "96%",
     label: "Winning Rate",
     color: "text-sky-500",
-    bgColor: "bg-sky-50",
-    borderColor: "border-sky-200",
+    bgColor: "bg-sky-100",
   },
   {
     icon: Wifi,
     value: "5,420",
     label: "Online Users",
     color: "text-orange-500",
-    bgColor: "bg-orange-50",
-    borderColor: "border-orange-200",
+    bgColor: "bg-orange-100",
   },
 ];
 
 export default function StatsSection2() {
-  const goldenTextStyle = {
-    background: "linear-gradient(135deg, #7b5800 0%, #fdba12 100%)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    backgroundClip: "text",
-  };
-
   return (
-    <section className="bg-surface px-3 md:px-6 py-6 md:py-8">
-      {/* Heading - WINZOX Style */}
-      <div className="flex flex-wrap items-center justify-between mb-4 md:mb-6">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="absolute -inset-1 bg-yellow-400 rounded-full blur-md opacity-30 animate-pulse"></div>
-            <div className="relative bg-gradient-to-br from-yellow-400 to-yellow-600 p-2 rounded-xl shadow-lg">
-              <Zap className="text-white" size={20} />
-            </div>
+    <section className="px-4 md:px-8 py-6 bg-[#f8f9fb]">
+      {/* Heading */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-green-600" />
           </div>
+
           <div>
-            <h2 className="text-xl md:text-2xl font-black tracking-tight" style={goldenTextStyle}>
+            <h2 className="text-lg md:text-2xl font-bold uppercase text-gray-900">
               Live Stats
             </h2>
-            <p className="text-gray-500 text-xs font-medium">Real-time platform metrics</p>
+            <p className="text-[11px] text-gray-500">
+              Real-time platform metrics
+            </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 bg-green-50 px-3 py-1.5 rounded-full border border-green-200">
-          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-          <span className="text-xs font-bold text-green-600 uppercase tracking-wider">Live</span>
+
+        <div className="hidden md:flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-3 py-1">
+          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <span className="text-xs font-semibold text-green-600">LIVE</span>
         </div>
       </div>
 
-      {/* Stats Cards - WINZOX Glass Style */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-        {stats.map((item, index) => {
-          const Icon = item.icon;
+      {/* Stats */}
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="grid grid-cols-4">
+          {stats.map((item, index) => {
+            const Icon = item.icon;
 
-          return (
-            <div
-              key={index}
-              className={`group relative bg-white/60 backdrop-blur-sm border border-white/40 rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden`}
-            >
-              {/* Animated background gradient */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-yellow-50/50 to-transparent pointer-events-none"></div>
-              
-              {/* Icon with gradient background */}
-              <div className={`relative z-10 w-12 h-12 md:w-14 md:h-14 rounded-2xl ${item.bgColor} border ${item.borderColor} flex items-center justify-center mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                <Icon className={`${item.color} w-6 h-6 md:w-7 md:h-7`} />
-              </div>
+            return (
+              <div
+                key={index}
+                className={`group relative flex flex-col items-center justify-center
+                px-2 py-4 md:py-6 transition-all duration-300 hover:bg-gray-50
+                ${
+                  index !== stats.length - 1
+                    ? "border-r border-gray-200"
+                    : ""
+                }`}
+              >
+                {/* Icon */}
+                <div
+                  className={`w-9 h-9 md:w-12 md:h-12 rounded-full ${item.bgColor}
+                  flex items-center justify-center transition-all duration-300
+                  group-hover:scale-110`}
+                >
+                  <Icon
+                    className={`${item.color} w-5 h-5 md:w-6 md:h-6`}
+                  />
+                </div>
 
-              {/* Value - with color change on hover */}
-              <div className="relative z-10">
-                <h3 className={`text-xl md:text-2xl lg:text-3xl font-black tracking-tight text-gray-900 group-hover:${item.color} transition-colors duration-300`}>
+                {/* Value */}
+                <h3
+                  className={`mt-2 text-[15px] md:text-2xl font-extrabold text-gray-900 transition-colors duration-300 ${item.color}`}
+                >
                   {item.value}
                 </h3>
-                <p className="text-gray-500 text-xs md:text-sm font-medium mt-0.5">
+
+                {/* Label */}
+                <p className="mt-1 text-[10px] md:text-sm text-gray-500 text-center leading-tight font-medium">
                   {item.label}
                 </p>
-              </div>
 
-              {/* Decorative progress bar */}
-              <div className="relative z-10 mt-3 md:mt-4 w-full h-1 bg-gray-100 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full rounded-full transition-all duration-1000 ${item.color.replace('text', 'bg')} opacity-50 group-hover:opacity-100`}
-                  style={{ width: `${Math.random() * 40 + 60}%` }}
-                ></div>
+                {/* Bottom Hover Line */}
+                <div
+                  className={`absolute bottom-0 left-0 h-1 w-0 group-hover:w-full transition-all duration-300 ${
+                    item.color === "text-green-500"
+                      ? "bg-green-500"
+                      : item.color === "text-purple-500"
+                      ? "bg-purple-500"
+                      : item.color === "text-sky-500"
+                      ? "bg-sky-500"
+                      : "bg-orange-500"
+                  }`}
+                />
               </div>
-
-              {/* Decorative corner accent */}
-              <div className="absolute top-0 right-0 w-16 h-16 rounded-full bg-yellow-400/5 -translate-y-8 translate-x-8 group-hover:scale-150 transition-transform duration-500 pointer-events-none"></div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
-      {/* Footer Stats - Additional Info */}
+      {/* Footer */}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-gray-500">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="w-4 h-4 text-green-500" />
+          <span>
+            <span className="font-semibold text-green-600">+12.5%</span> vs
+            last week
+          </span>
+        </div>
 
-
-      <style>{`
-        .bg-surface {
-          background-color: #f7f9fb;
-        }
-        button:focus {
-          outline: none !important;
-          box-shadow: none !important;
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-        .animate-pulse {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-      `}</style>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <span>Updated 2 min ago</span>
+        </div>
+      </div>
     </section>
   );
 }
