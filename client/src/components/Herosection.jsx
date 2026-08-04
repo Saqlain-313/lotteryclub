@@ -1,12 +1,12 @@
 import {
   ChevronLeft,
   ChevronRight,
-  Gamepad2Icon,
+  Gamepad2,
   ShieldCheck,
+  Users,
   WalletCards,
 } from "lucide-react";
 import { useEffect } from "react";
-import { HiUsers } from "react-icons/hi2";
 import { useDispatch, useSelector } from "react-redux";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -49,7 +49,7 @@ export default function HeroSection() {
     {
       value: "25,000+",
       label: "Players",
-      icon: HiUsers,
+      icon: Users,
     },
     {
       value: "₹15Cr+",
@@ -59,7 +59,7 @@ export default function HeroSection() {
     {
       value: "100+",
       label: "Games",
-      icon: Gamepad2Icon,
+      icon: Gamepad2,
     },
     {
       value: "99.9%",
@@ -67,6 +67,7 @@ export default function HeroSection() {
       icon: ShieldCheck,
     },
   ];
+
   if (loading) {
     return (
       <section className="w-full bg-white px-2 py-2 sm:px-3">
