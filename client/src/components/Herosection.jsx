@@ -46,8 +46,8 @@ export default function HeroSection() {
 
   if (loading) {
     return (
-      <div className="w-full px-4 py-2">
-        <div className="bg-gray-100 rounded-2xl h-72 flex items-center justify-center">
+      <div className="w-full px-3 py-2">
+        <div className="bg-gray-100 rounded-xl h-52 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-10 w-10 border-4 border-yellow-500 border-t-transparent mx-auto"></div>
             <p className="mt-3 text-gray-600 text-sm">Loading...</p>
@@ -59,19 +59,19 @@ export default function HeroSection() {
 
   return (
     <section className="w-full px-3 py-3 md:px-4 md:py-4">
-      {/* Banner Slider with Content Overlay */}
-      <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl">
+      {/* Banner Slider - Rectangle Shape */}
+      <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] lg:aspect-[16/6]">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           navigation={false}
           pagination={{ clickable: true }}
           autoplay={{ delay: 4000, disableOnInteraction: false }}
           loop
-          className="w-full"
+          className="w-full h-full"
         >
           {fallbackBanners.map((banner, index) => (
             <SwiperSlide key={banner._id || index}>
-              <div className="relative h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] w-full">
+              <div className="relative w-full h-full">
                 <img
                   src={banner.image}
                   alt="Banner"
@@ -79,33 +79,33 @@ export default function HeroSection() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
                 
-                {/* Content Overlay - Mobile Optimized */}
+                {/* Content Overlay - Centered Vertically */}
                 <div className="absolute inset-0 flex items-center px-5 sm:px-8 md:px-12 lg:px-20">
                   <div className="max-w-2xl w-full">
                     {/* PLAY GAMES - Mobile First */}
-                    <h1 className="text-white font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.1]">
+                    <h1 className="text-white font-black text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.1]">
                       PLAY GAMES
                     </h1>
                     
                     {/* WIN BIG - Golden Gradient */}
-                    <h1 className="text-transparent bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 bg-clip-text font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.1] mt-0">
+                    <h1 className="text-transparent bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 bg-clip-text font-black text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.1] mt-0">
                       WIN BIG
                     </h1>
                     
-                    {/* Subtitle - Mobile Optimized */}
-                    <div className="mt-2 sm:mt-3">
-                      <p className="text-white text-xs sm:text-sm md:text-base font-medium">
+                    {/* Subtitle */}
+                    <div className="mt-1.5 sm:mt-2 md:mt-3">
+                      <p className="text-white text-[10px] sm:text-xs md:text-sm lg:text-base font-medium">
                         Fast Results • 100% Secure
                       </p>
-                      <p className="text-white text-xs sm:text-sm md:text-base font-medium">
+                      <p className="text-white text-[10px] sm:text-xs md:text-sm lg:text-base font-medium">
                         Join Thousands of Winners
                       </p>
                     </div>
                     
                     {/* PLAY NOW Button */}
-                    <button className="mt-4 sm:mt-5 md:mt-6 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold px-6 sm:px-8 py-2.5 sm:py-3 rounded-full inline-flex items-center gap-2 hover:shadow-lg hover:shadow-yellow-500/30 transition-all text-sm sm:text-base active:scale-95">
+                    <button className="mt-3 sm:mt-4 md:mt-6 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold px-4 sm:px-6 md:px-8 py-1.5 sm:py-2 md:py-3 rounded-full inline-flex items-center gap-1.5 sm:gap-2 hover:shadow-lg hover:shadow-yellow-500/30 transition-all text-[10px] sm:text-sm md:text-base active:scale-95">
                       PLAY NOW
-                      <ArrowRight size={16} className="sm:w-[18px] sm:h-[18px]" />
+                      <ArrowRight size={12} className="sm:w-[16px] sm:h-[16px] md:w-[18px] md:h-[18px]" />
                     </button>
                   </div>
                 </div>
@@ -115,47 +115,25 @@ export default function HeroSection() {
         </Swiper>
       </div>
 
-      {/* Stats Section - Mobile Grid 2x2 */}
-      <div className="mt-4 sm:mt-5 md:mt-6 grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+      {/* Stats Section - Inline/Flex Layout */}
+      <div className="mt-3 sm:mt-4 md:mt-5 flex flex-wrap gap-2 sm:gap-3 md:gap-4 justify-center">
         {stats.map((stat, index) => (
           <div 
             key={index} 
-            className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-md border border-gray-100 text-center hover:shadow-lg transition-shadow active:scale-95"
+            className="bg-white rounded-lg sm:rounded-xl px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 shadow-md border border-gray-100 text-center hover:shadow-lg transition-shadow flex-1 min-w-[80px] sm:min-w-[100px] md:min-w-[120px] max-w-[120px] sm:max-w-[150px] md:max-w-[180px] active:scale-95"
           >
-            <p className="text-yellow-500 font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+            <p className="text-yellow-500 font-bold text-sm sm:text-base md:text-2xl lg:text-3xl">
               {stat.value}
             </p>
-            <p className="text-gray-600 text-xs sm:text-sm md:text-base font-medium mt-0.5 sm:mt-1">
+            <p className="text-gray-600 text-[8px] sm:text-xs md:text-sm font-medium mt-0.5 sm:mt-1">
               {stat.label}
             </p>
           </div>
         ))}
       </div>
 
-      {/* Trust Indicators - Mobile First */}
-      <div className="mt-4 sm:mt-5 md:mt-6 grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-        {[
-          { icon: Shield, label: "SSL Encrypted", sub: "Secure Transactions" },
-          { icon: Clock, label: "Instant Withdrawals", sub: "Within Minutes" },
-          { icon: Trophy, label: "24/7 Support", sub: "Live Chat Available" },
-          { icon: Star, label: "4.9/5 Rating", sub: "Trusted Platform" },
-        ].map((item, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-xl p-2.5 sm:p-3 md:p-4 shadow-md border border-gray-100 flex items-center gap-2.5 sm:gap-3 hover:shadow-lg transition-shadow active:scale-95"
-          >
-            <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 flex-shrink-0" />
-            <div>
-              <p className="text-gray-800 text-[10px] sm:text-xs font-bold leading-tight">
-                {item.label}
-              </p>
-              <p className="text-gray-500 text-[8px] sm:text-[10px] leading-tight">
-                {item.sub}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* Trust Indicators - Inline/Flex Layout */}
+
 
       <style>{`
         /* Swiper Pagination - Mobile Optimized */
@@ -177,7 +155,7 @@ export default function HeroSection() {
         }
         
         .swiper-pagination {
-          bottom: 12px !important;
+          bottom: 8px !important;
         }
 
         /* Touch Feedback */
@@ -202,13 +180,13 @@ export default function HeroSection() {
           }
           
           .swiper-pagination {
-            bottom: 16px !important;
+            bottom: 12px !important;
           }
         }
 
         @media (min-width: 768px) {
           .swiper-pagination {
-            bottom: 20px !important;
+            bottom: 16px !important;
           }
         }
       `}</style>
