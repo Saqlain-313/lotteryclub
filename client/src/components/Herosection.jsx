@@ -37,16 +37,13 @@ const fallbackBanners = [
 export default function HeroSection() {
   const dispatch = useDispatch();
 
-  const { banners, loading } = useSelector(
-    (state) => state.banner
-  );
+  const { banners, loading } = useSelector((state) => state.banner);
 
   useEffect(() => {
     dispatch(getBanners());
   }, [dispatch]);
 
-  const displayBanners =
-    banners?.length > 0 ? banners : fallbackBanners;
+  const displayBanners = banners?.length > 0 ? banners : fallbackBanners;
 
   const stats = [
     {
@@ -81,10 +78,8 @@ export default function HeroSection() {
 
   return (
     <section className="w-full bg-white px-2 py-2 sm:px-3 md:px-4">
-
       {/* ================= HERO BANNER ================= */}
       <div className="relative w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           navigation={{
@@ -103,7 +98,6 @@ export default function HeroSection() {
         >
           {displayBanners.map((banner, index) => (
             <SwiperSlide key={banner._id || index}>
-
               {/* Banner */}
               <div
                 className="
@@ -226,11 +220,7 @@ export default function HeroSection() {
                 sm:py-4
                 md:py-5
 
-                ${
-                  index !== stats.length - 1
-                    ? "border-r border-gray-200"
-                    : ""
-                }
+                ${index !== stats.length - 1 ? "border-r border-gray-200" : ""}
               `}
             >
               {/* ICON */}
@@ -245,7 +235,6 @@ export default function HeroSection() {
                   md:h-7
                   md:w-7
                   text-yellow-400
-                  fill-yellow-400
                 "
               />
 
