@@ -71,7 +71,7 @@ export default function PopularGames() {
     if (isDesktop) {
       return showAll ? games.length : 8;
     } else {
-      return showAll ? games.length : 6;
+      return showAll ? games.length : 4;
     }
   };
 
@@ -107,7 +107,7 @@ export default function PopularGames() {
         </div>
 
         {/* Cards - WINZOX Glass Style */}
-        <div className="grid grid-cols-3 md:grid-cols-4 gap-2 md:gap-4">
+        <div className="grid grid-cols-4 md:grid-cols-4 gap-2 md:gap-4">
           {displayGames.map((game, index) => (
             <div
               key={index}
