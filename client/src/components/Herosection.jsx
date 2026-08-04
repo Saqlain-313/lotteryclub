@@ -1,14 +1,13 @@
 import {
   ArrowRight,
   Clock,
-  DollarSign,
   Gamepad2,
   Rocket,
   Shield,
   Star,
   Trophy,
   Users,
-  Zap,
+  Wallet,
 } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,29 +52,29 @@ export default function HeroSection() {
       value: "25,000+",
       label: "Players",
       icon: Users,
-      color: "text-blue-500",
-      bgColor: "bg-blue-50",
+      color: "text-[#F4B400]",
+      bgColor: "bg-transparent",
     },
     {
-      value: "15Cr+",
+      value: "₹15Cr+",
       label: "Total Paid",
-      icon: DollarSign,
-      color: "text-green-500",
-      bgColor: "bg-green-50",
+      icon: Wallet,
+      color: "text-[#F4B400]",
+      bgColor: "bg-transparent",
     },
     {
       value: "100+",
       label: "Games",
       icon: Gamepad2,
-      color: "text-purple-500",
-      bgColor: "bg-purple-50",
+      color: "text-[#F4B400]",
+      bgColor: "bg-transparent",
     },
     {
       value: "99.9%",
       label: "Uptime",
-      icon: Zap,
-      color: "text-orange-500",
-      bgColor: "bg-orange-50",
+      icon: Shield,
+      color: "text-[#F4B400]",
+      bgColor: "bg-transparent",
     },
   ];
 
@@ -173,40 +172,38 @@ export default function HeroSection() {
         </Swiper>
       </div>
 
-      {/* Stats Section - Column Layout with Icon on Top */}
-      <div className="mt-4 md:mt-6 grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
+      {/* Stats Section */}
+      <div className="mt-4 md:mt-6 bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+        <div className="grid grid-cols-4">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
 
-          return (
-            <div
-              key={index}
-              className="group bg-white rounded-xl sm:rounded-2xl px-3 sm:px-4 py-3 sm:py-4 md:py-5 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-gray-200 flex flex-col items-center justify-center text-center hover:-translate-y-1"
-            >
-              {/* Icon on Top */}
+            return (
               <div
-                className={`p-2 sm:p-2.5 md:p-3 rounded-xl ${stat.bgColor} group-hover:scale-110 transition-transform duration-300 mb-1.5 sm:mb-2`}
+                key={index}
+                className={`flex flex-col items-center justify-center py-4 md:py-6 px-2 text-center ${
+                  index !== stats.length - 1 ? "border-r border-gray-200" : ""
+                }`}
               >
+                {/* Icon */}
                 <Icon
-                  size={18}
-                  className={`sm:w-5 sm:h-5 md:w-6 md:h-6 ${stat.color}`}
+                  className={`${stat.color} w-6 h-6 md:w-7 md:h-7 mb-2`}
+                  strokeWidth={2.2}
                 />
+
+                {/* Value */}
+                <h3 className="text-black font-bold text-base md:text-2xl leading-none">
+                  {stat.value}
+                </h3>
+
+                {/* Label */}
+                <p className="text-gray-500 text-[10px] md:text-sm mt-1 leading-tight">
+                  {stat.label}
+                </p>
               </div>
-
-              {/* Value */}
-              <span
-                className={`font-extrabold text-sm sm:text-base md:text-lg lg:text-xl ${stat.color}`}
-              >
-                {stat.value}
-              </span>
-
-              {/* Label */}
-              <span className="text-gray-500 text-[9px] sm:text-[10px] md:text-xs font-medium mt-0.5">
-                {stat.label}
-              </span>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Trust Indicators */}

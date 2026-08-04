@@ -1,11 +1,4 @@
-import {
-  ArrowRight,
-  Crown,
-  Flame,
-  Gift,
-  Sparkles,
-  TrendingUp,
-} from "lucide-react";
+import { ArrowRight, Crown, Gift, Sparkles, TrendingUp } from "lucide-react";
 import { useState } from "react";
 
 const games = [
@@ -124,7 +117,7 @@ export default function PopularGames() {
             <a
               key={index}
               href={game.link}
-              className="group relative rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-white aspect-[3/4] md:aspect-[4/5]"
+              className="group relative rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-white aspect-[3/5] md:aspect-[3/4]"
             >
               {/* Background Image */}
               <div
@@ -143,21 +136,21 @@ export default function PopularGames() {
               <div className="absolute top-2 left-2 right-2 md:top-3 md:left-3 md:right-3 z-20 flex items-start justify-between">
                 {/* Left Side - Country Badge */}
                 <div className="flex flex-col gap-1">
-                  <div className="bg-black/60 backdrop-blur-md px-1.5 py-0.5 md:px-2.5 md:py-1 flex justify-center rounded-lg border border-white/10 shadow-lg">
+                  {/* <div className="bg-black/60 backdrop-blur-md px-1.5 py-0.5 md:px-2.5 md:py-1 flex justify-center rounded-lg border border-white/10 shadow-lg">
                     <span className="text-white text-[6px] md:text-[10px] font-bold uppercase tracking-wider">
                       {game.title.split(" ")[0]}
                     </span>
-                  </div>
+                  </div> */}
 
                   {/* HOT Badge */}
-                  {game.hot && (
+                  {/* {game.hot && (
                     <div className="inline-flex items-center gap-0.5 md:gap-1 w-fit bg-gradient-to-r from-red-500 to-orange-500 px-1.5 py-0.5 md:px-2 md:py-0.5 rounded-full shadow-lg animate-pulse">
                       <Flame className="w-2 h-2 md:w-2.5 md:h-2.5 text-white fill-white" />
                       <span className="text-white text-[5px] md:text-[8px] font-bold uppercase tracking-wider">
                         Hot
                       </span>
                     </div>
-                  )}
+                  )} */}
                 </div>
 
                 {/* Right Side - Number Badge */}
@@ -174,33 +167,27 @@ export default function PopularGames() {
               {/* Bottom Section - Content */}
               <div className="absolute bottom-0 left-0 right-0 z-10 p-2 md:p-5">
                 {/* Prize Badge */}
-                <div className="flex items-center justify-center gap-1 bg-white/10 backdrop-blur-sm px-1.5 py-0.5 md:px-3 md:py-1 rounded-full border border-white/20 mb-1 md:mb-3 mx-auto w-fit">
+                {/* <div className="flex items-center justify-center gap-1 bg-white/10 backdrop-blur-sm px-1.5 py-0.5 md:px-3 md:py-1 rounded-full border border-white/20 mb-1 md:mb-3 mx-auto w-fit">
                   <Gift className="w-2 h-2 md:w-3 md:h-3 text-yellow-400" />
                   <span className="text-white text-[5px] md:text-[10px] font-bold">
                     ${game.prize}
                   </span>
-                </div>
+                </div> */}
 
                 {/* Game Name */}
                 <div className="text-center text-white mb-1 md:mb-3">
+                  <p>
+                    <span className="text-white text-[9px] md:text-[10px] font-bold uppercase tracking-wider">
+                      {game.title.split(" ")[0]}
+                    </span>
+                  </p>
                   <h3 className="font-extrabold text-[10px] md:text-xl lg:text-2xl leading-tight drop-shadow-lg">
                     {game.name}
                   </h3>
-
-                  {/* Live Indicator */}
-                  <div className="flex items-center justify-center gap-1 mt-0.5 md:mt-1">
-                    <span className="relative flex h-1 w-1 md:h-1.5 md:w-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-1 w-1 md:h-1.5 md:w-1.5 bg-green-500"></span>
-                    </span>
-                    <span className="text-[5px] md:text-[8px] text-green-400 font-semibold uppercase tracking-wider">
-                      Live
-                    </span>
-                  </div>
                 </div>
 
                 {/* Play Button */}
-                <button className="w-full inline-flex items-center justify-center gap-1 md:gap-2 bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 hover:from-yellow-500 hover:via-amber-500 hover:to-yellow-600 text-black font-bold rounded-lg md:rounded-xl px-1.5 py-1 md:px-4 md:py-2.5 text-[6px] md:text-xs lg:text-sm transition-all duration-300 shadow-lg hover:shadow-xl border border-yellow-300/50 group-hover:scale-105">
+                <button className="w-full inline-flex items-center justify-center gap-1 md:gap-2 bg-transparent border-white text-white font-bold rounded-lg md:rounded-xl px-1.5 py-1 md:px-4 md:py-2.5 text-[10px] md:text-xs lg:text-sm transition-all duration-300 shadow-lg hover:shadow-xl border border-yellow-300/50 group-hover:scale-105">
                   <span>PLAY</span>
                   <ArrowRight className="w-2 h-2 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
