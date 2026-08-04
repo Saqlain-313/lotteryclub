@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import {
   ArrowRight,
   Clock,
@@ -9,6 +10,9 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+=======
+import { ArrowRight, Clock, Rocket, Shield, Star, Trophy } from "lucide-react";
+>>>>>>> Stashed changes
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
@@ -48,6 +52,7 @@ export default function HeroSection() {
   const displayBanners = banners?.length > 0 ? banners : fallbackBanners;
 
   const stats = [
+<<<<<<< Updated upstream
     {
       value: "25,000+",
       label: "Players",
@@ -76,17 +81,21 @@ export default function HeroSection() {
       color: "text-[#F4B400]",
       bgColor: "bg-transparent",
     },
+=======
+    { value: "25,000+", label: "Players" },
+    { value: "15Cr+", label: "Total Paid" },
+    { value: "100+", label: "Games" },
+    { value: "99.9%", label: "Uptime" },
+>>>>>>> Stashed changes
   ];
 
   if (loading) {
     return (
       <div className="w-full px-3 py-2">
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl h-52 flex items-center justify-center">
+        <div className="bg-gray-100 rounded-xl h-52 flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-yellow-500 border-t-transparent mx-auto"></div>
-            <p className="mt-4 text-gray-600 font-medium">
-              Loading awesome games...
-            </p>
+            <div className="animate-spin rounded-full h-10 w-10 border-4 border-yellow-500 border-t-transparent mx-auto"></div>
+            <p className="mt-3 text-gray-600 text-sm">Loading...</p>
           </div>
         </div>
       </div>
@@ -94,9 +103,9 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="w-full px-3 py-3 md:px-4 md:py-4 bg-gradient-to-b from-gray-50 to-white">
-      {/* Banner Slider */}
-      <div className="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] lg:aspect-[16/6]">
+    <section className="w-full px-3 py-3 md:px-4 md:py-4">
+      {/* Banner Slider - Rectangle Shape */}
+      <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-xl aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] lg:aspect-[16/6]">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           navigation={false}
@@ -113,6 +122,7 @@ export default function HeroSection() {
                   alt="Banner"
                   className="w-full h-full object-cover"
                 />
+<<<<<<< Updated upstream
                 <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
 
                 <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-yellow-500/20 to-transparent" />
@@ -163,6 +173,37 @@ export default function HeroSection() {
                           className="group-hover:translate-x-1 transition-transform"
                         />
                       </span>
+=======
+                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+                
+                {/* Content Overlay - Centered Vertically */}
+                <div className="absolute inset-0 flex items-center px-5 sm:px-8 md:px-12 lg:px-20">
+                  <div className="max-w-2xl w-full">
+                    {/* PLAY GAMES - Mobile First */}
+                    <h1 className="text-white font-black text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.1]">
+                      PLAY GAMES
+                    </h1>
+                    
+                    {/* WIN BIG - Golden Gradient */}
+                    <h1 className="text-transparent bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 bg-clip-text font-black text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.1] mt-0">
+                      WIN BIG
+                    </h1>
+                    
+                    {/* Subtitle */}
+                    <div className="mt-1.5 sm:mt-2 md:mt-3">
+                      <p className="text-white text-[10px] sm:text-xs md:text-sm lg:text-base font-medium">
+                        Fast Results • 100% Secure
+                      </p>
+                      <p className="text-white text-[10px] sm:text-xs md:text-sm lg:text-base font-medium">
+                        Join Thousands of Winners
+                      </p>
+                    </div>
+                    
+                    {/* PLAY NOW Button */}
+                    <button className="mt-3 sm:mt-4 md:mt-6 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold px-4 sm:px-6 md:px-8 py-1.5 sm:py-2 md:py-3 rounded-full inline-flex items-center gap-1.5 sm:gap-2 hover:shadow-lg hover:shadow-yellow-500/30 transition-all text-[10px] sm:text-sm md:text-base active:scale-95">
+                      PLAY NOW
+                      <ArrowRight size={12} className="sm:w-[16px] sm:h-[16px] md:w-[18px] md:h-[18px]" />
+>>>>>>> Stashed changes
                     </button>
                   </div>
                 </div>
@@ -172,6 +213,7 @@ export default function HeroSection() {
         </Swiper>
       </div>
 
+<<<<<<< Updated upstream
       {/* Stats Section */}
       <div className="mt-4 md:mt-6 bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
         <div className="grid grid-cols-4">
@@ -204,8 +246,32 @@ export default function HeroSection() {
             );
           })}
         </div>
+=======
+      {/* Stats Section - Inline/Flex Layout */}
+<div className="grid grid-cols-4 border-t border-gray-200">
+    {stats.map((item, index) => (
+      <div
+        key={index}
+        className={`py-3 sm:py-4 md:py-5 flex flex-col items-center justify-center ${
+          index !== stats.length - 1 ? "border-r border-gray-200" : ""
+        }`}
+      >
+        <div className="text-yellow-500 mb-1 sm:mb-1.5">
+          {item.icon}
+        </div>
+        <h3 className="text-sm sm:text-lg md:text-2xl font-bold text-gray-900">
+          {item.value}
+        </h3>
+        <p className="text-[10px] sm:text-xs md:text-sm text-gray-500 mt-0.5 sm:mt-1">
+          {item.label}
+        </p>
+>>>>>>> Stashed changes
       </div>
+    ))}
+  </div>
+      {/* Trust Indicators - Inline/Flex Layout */}
 
+<<<<<<< Updated upstream
       {/* Trust Indicators */}
       <div className="mt-4 md:mt-5 flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6">
         {[
@@ -238,18 +304,21 @@ export default function HeroSection() {
           animation: gradient 3s ease infinite;
         }
         
+=======
+
+      <style>{`
+        /* Swiper Pagination - Mobile Optimized */
+>>>>>>> Stashed changes
         .swiper-pagination-bullet {
-          background: rgba(255, 255, 255, 0.4) !important;
-          width: 8px !important;
-          height: 8px !important;
-          transition: all 0.3s ease !important;
+          background: rgba(255, 255, 255, 0.5) !important;
+          width: 6px !important;
+          height: 6px !important;
         }
         
         .swiper-pagination-bullet-active {
           background: #facc15 !important;
-          width: 24px !important;
+          width: 18px !important;
           border-radius: 9999px !important;
-          box-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
         }
         
         .swiper-button-prev,
@@ -258,31 +327,38 @@ export default function HeroSection() {
         }
         
         .swiper-pagination {
-          bottom: 12px !important;
+          bottom: 8px !important;
         }
 
+        /* Touch Feedback */
         .active\\:scale-95:active {
           transform: scale(0.95);
         }
 
+        /* Better Text Rendering */
+        h1 {
+          text-rendering: optimizeLegibility;
+        }
+
+        /* Responsive Breakpoint Adjustments */
         @media (min-width: 640px) {
           .swiper-pagination-bullet {
-            width: 10px !important;
-            height: 10px !important;
+            width: 8px !important;
+            height: 8px !important;
           }
           
           .swiper-pagination-bullet-active {
-            width: 28px !important;
+            width: 24px !important;
           }
           
           .swiper-pagination {
-            bottom: 16px !important;
+            bottom: 12px !important;
           }
         }
 
         @media (min-width: 768px) {
           .swiper-pagination {
-            bottom: 20px !important;
+            bottom: 16px !important;
           }
         }
       `}</style>

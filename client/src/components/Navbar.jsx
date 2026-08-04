@@ -186,7 +186,7 @@ const Navbar = ({ children }) => {
     return gradients[index];
   };
 
-  // WINZOX Logo Component - Large size
+  // WINZOX Logo Component
   const WinzoxLogo = ({ className = "h-48" }) => (
     <img
       src="https://i.ibb.co/bRDCrgMB/4f0fb13d-8dd5-44fd-9bfa-d1e47e94d5a7.png"
@@ -403,9 +403,10 @@ const Navbar = ({ children }) => {
       <div className="md:ml-72 flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white">
         {/* ================= TOP NAVBAR ================= */}
         <div className="h-16 border-b border-white/40 bg-white/80 backdrop-blur-xl sticky top-0 z-40 shadow-lg shadow-gray-100/50 transform-gpu">
-          <div className="h-full flex items-center justify-between px-4 sm:px-6">
-            {/* Left - Menu Button (Mobile only) */}
-            <div className="flex items-center gap-4 md:w-auto">
+          <div className="h-full flex items-center px-4 sm:px-6">
+            {/* Left - Menu Button & Logo */}
+            <div className="flex items-center gap-2 md:gap-4">
+              {/* Mobile Menu Button */}
               <button
                 ref={menuButtonRef}
                 onClick={(e) => {
@@ -418,68 +419,68 @@ const Navbar = ({ children }) => {
                 <Menu size={22} />
               </button>
 
-              {/* Desktop Nav Links */}
-              <div className="hidden md:flex items-center gap-1">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    to={item.path}
-                    className={`relative px-4 py-2 rounded-2xl text-sm font-bold transition-all duration-500 [transform-style:preserve-3d] ${
-                      isActiveRoute(item.path)
-                        ? "text-yellow-600 bg-gradient-to-r from-yellow-50/80 to-orange-50/80 transform-gpu scale-105 shadow-lg shadow-yellow-500/15"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-yellow-50/60 hover:to-orange-50/60 transform-gpu hover:scale-105 hover:-translate-y-1"
-                    }`}
-                  >
-                    <span className="flex items-center gap-2">
-                      <item.icon
-                        size={16}
-                        className="transition-all duration-300 group-hover:rotate-y-6 [transform-style:preserve-3d]"
-                      />
-                      {item.label}
-                    </span>
-                    {isActiveRoute(item.path) && (
-                      <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-6 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-500/40 animate-pulse-slow"></span>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Center - Mobile Logo */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 md:hidden">
+              {/* Logo - Always Left Aligned */}
               <Link
                 to="/"
-                className="flex items-center gap-2 transform-gpu hover:scale-105 transition-all duration-500"
+                className="flex items-center transform-gpu hover:scale-105 transition-all duration-500"
               >
-                <WinzoxLogo className="h-14" />
+                <WinzoxLogo className="h-12 md:h-10" />
               </Link>
             </div>
 
-            {/* Right - Account Button (Redirects to /account) */}
-            <div className="flex items-center gap-3">
+            {/* Center - Empty for spacing */}
+            <div className="flex-1"></div>
+
+            {/* Right - Login & Register Buttons */}
+            <div className="flex items-center gap-2">
               {isAuthenticated ? (
-                <Link
-                  to="/account"
-                  className="flex items-center gap-3 px-4 py-2 rounded-2xl text-black hover:shadow-2xl transition-all duration-500"
-                >
-                  <div
-                    className={`w-7 h-7 rounded-full bg-gradient-to-r ${getAvatarGradient()} flex items-center justify-center text-white text-xs font-bold shadow-lg transform-gpu hover:scale-110 transition-all duration-300`}
+                <>
+                  {/* Desktop Avatar/Name */}
+                  <Link
+                    to="/account"
+                    className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl text-black hover:shadow-2xl transition-all duration-500"
                   >
-                    {getInitial()}
-                  </div>
-                  <span className="text-sm font-bold hidden sm:inline">
-                    {getUserDisplayName()}
-                  </span>
-                  <ChevronRight size={14} className="hidden sm:inline" />
-                </Link>
+                    <div
+                      className={`w-7 h-7 rounded-full bg-gradient-to-r ${getAvatarGradient()} flex items-center justify-center text-white text-xs font-bold shadow-lg transform-gpu hover:scale-110 transition-all duration-300`}
+                    >
+                      {getInitial()}
+                    </div>
+                    <span className="text-sm font-bold">
+                      {getUserDisplayName()}
+                    </span>
+                  </Link>
+
+                  {/* Mobile Avatar only */}
+                  <Link
+                    to="/account"
+                    className="md:hidden flex items-center"
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full bg-gradient-to-r ${getAvatarGradient()} flex items-center justify-center text-white text-xs font-bold shadow-lg transform-gpu hover:scale-110 transition-all duration-300`}
+                    >
+                      {getInitial()}
+                    </div>
+                  </Link>
+                </>
               ) : (
-                <Link
-                  to="/login"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-black text-sm font-bold hover:shadow-2xl hover:shadow-yellow-500/35 transition-all duration-500 transform-gpu hover:scale-105 hover:-translate-y-1 hover:rotate-y-3 [transform-style:preserve-3d]"
-                >
-                  <LogIn size={18} />
-                  Login
-                </Link>
+                <>
+                  <Link
+                    to="/login"
+                    className="flex items-center gap-1.5 px-4 py-1.5 rounded bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-black text-sm font-bold hover:shadow-2xl hover:shadow-yellow-500/35 transition-all duration-500 transform-gpu hover:scale-105 hover:-translate-y-0.5 hover:rotate-y-3 [transform-style:preserve-3d]"
+                  >
+                    <LogIn size={16} />
+                    <span className="hidden sm:inline">LOGIN</span>
+                    <span className="sm:hidden">Login</span>
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="flex items-center gap-1.5 px-4 py-1.5 rounded bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-black text-sm font-bold hover:shadow-2xl hover:shadow-yellow-500/35 transition-all duration-500 transform-gpu hover:scale-105 hover:-translate-y-0.5 hover:rotate-y-3 [transform-style:preserve-3d]"
+                  >
+                    <UserPlus size={16} />
+                    <span className="hidden sm:inline">REGISTER</span>
+                    <span className="sm:hidden">Register</span>
+                  </Link>
+                </>
               )}
             </div>
           </div>
