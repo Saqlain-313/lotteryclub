@@ -12,9 +12,9 @@ const Homme = () => {
   return (
     <main className="pb-11 md:pb-0">
       <Herosection />
-      <StatsSection />
+      {/* <StatsSection /> */}
       <PopularGames />
-      <FeatureBar />
+      {/* <FeatureBar /> */}
       <TopWinners />
       <StatsSection2 />
       <CountriesSection />
