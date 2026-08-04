@@ -20,11 +20,38 @@ import {
   updateProfile,
 } from "../redux/slices/authSlice";
 
-export default function ProfileContent() {
+// Helper function to get currency symbol based on country
+const getCurrencySymbol = (country) => {
+  const symbols = {
+    'IN': '₹',
+    'US': '$',
+    'GB': '£',
+    'EU': '€',
+    'JP': '¥',
+    'CN': '¥',
+    'AU': '$',
+    'CA': '$',
+    'default': '₹'
+  };
+  return symbols[country] || symbols.default;
+};
+
+export default function ProfileContent({ formatCurrency: propFormatCurrency, currencySymbol: propCurrencySymbol }) {
   const dispatch = useDispatch();
   const { user, loading, error, profileLoaded } = useSelector(
     (state) => state.auth,
   );
+
+  // Use props if provided, otherwise calculate from user
+  const currencySymbol = propCurrencySymbol || getCurrencySymbol(user?.country);
+  
+  // Format currency function
+  const formatCurrency = propFormatCurrency || ((amount) => {
+    return `${currencySymbol}${Number(amount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}`;
+  });
 
   const [profile, setProfile] = useState({
     name: "",
@@ -65,19 +92,19 @@ export default function ProfileContent() {
   const stats = [
     {
       title: "Available Balance",
-      value: `₹${user?.balance?.local || 0}`,
+      value: formatCurrency(user?.balance?.local || 0),
       icon: IndianRupee,
       color: "text-amber-500",
     },
     {
       title: "Wallet Balance",
-      value: `₹${user?.balance?.local || 0}`,
+      value: formatCurrency(user?.balance?.local || 0),
       icon: Wallet,
       color: "text-green-600",
     },
     {
       title: "Referral Earnings",
-      value: `₹${user?.referralEarning || 0}`,
+      value: formatCurrency(user?.referralEarning || 0),
       icon: Users,
       color: "text-blue-600",
     },

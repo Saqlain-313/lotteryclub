@@ -16,6 +16,26 @@ import ChangePassword from "../components/ChangePassword";
 import { getProfile } from "../redux/slices/authSlice";
 import ProfileContent from "./ProfileContent";
 
+// Helper function to get currency symbol based on country
+const getCurrencySymbol = (country) => {
+  const symbols = {
+    'IN': '₹',
+    'US': '$',
+    'GB': '£',
+    'EU': '€',
+    'JP': '¥',
+    'CN': '¥',
+    'AU': '$',
+    'CA': '$',
+    'SG': 'S$',
+    'MY': 'RM',
+    'AE': 'د.إ',
+    'SA': '﷼',
+    'default': '₹'
+  };
+  return symbols[country] || symbols.default;
+};
+
 export default function ProfilePage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,6 +44,17 @@ export default function ProfilePage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { user, loading, profileLoaded } = useSelector((state) => state.auth);
+
+  // Get currency symbol based on user's country
+  const currencySymbol = getCurrencySymbol(user?.country);
+
+  // Format currency function with proper number formatting
+  const formatCurrency = (amount) => {
+    return `${currencySymbol}${Number(amount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}`;
+  };
 
   useEffect(() => {
     if (!profileLoaded && !loading) {
@@ -79,6 +110,8 @@ export default function ProfilePage() {
             getUserDisplayName={getUserDisplayName}
             getUserId={getUserId}
             getAvatar={getAvatar}
+            formatCurrency={formatCurrency}
+            currencySymbol={currencySymbol}
           />
         </div>
 
@@ -95,12 +128,14 @@ export default function ProfilePage() {
           getUserId={getUserId}
           getAvatar={getAvatar}
           menu={menu}
+          formatCurrency={formatCurrency}
+          currencySymbol={currencySymbol}
         />
 
         {/* Right Content */}
         <div className="flex-1 h-full overflow-auto sm:pb-20 md:pb-0 md:px-2">
           <div className="bg-white rounded-3xl border border-gray-200 shadow-lg">
-            {activeTab === "profile" && <ProfileContent />}
+            {activeTab === "profile" && <ProfileContent formatCurrency={formatCurrency} currencySymbol={currencySymbol} />}
             {activeTab === "password" && <ChangePassword />}
           </div>
         </div>
@@ -121,6 +156,8 @@ function DesktopSidebar({
   getUserDisplayName,
   getUserId,
   getAvatar,
+  formatCurrency,
+  currencySymbol,
 }) {
   const menu = [
     { id: "profile", title: "Profile", icon: User },
@@ -154,7 +191,7 @@ function DesktopSidebar({
         <div className="mt-8 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white p-5">
           <p className="text-sm opacity-90">Available Balance</p>
           <h2 className="text-4xl font-bold mt-2">
-            ₹{user?.balance.local?.toLocaleString() || "0"}
+            {formatCurrency(user?.balance.local || 0)}
           </h2>
         </div>
       </div>
@@ -223,6 +260,8 @@ function MobileSidebar({
   getUserId,
   getAvatar,
   menu,
+  formatCurrency,
+  currencySymbol,
 }) {
   return (
     <div
@@ -264,7 +303,7 @@ function MobileSidebar({
           <div className="mt-6 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 p-4 text-white">
             <p className="text-sm">Available Balance</p>
             <h2 className="text-3xl font-bold mt-1">
-              ₹{user?.balance.local?.toLocaleString() || "0"}
+              {formatCurrency(user?.balance.local || 0)}
             </h2>
           </div>
         </div>

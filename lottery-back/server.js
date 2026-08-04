@@ -17,6 +17,8 @@ const gameCountRoutes = require("./routes/admin/gameCountRoutes");
 const adminGameEntryRoutes = require("./routes/admin/gameEntryRoutes");
 const gameEntryRoute = require("./routes/gameEntryRoute");
 const powerballResultRoutes = require("./routes/admin/powerballResultRoutes");
+const publicBidRoutes = require('./routes/publicBidRoutes');
+
 
 const connectDB = require("./config/connectdb");
 
@@ -63,6 +65,8 @@ app.use("/api/markets", require("./routes/marketRoutes"));
 app.use("/api/bids", require("./routes/bidRoutes"));
 app.use("/api/results", require("./routes/resultRoutes"));
 app.use("/api/currency", require("./routes/currencyRateRoutes"));
+app.use('/api/public-bids', publicBidRoutes);
+
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 

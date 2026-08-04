@@ -29,6 +29,26 @@ import { getTodayBidsSummary } from "../../redux/slices/bidSlice";
 import { getActiveMarkets } from "../../redux/slices/marketSlice";
 import { getTodayResults } from "../../redux/slices/resultSlice";
 
+// Helper function to get currency symbol based on country
+const getCurrencySymbol = (country) => {
+  const symbols = {
+    'IN': '₹',
+    'US': '$',
+    'GB': '£',
+    'EU': '€',
+    'JP': '¥',
+    'CN': '¥',
+    'AU': '$',
+    'CA': '$',
+    'SG': 'S$',
+    'MY': 'RM',
+    'AE': 'د.إ',
+    'SA': '﷼',
+    'default': '₹'
+  };
+  return symbols[country] || symbols.default;
+};
+
 const MatkaDashboard = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -36,6 +56,17 @@ const MatkaDashboard = () => {
   const { todayResults } = useSelector((state) => state.result);
   const { activeMarkets } = useSelector((state) => state.market);
   const { loading } = useSelector((state) => state.bid);
+
+  // Get currency symbol based on user's country
+  const currencySymbol = getCurrencySymbol(user?.country);
+
+  // Format currency function using the currency symbol
+  const formatCurrency = (amount) => {
+    return `${currencySymbol}${Number(amount).toLocaleString('en-IN', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    })}`;
+  };
 
   useEffect(() => {
     dispatch(getTodayBidsSummary());
@@ -80,14 +111,6 @@ const MatkaDashboard = () => {
       "first-digit": ArrowLeftFromLine,
     };
     return icons[type] || Gamepad2;
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      minimumFractionDigits: 0,
-    }).format(amount || 0);
   };
 
   if (loading) {

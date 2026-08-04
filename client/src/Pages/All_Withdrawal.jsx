@@ -45,6 +45,22 @@ import {
   selectWithdrawalMessage,
 } from "../redux/slices/withdrawalSlice";
 
+// Helper function to get currency symbol based on country
+const getCurrencySymbol = (country) => {
+  const symbols = {
+    'IN': '₹',
+    'US': '$',
+    'GB': '£',
+    'EU': '€',
+    'JP': '¥',
+    'CN': '¥',
+    'AU': '$',
+    'CA': '$',
+    'default': '₹'
+  };
+  return symbols[country] || symbols.default;
+};
+
 const AllWithdrawal = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -64,6 +80,17 @@ const AllWithdrawal = () => {
   const currentWithdrawal = useSelector(selectCurrentWithdrawal);
   const error = useSelector(selectWithdrawalError);
   const message = useSelector(selectWithdrawalMessage);
+
+  // Get currency symbol based on user's country
+  const currencySymbol = getCurrencySymbol(user?.country);
+  
+  // Format currency function
+  const formatCurrency = (amount) => {
+    return `${currencySymbol}${Number(amount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}`;
+  };
 
   // Local state
   const [formData, setFormData] = useState({
@@ -216,11 +243,11 @@ const AllWithdrawal = () => {
     if (!formData.amount) {
       errors.amount = "Please enter withdrawal amount";
     } else if (parseFloat(formData.amount) < settings?.minWithdrawal) {
-      errors.amount = `Minimum withdrawal amount is ${settings?.currencySymbol}${settings?.minWithdrawal}`;
+      errors.amount = `Minimum withdrawal amount is ${currencySymbol}${settings?.minWithdrawal}`;
     } else if (parseFloat(formData.amount) > settings?.maxWithdrawal) {
-      errors.amount = `Maximum withdrawal amount is ${settings?.currencySymbol}${settings?.maxWithdrawal}`;
+      errors.amount = `Maximum withdrawal amount is ${currencySymbol}${settings?.maxWithdrawal}`;
     } else if (parseFloat(formData.amount) > user?.balance.local) {
-      errors.amount = `Insufficient balance. Available: ${settings?.currencySymbol}${user?.balance.local}`;
+      errors.amount = `Insufficient balance. Available: ${formatCurrency(user?.balance.local)}`;
     }
     
     if (!formData.paymentMethod) {
@@ -345,12 +372,6 @@ const AllWithdrawal = () => {
     return names[method] || method;
   };
 
-  // Format currency
-  const formatCurrency = (amount) => {
-    if (!settings) return `₹${amount}`;
-    return `${settings.currencySymbol}${amount.toFixed(2)}`;
-  };
-
   // Format date
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('en-IN', {
@@ -398,7 +419,7 @@ const AllWithdrawal = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-4 px-3">
       <div className="max-w-4xl mx-auto">
-        {/* Header - Removed View All button */}
+        {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-4 mb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -467,7 +488,7 @@ const AllWithdrawal = () => {
                   </label>
                   <div className="relative">
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                      {settings?.currencySymbol || '₹'}
+                      {currencySymbol}
                     </div>
                     <input
                       type="number"

@@ -6,6 +6,7 @@ import StatsSection from "../components/StatsSection";
 import StatsSection2 from "../components/StatsSection2";
 import TopWinners from "../components/TopWinners";
 import Footer from "../Pages/Footer";
+import PublicBidResults from "./PublicBidResults";
 
 const Homme = () => {
   return (
@@ -17,6 +18,7 @@ const Homme = () => {
       <TopWinners />
       <StatsSection2 />
       <CountriesSection />
+      <PublicBidResults/>
       <Footer />
     </main>
   );

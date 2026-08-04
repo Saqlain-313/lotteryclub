@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { api } from './api';
 
-const API_URL =  'http://localhost:5000/api';
 
 // Place a bid
 export const placeBid = createAsyncThunk(
@@ -9,7 +8,7 @@ export const placeBid = createAsyncThunk(
   async (bidData, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.post(`${API_URL}/bids/place`, bidData, {
+      const response = await api.post(`/bids/place`, bidData, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       return response.data;
@@ -25,7 +24,7 @@ export const getBiddingHistory = createAsyncThunk(
   async (params, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/bids/history`, {
+      const response = await api.get(`/bids/history`, {
         params,
         headers: { Authorization: `Bearer ${auth.token}` },
       });
@@ -42,7 +41,7 @@ export const getTodayBidsSummary = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/bids/today-summary`, {
+      const response = await api.get(`/bids/today-summary`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       return response.data;
@@ -58,7 +57,7 @@ export const cancelBid = createAsyncThunk(
   async (bidId, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.delete(`${API_URL}/bids/${bidId}/cancel`, {
+      const response = await api.delete(`/bids/${bidId}/cancel`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       return response.data;
@@ -74,7 +73,7 @@ export const getBidById = createAsyncThunk(
   async (bidId, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/bids/${bidId}`, {
+      const response = await api.get(`/bids/${bidId}`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       return response.data;

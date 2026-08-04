@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { api } from "./api";
 
-const API_URL =  'http://localhost:5000/api';
+
 
 // Get active markets for user
 export const getActiveMarkets = createAsyncThunk(
@@ -9,7 +9,7 @@ export const getActiveMarkets = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/markets/active`, {
+      const response = await api.get(`/markets/active`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       return response.data;
@@ -25,7 +25,7 @@ export const getMarketById = createAsyncThunk(
   async (marketId, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/markets/${marketId}`, {
+      const response = await api.get(`/markets/${marketId}`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       return response.data;
@@ -41,7 +41,7 @@ export const getAllMarkets = createAsyncThunk(
   async (params, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/markets`, {
+      const response = await api.get(`/markets`, {
         params,
         headers: { Authorization: `Bearer ${auth.token}` },
       });

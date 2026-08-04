@@ -28,12 +28,43 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/slices/authSlice";
 
+// Helper function to get currency symbol based on country
+const getCurrencySymbol = (country) => {
+  const symbols = {
+    'IN': '₹',
+    'US': '$',
+    'GB': '£',
+    'EU': '€',
+    'JP': '¥',
+    'CN': '¥',
+    'AU': '$',
+    'CA': '$',
+    'SG': 'S$',
+    'MY': 'RM',
+    'AE': 'د.إ',
+    'SA': '﷼',
+    'default': '₹'
+  };
+  return symbols[country] || symbols.default;
+};
+
 const Account = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.auth);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  // Get currency symbol based on user's country
+  const currencySymbol = getCurrencySymbol(user?.country);
+
+  // Format currency function with proper number formatting
+  const formatCurrency = (amount) => {
+    return `${currencySymbol}${Number(amount).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}`;
+  };
 
   // 🔶 Warm amber/gold glow shadow — matches reference image exactly
   const glowShadow =
@@ -186,7 +217,7 @@ const Account = () => {
     {
       icon: TrendingUp,
       label: "WINNINGS",
-      value: "₹45,230",
+      value: formatCurrency(45230),
       change: "+8%",
       color: "text-green-500",
       bg: "bg-green-50",
@@ -278,7 +309,7 @@ const Account = () => {
                   Balance:
                 </span>
                 <span className="text-xs font-bold text-yellow-600">
-                  ₹{user?.balance?.local?.toFixed(2) || "0.00"}
+                  {formatCurrency(user?.balance?.local || 0)}
                 </span>
               </div>
             </div>

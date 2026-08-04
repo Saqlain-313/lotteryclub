@@ -13,6 +13,7 @@ import gameEntryReducer from "./slices/gameEntrySlice";
 import marketReducer from "./slices/marketSlice";
 import bidReducer from "./slices/bidSlice";
 import resultReducer from "./slices/resultSlice";
+import publicBidReducer from "./slices/publicBidSlice";
 
 export const store = configureStore({
   reducer: {
@@ -29,6 +30,8 @@ export const store = configureStore({
     market: marketReducer,
     bid: bidReducer,
     result: resultReducer,
+    publicBid: publicBidReducer,
+
   },
 });
 

@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { api } from './api';
 
-const API_URL =  'http://localhost:5000/api';
 
 // Get all results
 export const getResults = createAsyncThunk(
@@ -9,7 +8,7 @@ export const getResults = createAsyncThunk(
   async (params, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/results`, {
+      const response = await api.get(`/results`, {
         params,
         headers: { Authorization: `Bearer ${auth.token}` },
       });
@@ -26,7 +25,7 @@ export const getTodayResults = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/results/today`, {
+      const response = await api.get(`/results/today`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       return response.data;
@@ -42,7 +41,7 @@ export const getResultById = createAsyncThunk(
   async (resultId, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/results/${resultId}`, {
+      const response = await api.get(`/results/${resultId}`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       return response.data;
@@ -58,7 +57,7 @@ export const getResultStats = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.get(`${API_URL}/results/stats/overview`, {
+      const response = await api.get(`/results/stats/overview`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       return response.data;
