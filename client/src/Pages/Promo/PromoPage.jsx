@@ -1,15 +1,14 @@
 import { useState } from "react";
 
-import PromoHeader from "../../components/promo/PromoHeader";
 import PromoTabs from "../../components/promo/PromoTabs";
 
-import PromoBanner from "../../components/promo/PromoBanner";
-import ReferralCard from "../../components/promo/ReferralCard";
 import HowToEarn from "../../components/promo/HowToEarn";
 import JoinedMembers from "../../components/promo/JoinedMembers";
+import PromoBanner from "../../components/promo/PromoBanner";
+import ReferralCard from "../../components/promo/ReferralCard";
 
-import RechargeBonus from "../../components/promo/RechargeBonus";
 import BetBonus from "../../components/promo/BetBonus";
+import RechargeBonus from "../../components/promo/RechargeBonus";
 import ReferralRules from "../../components/promo/ReferralRules";
 
 const PromoPage = () => {
@@ -20,10 +19,7 @@ const PromoPage = () => {
       {/* <PromoHeader /> */}
 
       <div className="w-full px-4 sm:px-6 lg:px-8 py-4 md:py-6 pb-24">
-        <PromoTabs
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
+        <PromoTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
         {/* My Link */}
         {activeTab === "link" && (
